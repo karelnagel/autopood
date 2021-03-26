@@ -1,10 +1,9 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimerTask;
 
-public class Refresh extends TimerTask
-{
-    public void run()
-    {
+public class Refresh extends TimerTask {
+    public void run() {
         var poodideList = new ArrayList<Pood>();
 
         var mobile = new Mobile();
@@ -13,8 +12,7 @@ public class Refresh extends TimerTask
         poodideList.add(mobile);
 
         //Refresh all shops
-        for (Pood pood : poodideList)
-        {
+        for (Pood pood : poodideList) {
             pood.refresh();
         }
     }

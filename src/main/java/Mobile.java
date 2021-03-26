@@ -1,11 +1,10 @@
-public class Mobile extends Pood
-{
-    Mobile(){
+public class Mobile extends Pood {
+    Mobile() {
 
     }
+
     @Override
-    public void refresh()
-    {
+    public void refresh() {
         System.out.println("Mobile refresh");
     }
 }

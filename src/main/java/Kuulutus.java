@@ -1,8 +1,13 @@
 import java.util.Date;
 
-public class Kuulutus
-{
+public class Kuulutus {
     Date aeg;
     double hind;
     String mark;
+    String mudel;
+    int aasta;
+
+    Kuulutus() {
+
+    }
 }

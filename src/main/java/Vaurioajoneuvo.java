@@ -1,13 +1,10 @@
-public class Vaurioajoneuvo extends Pood
-{
-    Vaurioajoneuvo()
-    {
+public class Vaurioajoneuvo extends Pood {
+    Vaurioajoneuvo() {
 
     }
 
     @Override
-    public void refresh()
-    {
+    public void refresh() {
         System.out.println("Vaurioajoneuvo refresh");
     }
 }
