@@ -1,0 +1,10 @@
+messenger4j:
+  appSecret: "48cccf57b5ec4462f06b0595fba26889"
+  verifyToken : "asdasd"
+  pageAccessToken: "EAAGlPfpWVvMBAJHZAOMbAW0jsc11PpGKSoJMf7KIvmZBIMnTUs6uk8Cu7qRxpVUISu8Nk1dxn6ZBx0IK7QAfoPfHF66fNWXM6VjFxzudJzICprpj4zvzy3E5kjh8JS2qnZA3GFOLNDfnfHAix2ROqE8Tt9nyRPZAV616pyL2L2gZDZD"
+
+logging:
+  level:
+    com:
+      github:
+        messenger4j: INFO
