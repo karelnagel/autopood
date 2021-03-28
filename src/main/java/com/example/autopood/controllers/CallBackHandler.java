@@ -44,8 +44,7 @@ public class CallBackHandler
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     /**
      * Constructs the {@code CallBackHandler} and initializes the {@code MessengerReceiveClient}.
@@ -58,7 +57,7 @@ public class CallBackHandler
     @Autowired
     public CallBackHandler(@Value("${messenger4j.appSecret}") final String appSecret,
                            @Value("${messenger4j.verifyToken}") final String verifyToken,
-                           final MessengerSendClient sendClient)
+                           final MessengerSendClient sendClient, UserRepository userRepository)
     {
 
         logger.debug("Initializing MessengerReceiveClient - appSecret: {} | verifyToken: {}", appSecret, verifyToken);
@@ -74,6 +73,7 @@ public class CallBackHandler
                 .fallbackEventHandler(newFallbackEventHandler())
                 .build();
         this.sendClient = sendClient;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -180,7 +180,7 @@ public class CallBackHandler
                 .addTextQuickReply("Max läbisõit", OPTION_MAX_LABISOIT).toList()
                 .build();
 
-        this.sendClient.sendTextMessage(recipientId, "Was this helpful?!", quickReplies);
+        this.sendClient.sendTextMessage(recipientId, "Mida tahad teha?", quickReplies);
     }
 
     private QuickReplyMessageEventHandler newQuickReplyMessageEventHandler()
@@ -192,7 +192,7 @@ public class CallBackHandler
             final String senderId = event.getSender().getId();
             final String messageId = event.getMid();
             final String quickReplyPayload = event.getQuickReply().getPayload();
-sendTextMessage(senderId,"sain");
+            sendTextMessage(senderId,"sain");
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
             User user = userRepository.findById(senderId).get();
             if (quickReplyPayload.equals(OPTION_VAATA))
