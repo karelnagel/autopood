@@ -256,9 +256,6 @@ public class CallBackHandler
         logger.error("Message could not be sent. An unexpected error occurred.", e);
     }
 
-
-    //Not needed right now but might be in future
-
     private PostbackEventHandler newPostbackEventHandler()
     {
         return event ->
@@ -273,9 +270,30 @@ public class CallBackHandler
             logger.info("Received postback for user '{}' and page '{}' with payload '{}' at '{}'",
                     senderId, recipientId, payload, timestamp);
 
-            sendTextMessage(senderId, "Postback called");
+            boolean userExists = userRepository.existsById(senderId);
+            if (!userExists)
+            {
+                User user = new User();
+                user.setId(senderId);
+                userRepository.save(user);
+                sendTextMessage(senderId, "Tere tulemast!");
+                sendTextMessage(senderId, "Vali auto parameetrid");
+                try
+                {
+                    sendOptions(senderId);
+                } catch (MessengerApiException e)
+                {
+                    e.printStackTrace();
+                } catch (MessengerIOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
         };
     }
+
+
+    //Not needed right now but might be in future
 
     private AccountLinkingEventHandler newAccountLinkingEventHandler()
     {
