@@ -7,4 +7,9 @@ public class Mobile extends Pood {
     public void refresh() {
         System.out.println("Mobile refresh");
     }
+
+    @Override
+    public void andmed() {
+
+    }
 }

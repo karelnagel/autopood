@@ -6,6 +6,7 @@ public class Kuulutus {
     String mark;
     String mudel;
     int aasta;
+    String link;
 
     Kuulutus() {
 
