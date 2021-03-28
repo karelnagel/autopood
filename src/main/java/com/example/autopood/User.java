@@ -6,7 +6,7 @@ import javax.persistence.Id;
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
     @Id
-    private Integer id;
+    private String id;
     private String lastAction;
     private String brand;
     private String model;
@@ -25,11 +25,11 @@ public class User {
                 "Aasta: "+minYear+"-"+maxYear+"\n";
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

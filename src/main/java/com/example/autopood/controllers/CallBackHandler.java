@@ -137,12 +137,11 @@ public class CallBackHandler
 
             try
             {
-                int userId = Integer.parseInt(senderId);
-                User user = userRepository.findById(userId).get();
+                User user = userRepository.findById(senderId).get();
                 if (user == null)
                 {
                     user = new User();
-                    user.setId(userId);
+                    user.setId(senderId);
                     userRepository.save(user);
                     sendTextMessage(senderId, "Tere tulemast!");
                     sendTextMessage(senderId, "Vali auto parameetrid");
@@ -193,8 +192,7 @@ public class CallBackHandler
             final String quickReplyPayload = event.getQuickReply().getPayload();
 
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
-            int userId = Integer.parseInt(senderId);
-            User user = userRepository.findById(userId).get();
+            User user = userRepository.findById(senderId).get();
             if (quickReplyPayload.equals(OPTION_VAATA))
             {
                 sendTextMessage(senderId, user.toString());
