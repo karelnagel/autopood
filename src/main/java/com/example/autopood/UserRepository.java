@@ -1,6 +1,5 @@
-package com.example.autopood.repositorities;
+package com.example.autopood;
 
-import com.example.autopood.models.User;
 import org.springframework.data.repository.CrudRepository;
 
 

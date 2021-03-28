@@ -15,5 +15,3 @@ spring:
     url: jdbc:mysql://sql430.main-hosting.eu/u157943634_autopood
     username: u157943634_autopood
     password : dGXeKlB8x0*N
-
-spring.datasource.hikari.maxLifeTime : 600000

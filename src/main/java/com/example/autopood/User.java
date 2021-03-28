@@ -1,4 +1,4 @@
-package com.example.autopood.models;
+package com.example.autopood;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
