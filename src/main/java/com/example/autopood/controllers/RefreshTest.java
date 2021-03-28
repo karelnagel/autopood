@@ -27,7 +27,7 @@ public class RefreshTest {
     public void getTest(){
         System.out.println("Refresh");
     }
-    @PostMapping(path="/add") // Map ONLY POST Requests
+    @GetMapping(path="/add") // Map ONLY POST Requests
     public @ResponseBody String addNewUser (@RequestParam String name
             , @RequestParam String email) {
         // @ResponseBody means the returned String is the response, not a view name
