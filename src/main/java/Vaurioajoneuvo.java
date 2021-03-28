@@ -5,17 +5,16 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Vaurioajoneuvo extends Pood {
-
-
+    public static String viimanekuulutus = "pole määratud";
     Vaurioajoneuvo() {
-
     }
 
     @Override
     public void refresh() {
-        System.out.println("Vaurioajoneuvo refresh");
+        System.out.println("------------------------------------\n------ Vaurioajoneuvo refresh ------\n------------------------------------");
 
         //link on avariiliste autode refreshiks
         //https://www.vaurioajoneuvo.fi/?type=PassengerCar&sale_condition=Vaurioituneena%2C%20korjattavaksi%20liikennek%C3%A4ytt%C3%B6%C3%B6n
@@ -23,8 +22,7 @@ public class Vaurioajoneuvo extends Pood {
         Document fullsource = null;
         Elements listings = null;
         var kuulutustekirjeldused = new ArrayList<String>();
-        ArrayList<Kuulutus> kuulutused = new ArrayList<>();
-
+        ArrayList<Integer> millisedEemaldada = new ArrayList<>();
 
         //var kuulutus
 
@@ -34,26 +32,118 @@ public class Vaurioajoneuvo extends Pood {
             e.printStackTrace();
         }
         try{
+            //tõmbame kõik kuulutused elementideks
             listings = fullsource.select("div[class=col-12 col-lg-3 item-lift-container]");
             for(Element listing : listings){
-                String kirjeldus = listing.select("div[class=item-lift-title]").text();
-                System.out.println(kirjeldus);
-                kuulutustekirjeldused.add(kirjeldus);
+                //peame kontrollima, kas on auto üldse
+                String vehicleType = listing.select("p[class=item-lift-dependency]").text();
+                if(vehicleType.equals("Myyntiehto: Muu tuote")) {
+                    //ei tee nendega midagi, mis on "muu toode"
+                    millisedEemaldada.add(listings.indexOf(listing));
+                }
+                else {
+                    String kirjeldus = listing.select("div[class=item-lift-title]").text();
+                    kuulutustekirjeldused.add(kirjeldus);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-/*
-        for (int i = 0; i < kuulutustekirjeldused.size(); i++) {
-            System.out.println(kuulutustekirjeldused.get(i));
+        int count = 0;
+        for(Integer i : millisedEemaldada){
+            listings.remove(listings.get(i-count));
+            count = count + 1;
         }
-        */
+        //System.out.println("Viimane kuulutus oli: "+viimanekuulutus);
+        //saime uue viimase ja võrdleme
+        String uusviimane = kuulutustekirjeldused.get(0);
+        if(isNew(uusviimane)){
+            //kui leidsime uue kuulutuse, loome uue kuulutuse ja saadame selle
+            saadakuulutus(listings.get(0));
+        }
+        //kui ei saanud uut viimast
+        //System.out.println("Uus viimane kuulutus on: "+viimanekuulutus);
 
     }
 
-        @Override
-        public void andmed () {
+    @Override
+    public void andmed () {
+
+    }
+    public boolean isNew(String viimane) {
+        if (viimane.equals(viimanekuulutus)){
+            System.out.println("Uusi kuulutusi pole");
+        return false;
+    }
+        else{
+            System.out.println("Leidsime uue kuulutuse");
+            viimanekuulutus = viimane;
+            return true;
 
         }
     }
+    public void saadakuulutus(Element auto){
+        String mark = scrapeMark(auto);
+        String mudel = scrapeMudel(auto);
+        int aasta = scrapeAasta(auto);
+        int hind = scrapeHind(auto);
+        String link = scrapeLink(auto);
+        System.out.println("Saadame uue auto:\n Mark: "  + mark + "\n Mudel: " + mudel + "\n Aasta: "+ aasta
+                            + "\n Hind: " + hind + "\n Link: " + link);
+        Kuulutus uusAuto = new Kuulutus(mark,mudel,aasta,hind,link);
+
+    }
+
+    public static String scrapeMark(Element kuulutus){
+        String rida;
+        String mark;
+        String[] blok;
+        rida = kuulutus.select("div[class=item-lift-title]").text();
+        blok = rida.split(" ");
+        mark = blok[0];
+        return mark;
+    }
+    public static String scrapeMudel(Element kuulutus){
+        String rida;
+        String mudel;
+        String[] blok;
+        rida = kuulutus.select("div[class=item-lift-title]").text();
+        blok = rida.split(" ");
+        mudel = blok[1];
+        return mudel;
+    }
+    public static int scrapeAasta(Element kuulutus){
+        String rida;
+        int aasta=1;
+        String[] blok;
+
+        rida = kuulutus.select("p[class=item-lift-details]").text();
+        blok = rida.split(",");
+        rida = blok[1].strip();
+        aasta = Integer.parseInt(rida);
+        return aasta;
+    }
+    public static int scrapeHind(Element kuulutus){
+        int hind=1;
+        String rida;
+        String[] blok;
+        int pikkus;
+
+        rida = kuulutus.select("div[class=item-lift-price]").text();
+        blok = rida.split(" ");
+        pikkus = blok.length;
+        rida = blok[pikkus-3]+blok[pikkus-2];
+        hind = Integer.parseInt(rida);
+        return hind;
+    }
+    public static String scrapeLink(Element kuulutus){
+        String rida;
+        Element closer;
+        String baselink = "https://www.vaurioajoneuvo.fi";
+
+        closer = kuulutus.select("a").first();
+        rida = closer.attr("href");
+        String link = baselink + rida;
+        return link;
+    }
+}

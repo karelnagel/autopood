@@ -15,7 +15,13 @@ public class Main {
             Thread.currentThread().interrupt();
         }
         idk.run();
-        //ettenatud millisekundite järel teostame uue Refresh()-i
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        idk.run();
+        //ettenatud millisekundite järel teostame uue Refresh()
         //timer.schedule(new Refresh(), 0, 2000);
     }
 }

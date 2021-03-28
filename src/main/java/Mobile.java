@@ -5,7 +5,8 @@ public class Mobile extends Pood {
 
     @Override
     public void refresh() {
-        System.out.println("Mobile refresh");
+        System.out.println("----------------------------\n------ Mobile refresh ------\n----------------------------");
+        System.out.println("Uusi kuulutusi pole");
     }
 
     @Override
