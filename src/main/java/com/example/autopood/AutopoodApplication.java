@@ -22,7 +22,6 @@ public class AutopoodApplication
     }
     public static void main(String[] args)
     {
-
         SpringApplication.run(AutopoodApplication.class, args);
     }
 
