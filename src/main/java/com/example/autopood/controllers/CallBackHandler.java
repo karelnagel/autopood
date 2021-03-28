@@ -151,7 +151,7 @@ public class CallBackHandler
                 } else
                 {
                     User user = userRepository.findById(senderId).get();
-                    if (user.getLastAction() == null)
+                    if (user.getLastAction().isEmpty()||user.getLastAction()==null)
                     {
                         sendOptions(senderId);
                     }

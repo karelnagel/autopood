@@ -10,7 +10,7 @@ logging:
         messenger4j: INFO
 
 spring:
-  jpa.hibernate.ddl-auto: update
+  jpa.hibernate.ddl-auto: create-drop
   datasource:
     url: jdbc:mysql://sql430.main-hosting.eu/u157943634_autopood
     username: u157943634_autopood
