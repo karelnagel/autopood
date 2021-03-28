@@ -10,9 +10,7 @@ import com.github.messenger4j.receive.MessengerReceiveClient;
 import com.github.messenger4j.receive.events.AccountLinkingEvent;
 import com.github.messenger4j.receive.handlers.*;
 import com.github.messenger4j.send.MessengerSendClient;
-import com.github.messenger4j.send.NotificationType;
 import com.github.messenger4j.send.QuickReply;
-import com.github.messenger4j.send.Recipient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,17 +41,8 @@ public class CallBackHandler
 
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
-
     private final UserRepository userRepository;
 
-    /**
-     * Constructs the {@code CallBackHandler} and initializes the {@code MessengerReceiveClient}.
-     *
-     * @param appSecret   the {@code Application Secret}
-     * @param verifyToken the {@code Verification Token} that has been provided by you during the setup of the {@code
-     *                    Webhook}
-     * @param sendClient  the initialized {@code MessengerSendClient}
-     */
     @Autowired
     public CallBackHandler(@Value("${messenger4j.appSecret}") final String appSecret,
                            @Value("${messenger4j.verifyToken}") final String verifyToken,
@@ -76,12 +65,7 @@ public class CallBackHandler
         this.userRepository = userRepository;
     }
 
-    /**
-     * Webhook verification endpoint.
-     * <p>
-     * The passed verification token (as query parameter) must match the configured verification token.
-     * In case this is true, the passed challenge string must be returned by this endpoint.
-     */
+    //For messenger verification
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> verifyWebhook(@RequestParam("hub.mode") final String mode,
                                                 @RequestParam("hub.verify_token") final String verifyToken,
@@ -100,14 +84,11 @@ public class CallBackHandler
         }
     }
 
-    /**
-     * Callback endpoint responsible for processing the inbound messages and events.
-     */
+    //For incoming messages
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> handleCallback(@RequestBody final String payload,
                                                @RequestHeader("X-Hub-Signature") final String signature)
     {
-
         logger.debug("Received Messenger Platform callback - payload: {} | signature: {}", payload, signature);
         try
         {
@@ -137,8 +118,8 @@ public class CallBackHandler
 
             try
             {
-                boolean userexists = userRepository.existsById(senderId);
-                if (!userexists)
+                boolean userExists = userRepository.existsById(senderId);
+                if (!userExists)
                 {
                     User user = new User();
                     user.setId(senderId);
@@ -150,42 +131,49 @@ public class CallBackHandler
                 } else
                 {
                     User user = userRepository.findById(senderId).get();
-                    if (user.getLastAction().isEmpty()||user.getLastAction()==null)
+                    if (user.getLastAction().isEmpty() || user.getLastAction() == null)
                     {
                         sendOptions(senderId);
-                    }
-                    else{
-                        switch (user.getLastAction())
+                    } else
+                    {
+                        try
                         {
-                            case OPTION_MARK:
-                                user.setBrand(messageText);
-                                break;
-                            case OPTION_MUDEL:
-                                user.setModel(messageText);
-                                break;
-                            case OPTION_MIN_HIND:
-                                user.setMinPrice(Integer.parseInt(messageText));
-                                break;
-                            case OPTION_MAX_HIND:
-                                user.setMaxPrice(Integer.parseInt(messageText));
-                                break;
-                            case OPTION_MIN_AASTA:
-                                user.setMinYear(Integer.parseInt(messageText));
-                                break;
-                            case OPTION_MAX_AASTA:
-                                user.setMaxYear(Integer.parseInt(messageText));
-                                break;
-                            case OPTION_MIN_LABISOIT:
-                                user.setMinMilage(Integer.parseInt(messageText));
-                                break;
-                            case OPTION_MAX_LABISOIT:
-                                user.setMaxMilage(Integer.parseInt(messageText));
-                                break;
+                            switch (user.getLastAction())
+                            {
+                                case OPTION_MARK:
+                                    user.setBrand(messageText);
+                                    break;
+                                case OPTION_MUDEL:
+                                    user.setModel(messageText);
+                                    break;
+                                case OPTION_MIN_HIND:
+                                    user.setMinPrice(Integer.parseInt(messageText));
+                                    break;
+                                case OPTION_MAX_HIND:
+                                    user.setMaxPrice(Integer.parseInt(messageText));
+                                    break;
+                                case OPTION_MIN_AASTA:
+                                    user.setMinYear(Integer.parseInt(messageText));
+                                    break;
+                                case OPTION_MAX_AASTA:
+                                    user.setMaxYear(Integer.parseInt(messageText));
+                                    break;
+                                case OPTION_MIN_LABISOIT:
+                                    user.setMinMilage(Integer.parseInt(messageText));
+                                    break;
+                                case OPTION_MAX_LABISOIT:
+                                    user.setMaxMilage(Integer.parseInt(messageText));
+                                    break;
+                            }
+                            sendTextMessage(senderId, user.getLastAction() + " muudetud " + messageText);
+                            user.setLastAction("");
+                            userRepository.save(user);
+                            sendOptions(senderId);
                         }
-                        sendTextMessage(senderId,user.getLastAction()+" muudetud "+messageText);
-                        user.setLastAction("");
-                        userRepository.save(user);
-                        sendOptions(senderId);
+                        catch (NumberFormatException nfe)
+                        {
+                            sendTextMessage(senderId, "Pole sobiv number");
+                        }
                     }
                 }
             } catch (MessengerApiException | MessengerIOException e)
@@ -193,23 +181,6 @@ public class CallBackHandler
                 handleSendException(e);
             }
         };
-    }
-
-    void sendOptions(String recipientId) throws MessengerApiException, MessengerIOException
-    {
-        final List<QuickReply> quickReplies = QuickReply.newListBuilder()
-                .addTextQuickReply("Vaata praegust", OPTION_VAATA).toList()
-                .addTextQuickReply("Mark", OPTION_MARK).toList()
-                .addTextQuickReply("Mudel", OPTION_MUDEL).toList()
-                .addTextQuickReply("Min hind", OPTION_MIN_HIND).toList()
-                .addTextQuickReply("Max hind", OPTION_MAX_HIND).toList()
-                .addTextQuickReply("Min aasta", OPTION_MIN_AASTA).toList()
-                .addTextQuickReply("Max aasta", OPTION_MAX_AASTA).toList()
-                .addTextQuickReply("Min läbisõit", OPTION_MIN_LABISOIT).toList()
-                .addTextQuickReply("Max läbisõit", OPTION_MAX_LABISOIT).toList()
-                .build();
-
-        this.sendClient.sendTextMessage(recipientId, "Mida tahad teha?", quickReplies);
     }
 
     private QuickReplyMessageEventHandler newQuickReplyMessageEventHandler()
@@ -247,6 +218,46 @@ public class CallBackHandler
             }
         };
     }
+
+
+    private void sendTextMessage(String recipientId, String text)
+    {
+        try
+        {
+            this.sendClient.sendTextMessage(recipientId, text);
+        } catch (MessengerApiException e)
+        {
+            e.printStackTrace();
+        } catch (MessengerIOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    void sendOptions(String recipientId) throws MessengerApiException, MessengerIOException
+    {
+        final List<QuickReply> quickReplies = QuickReply.newListBuilder()
+                .addTextQuickReply("Vaata praegust", OPTION_VAATA).toList()
+                .addTextQuickReply("Mark", OPTION_MARK).toList()
+                .addTextQuickReply("Mudel", OPTION_MUDEL).toList()
+                .addTextQuickReply("Min hind", OPTION_MIN_HIND).toList()
+                .addTextQuickReply("Max hind", OPTION_MAX_HIND).toList()
+                .addTextQuickReply("Min aasta", OPTION_MIN_AASTA).toList()
+                .addTextQuickReply("Max aasta", OPTION_MAX_AASTA).toList()
+                .addTextQuickReply("Min läbisõit", OPTION_MIN_LABISOIT).toList()
+                .addTextQuickReply("Max läbisõit", OPTION_MAX_LABISOIT).toList()
+                .build();
+
+        this.sendClient.sendTextMessage(recipientId, "Mida tahad teha?", quickReplies);
+    }
+
+    private void handleSendException(Exception e)
+    {
+        logger.error("Message could not be sent. An unexpected error occurred.", e);
+    }
+
+
+    //Not needed right now but might be in future
 
     private PostbackEventHandler newPostbackEventHandler()
     {
@@ -350,11 +361,6 @@ public class CallBackHandler
         };
     }
 
-    /**
-     * This handler is called when either the message is unsupported or when the event handler for the actual event type
-     * is not registered. In this showcase all event handlers are registered. Hence only in case of an
-     * unsupported message the fallback event handler is called.
-     */
     private FallbackEventHandler newFallbackEventHandler()
     {
         return event ->
@@ -364,25 +370,5 @@ public class CallBackHandler
             final String senderId = event.getSender().getId();
             logger.info("Received unsupported message from user '{}'", senderId);
         };
-    }
-
-    private void sendTextMessage(String recipientId, String text)
-    {
-        try
-        {
-            final Recipient recipient = Recipient.newBuilder().recipientId(recipientId).build();
-            final NotificationType notificationType = NotificationType.REGULAR;
-            final String metadata = "DEVELOPER_DEFINED_METADATA";
-
-            this.sendClient.sendTextMessage(recipient, notificationType, text, metadata);
-        } catch (MessengerApiException | MessengerIOException e)
-        {
-            handleSendException(e);
-        }
-    }
-
-    private void handleSendException(Exception e)
-    {
-        logger.error("Message could not be sent. An unexpected error occurred.", e);
     }
 }
