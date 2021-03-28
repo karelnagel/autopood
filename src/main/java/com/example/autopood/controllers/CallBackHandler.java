@@ -137,10 +137,10 @@ public class CallBackHandler
 
             try
             {
-                User user = userRepository.findById(senderId).get();
-                if (user == null)
+                boolean userexists = userRepository.existsById(senderId);
+                if (!userexists)
                 {
-                    user = new User();
+                    User user = new User();
                     user.setId(senderId);
                     userRepository.save(user);
                     sendTextMessage(senderId, "Tere tulemast!");
@@ -149,6 +149,7 @@ public class CallBackHandler
 
                 } else
                 {
+                    User user = userRepository.findById(senderId).get();
                     if (user.getLastAction() == null)
                     {
                         sendOptions(senderId);
