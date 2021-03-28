@@ -8,3 +8,10 @@ logging:
     com:
       github:
         messenger4j: INFO
+
+spring:
+  jpa.hibernate.ddl-auto: update
+  datasource:
+    url: jdbc:mysql://sql430.main-hosting.eu/u157943634_autopood
+    username: u157943634_autopood
+    password : dGXeKlB8x0*N

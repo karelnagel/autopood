@@ -1,5 +1,7 @@
 package com.example.autopood.controllers;
 
+import com.example.autopood.User;
+import com.example.autopood.UserRepository;
 import com.github.messenger4j.MessengerPlatform;
 import com.github.messenger4j.exceptions.MessengerApiException;
 import com.github.messenger4j.exceptions.MessengerIOException;
@@ -7,7 +9,10 @@ import com.github.messenger4j.exceptions.MessengerVerificationException;
 import com.github.messenger4j.receive.MessengerReceiveClient;
 import com.github.messenger4j.receive.events.AccountLinkingEvent;
 import com.github.messenger4j.receive.handlers.*;
-import com.github.messenger4j.send.*;
+import com.github.messenger4j.send.MessengerSendClient;
+import com.github.messenger4j.send.NotificationType;
+import com.github.messenger4j.send.QuickReply;
+import com.github.messenger4j.send.Recipient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +31,21 @@ public class CallBackHandler
 
     private static final Logger logger = LoggerFactory.getLogger(CallBackHandler.class);
 
-    public static final String GOOD_ACTION = "DEVELOPER_DEFINED_PAYLOAD_FOR_GOOD_ACTION";
-    public static final String NOT_GOOD_ACTION = "DEVELOPER_DEFINED_PAYLOAD_FOR_NOT_GOOD_ACTION";
+    public static final String OPTION_VAATA = "vaata";
+    public static final String OPTION_MARK = "mark";
+    public static final String OPTION_MUDEL = "mudel";
+    public static final String OPTION_MIN_HIND = "min hind";
+    public static final String OPTION_MAX_HIND = "max hind";
+    public static final String OPTION_MIN_AASTA = "min aasta";
+    public static final String OPTION_MAX_AASTA = "max aasta";
+    public static final String OPTION_MIN_LABISOIT = "min labisoit";
+    public static final String OPTION_MAX_LABISOIT = "max labisoit";
 
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Constructs the {@code CallBackHandler} and initializes the {@code MessengerReceiveClient}.
@@ -43,7 +58,8 @@ public class CallBackHandler
     @Autowired
     public CallBackHandler(@Value("${messenger4j.appSecret}") final String appSecret,
                            @Value("${messenger4j.verifyToken}") final String verifyToken,
-                           final MessengerSendClient sendClient) {
+                           final MessengerSendClient sendClient)
+    {
 
         logger.debug("Initializing MessengerReceiveClient - appSecret: {} | verifyToken: {}", appSecret, verifyToken);
         this.receiveClient = MessengerPlatform.newReceiveClientBuilder(appSecret, verifyToken)
@@ -62,20 +78,23 @@ public class CallBackHandler
 
     /**
      * Webhook verification endpoint.
-     *
+     * <p>
      * The passed verification token (as query parameter) must match the configured verification token.
      * In case this is true, the passed challenge string must be returned by this endpoint.
      */
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> verifyWebhook(@RequestParam("hub.mode") final String mode,
                                                 @RequestParam("hub.verify_token") final String verifyToken,
-                                                @RequestParam("hub.challenge") final String challenge) {
+                                                @RequestParam("hub.challenge") final String challenge)
+    {
 
         logger.debug("Received Webhook verification request - mode: {} | verifyToken: {} | challenge: {}", mode,
                 verifyToken, challenge);
-        try {
+        try
+        {
             return ResponseEntity.ok(this.receiveClient.verifyWebhook(mode, verifyToken, challenge));
-        } catch (MessengerVerificationException e) {
+        } catch (MessengerVerificationException e)
+        {
             logger.warn("Webhook verification failed: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
@@ -86,21 +105,26 @@ public class CallBackHandler
      */
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> handleCallback(@RequestBody final String payload,
-                                               @RequestHeader("X-Hub-Signature") final String signature) {
+                                               @RequestHeader("X-Hub-Signature") final String signature)
+    {
 
         logger.debug("Received Messenger Platform callback - payload: {} | signature: {}", payload, signature);
-        try {
+        try
+        {
             this.receiveClient.processCallbackPayload(payload, signature);
             logger.debug("Processed callback payload successfully");
             return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (MessengerVerificationException e) {
+        } catch (MessengerVerificationException e)
+        {
             logger.warn("Processing of callback payload failed: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
-    private TextMessageEventHandler newTextMessageEventHandler() {
-        return event -> {
+    private TextMessageEventHandler newTextMessageEventHandler()
+    {
+        return event ->
+        {
             logger.debug("Received TextMessageEvent: {}", event);
 
             final String messageId = event.getMid();
@@ -111,57 +135,57 @@ public class CallBackHandler
             logger.info("Received message '{}' with text '{}' from user '{}' at '{}'",
                     messageId, messageText, senderId, timestamp);
 
-            try {
-                switch (messageText.toLowerCase()) {
+            try
+            {
+                int userId = Integer.parseInt(senderId);
+                User user = userRepository.findById(userId).get();
+                if (user == null)
+                {
+                    user = new User();
+                    user.setId(userId);
+                    userRepository.save(user);
+                    sendTextMessage(senderId, "Tere tulemast!");
+                    sendTextMessage(senderId, "Vali auto parameetrid");
+                    sendOptions(senderId);
 
-
-                    case "yo":
-                        sendTextMessage(senderId, "Hello, What I can do for you ? Type the word you're looking for");
-                        break;
-
-                    case "great":
-                        sendTextMessage(senderId, "You're welcome :) keep rocking");
-                        break;
-                    case "2":
-                        sendQuickReply(senderId);
-                        break;
-
-
-                    default:
-                        sendTextMessage(senderId,"Tere");
-                        sendTextMessage(senderId,"Tulid autot ostma jah, utle mis sulle meeldib");
+                } else
+                {
+                    if (user.getLastAction() == null)
+                    {
+                        sendOptions(senderId);
+                    }
+                    else{
+                        sendTextMessage(senderId,"asdasdasdasdasasdasd");
+                    }
                 }
-            } catch (MessengerApiException | MessengerIOException e) {
+            } catch (MessengerApiException | MessengerIOException e)
+            {
                 handleSendException(e);
             }
         };
     }
 
-
-    private void sendGifMessage(String recipientId, String gif) throws MessengerApiException, MessengerIOException {
-        this.sendClient.sendImageAttachment(recipientId, gif);
-    }
-
-
-
-    private void sendQuickReply(String recipientId) throws MessengerApiException, MessengerIOException {
+    void sendOptions(String recipientId) throws MessengerApiException, MessengerIOException
+    {
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
-                .addTextQuickReply("Looks good", GOOD_ACTION).toList()
-                .addTextQuickReply("Nope!", NOT_GOOD_ACTION).toList()
-                .addTextQuickReply("Nope!", NOT_GOOD_ACTION).toList()
-                .addTextQuickReply("Nope!", NOT_GOOD_ACTION).toList()
-                .addTextQuickReply("Nope!", NOT_GOOD_ACTION).toList()
-                .addTextQuickReply("Nope!", NOT_GOOD_ACTION).toList()
-                .addTextQuickReply("Nope!", NOT_GOOD_ACTION).toList()
-                .addTextQuickReply("Nope!", NOT_GOOD_ACTION).toList()
-                .addTextQuickReply("Nope!", NOT_GOOD_ACTION).toList()
+                .addTextQuickReply("Vaata praegust", OPTION_VAATA).toList()
+                .addTextQuickReply("Mark", OPTION_MARK).toList()
+                .addTextQuickReply("Mudel", OPTION_MUDEL).toList()
+                .addTextQuickReply("Min hind", OPTION_MIN_HIND).toList()
+                .addTextQuickReply("Max hind", OPTION_MAX_HIND).toList()
+                .addTextQuickReply("Min aasta", OPTION_MIN_AASTA).toList()
+                .addTextQuickReply("Max aasta", OPTION_MAX_AASTA).toList()
+                .addTextQuickReply("Min läbisõit", OPTION_MIN_LABISOIT).toList()
+                .addTextQuickReply("Max läbisõit", OPTION_MAX_LABISOIT).toList()
                 .build();
 
         this.sendClient.sendTextMessage(recipientId, "Was this helpful?!", quickReplies);
     }
 
-    private QuickReplyMessageEventHandler newQuickReplyMessageEventHandler() {
-        return event -> {
+    private QuickReplyMessageEventHandler newQuickReplyMessageEventHandler()
+    {
+        return event ->
+        {
             logger.debug("Received QuickReplyMessageEvent: {}", event);
 
             final String senderId = event.getSender().getId();
@@ -169,25 +193,25 @@ public class CallBackHandler
             final String quickReplyPayload = event.getQuickReply().getPayload();
 
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
-
-
-                try {
-                    if(quickReplyPayload.equals(GOOD_ACTION))
-                    sendGifMessage(senderId, "https://media.giphy.com/media/3oz8xPxTUeebQ8pL1e/giphy.gif");
-                    else
-                    sendGifMessage(senderId, "https://media.giphy.com/media/26ybx7nkZXtBkEYko/giphy.gif");
-                } catch (MessengerApiException e) {
-                    handleSendException(e);
-                } catch (MessengerIOException e) {
-                    handleIOException(e);
-                }
-
+            int userId = Integer.parseInt(senderId);
+            User user = userRepository.findById(userId).get();
+            if (quickReplyPayload.equals(OPTION_VAATA))
+            {
+                sendTextMessage(senderId, user.toString());
+            } else
+            {
+                user.setLastAction(quickReplyPayload);
+                userRepository.save(user);
+                sendTextMessage(senderId, "Kirjuta " + quickReplyPayload);
+            }
             sendTextMessage(senderId, "Let's try another one :D!");
         };
     }
 
-    private PostbackEventHandler newPostbackEventHandler() {
-        return event -> {
+    private PostbackEventHandler newPostbackEventHandler()
+    {
+        return event ->
+        {
             logger.debug("Received PostbackEvent: {}", event);
 
             final String senderId = event.getSender().getId();
@@ -202,8 +226,10 @@ public class CallBackHandler
         };
     }
 
-    private AccountLinkingEventHandler newAccountLinkingEventHandler() {
-        return event -> {
+    private AccountLinkingEventHandler newAccountLinkingEventHandler()
+    {
+        return event ->
+        {
             logger.debug("Received AccountLinkingEvent: {}", event);
 
             final String senderId = event.getSender().getId();
@@ -215,8 +241,10 @@ public class CallBackHandler
         };
     }
 
-    private OptInEventHandler newOptInEventHandler() {
-        return event -> {
+    private OptInEventHandler newOptInEventHandler()
+    {
+        return event ->
+        {
             logger.debug("Received OptInEvent: {}", event);
 
             final String senderId = event.getSender().getId();
@@ -231,8 +259,10 @@ public class CallBackHandler
         };
     }
 
-    private EchoMessageEventHandler newEchoMessageEventHandler() {
-        return event -> {
+    private EchoMessageEventHandler newEchoMessageEventHandler()
+    {
+        return event ->
+        {
             logger.debug("Received EchoMessageEvent: {}", event);
 
             final String messageId = event.getMid();
@@ -245,16 +275,20 @@ public class CallBackHandler
         };
     }
 
-    private MessageDeliveredEventHandler newMessageDeliveredEventHandler() {
-        return event -> {
+    private MessageDeliveredEventHandler newMessageDeliveredEventHandler()
+    {
+        return event ->
+        {
             logger.debug("Received MessageDeliveredEvent: {}", event);
 
             final List<String> messageIds = event.getMids();
             final Date watermark = event.getWatermark();
             final String senderId = event.getSender().getId();
 
-            if (messageIds != null) {
-                messageIds.forEach(messageId -> {
+            if (messageIds != null)
+            {
+                messageIds.forEach(messageId ->
+                {
                     logger.info("Received delivery confirmation for message '{}'", messageId);
                 });
             }
@@ -263,8 +297,10 @@ public class CallBackHandler
         };
     }
 
-    private MessageReadEventHandler newMessageReadEventHandler() {
-        return event -> {
+    private MessageReadEventHandler newMessageReadEventHandler()
+    {
+        return event ->
+        {
             logger.debug("Received MessageReadEvent: {}", event);
 
             final Date watermark = event.getWatermark();
@@ -279,8 +315,10 @@ public class CallBackHandler
      * is not registered. In this showcase all event handlers are registered. Hence only in case of an
      * unsupported message the fallback event handler is called.
      */
-    private FallbackEventHandler newFallbackEventHandler() {
-        return event -> {
+    private FallbackEventHandler newFallbackEventHandler()
+    {
+        return event ->
+        {
             logger.debug("Received FallbackEvent: {}", event);
 
             final String senderId = event.getSender().getId();
@@ -288,23 +326,23 @@ public class CallBackHandler
         };
     }
 
-    private void sendTextMessage(String recipientId, String text) {
-        try {
+    private void sendTextMessage(String recipientId, String text)
+    {
+        try
+        {
             final Recipient recipient = Recipient.newBuilder().recipientId(recipientId).build();
             final NotificationType notificationType = NotificationType.REGULAR;
             final String metadata = "DEVELOPER_DEFINED_METADATA";
 
             this.sendClient.sendTextMessage(recipient, notificationType, text, metadata);
-        } catch (MessengerApiException | MessengerIOException e) {
+        } catch (MessengerApiException | MessengerIOException e)
+        {
             handleSendException(e);
         }
     }
 
-    private void handleSendException(Exception e) {
+    private void handleSendException(Exception e)
+    {
         logger.error("Message could not be sent. An unexpected error occurred.", e);
-    }
-
-    private void handleIOException(Exception e) {
-        logger.error("Could not open Spring.io page. An unexpected error occurred.", e);
     }
 }
