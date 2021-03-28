@@ -1,7 +1,7 @@
 package com.example.autopood.controllers;
 
-import com.example.autopood.User;
-import com.example.autopood.UserRepository;
+import com.example.autopood.models.User;
+import com.example.autopood.repositorities.UserRepository;
 import com.github.messenger4j.MessengerPlatform;
 import com.github.messenger4j.exceptions.MessengerApiException;
 import com.github.messenger4j.exceptions.MessengerIOException;
@@ -222,15 +222,28 @@ public class CallBackHandler
             final String messageId = event.getMid();
             final String quickReplyPayload = event.getQuickReply().getPayload();
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
-            User user = userRepository.findById(senderId).get();
-            if (quickReplyPayload.equals(OPTION_VAATA))
+            if (userRepository.existsById(senderId))
             {
-                sendTextMessage(senderId, user.toString());
-            } else
-            {
-                user.setLastAction(quickReplyPayload);
-                userRepository.save(user);
-                sendTextMessage(senderId, "Kirjuta " + quickReplyPayload);
+                User user = userRepository.findById(senderId).get();
+                if (quickReplyPayload.equals(OPTION_VAATA))
+                {
+                    sendTextMessage(senderId, user.toString());
+                    try
+                    {
+                        sendOptions(senderId);
+                    } catch (MessengerApiException e)
+                    {
+                        e.printStackTrace();
+                    } catch (MessengerIOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                } else
+                {
+                    user.setLastAction(quickReplyPayload);
+                    userRepository.save(user);
+                    sendTextMessage(senderId, "Kirjuta " + quickReplyPayload);
+                }
             }
         };
     }
