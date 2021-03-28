@@ -1,6 +1,9 @@
 package com.example.autopood.controllers;
 
+import com.example.autopood.models.Kuulutus;
 import com.example.autopood.models.User;
+import com.example.autopood.poed.Pood;
+import com.example.autopood.poed.Vaurioajoneuvo;
 import com.example.autopood.repositorities.UserRepository;
 import com.github.messenger4j.exceptions.MessengerApiException;
 import com.github.messenger4j.exceptions.MessengerIOException;
@@ -11,6 +14,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class Refresh
@@ -30,6 +36,24 @@ public class Refresh
     public void getTest()
     {
         System.out.println("Refresh");
+        List<Pood> poodideList = new ArrayList<Pood>();
+//
+//        var mobile = new Mobile();
+        var vaurioajoneuvo = new Vaurioajoneuvo();
+        poodideList.add(vaurioajoneuvo);
+//        poodideList.add(mobile);
+
+        //Refresh all shops
+        for (Pood pood : poodideList)
+        {
+            var list = pood.refresh();
+            for (Kuulutus kuulutus : list)
+            {
+                //Kontrolli kas keegi tahab
+
+                sendMessage(kuulutus.toString());
+            }
+        }
     }
 
     @GetMapping("/message")
