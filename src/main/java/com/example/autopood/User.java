@@ -6,16 +6,16 @@ import javax.persistence.Id;
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
     @Id
-    private String id;
-    private String lastAction;
-    private String brand;
-    private String model;
-    private double minPrice;
-    private double maxPrice;
-    private double maxMilage;
-    private double minMilage;
-    private int maxYear;
-    private int minYear;
+    private String id="";
+    private String lastAction="";
+    private String brand="";
+    private String model="";
+    private double minPrice=0;
+    private double maxPrice=0;
+    private double maxMilage=0;
+    private double minMilage=0;
+    private int maxYear=0;
+    private int minYear=0;
 
 
     @Override
