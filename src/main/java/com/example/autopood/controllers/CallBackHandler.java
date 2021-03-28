@@ -1,7 +1,7 @@
 package com.example.autopood.controllers;
 
-import com.example.autopood.User;
-import com.example.autopood.UserRepository;
+import com.example.autopood.models.User;
+import com.example.autopood.repositorities.UserRepository;
 import com.github.messenger4j.MessengerPlatform;
 import com.github.messenger4j.exceptions.MessengerApiException;
 import com.github.messenger4j.exceptions.MessengerIOException;
@@ -226,6 +226,16 @@ public class CallBackHandler
             if (quickReplyPayload.equals(OPTION_VAATA))
             {
                 sendTextMessage(senderId, user.toString());
+                try
+                {
+                    sendOptions(senderId);
+                } catch (MessengerApiException e)
+                {
+                    e.printStackTrace();
+                } catch (MessengerIOException e)
+                {
+                    e.printStackTrace();
+                }
             } else
             {
                 user.setLastAction(quickReplyPayload);
