@@ -156,7 +156,37 @@ public class CallBackHandler
                         sendOptions(senderId);
                     }
                     else{
-                        sendTextMessage(senderId,"asdasdasdasdasasdasd");
+                        switch (user.getLastAction())
+                        {
+                            case OPTION_MARK:
+                                user.setBrand(messageText);
+                                break;
+                            case OPTION_MUDEL:
+                                user.setModel(messageText);
+                                break;
+                            case OPTION_MIN_HIND:
+                                user.setMinPrice(Integer.parseInt(messageText));
+                                break;
+                            case OPTION_MAX_HIND:
+                                user.setMaxPrice(Integer.parseInt(messageText));
+                                break;
+                            case OPTION_MIN_AASTA:
+                                user.setMinYear(Integer.parseInt(messageText));
+                                break;
+                            case OPTION_MAX_AASTA:
+                                user.setMaxYear(Integer.parseInt(messageText));
+                                break;
+                            case OPTION_MIN_LABISOIT:
+                                user.setMinMilage(Integer.parseInt(messageText));
+                                break;
+                            case OPTION_MAX_LABISOIT:
+                                user.setMaxMilage(Integer.parseInt(messageText));
+                                break;
+                        }
+                        user.setLastAction("");
+                        userRepository.save(user);
+                        sendTextMessage(senderId,user.getLastAction()+" muudetud "+messageText);
+                        sendOptions(senderId);
                     }
                 }
             } catch (MessengerApiException | MessengerIOException e)

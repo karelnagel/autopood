@@ -20,7 +20,9 @@ public class User {
 
     @Override
     public String toString(){
-        return "Hind: "+minPrice+"-"+maxPrice+"\n"+
+        return "Mark: "+brand+"\n"+
+                "Mudel: "+model+"\n"+
+                "Hind: "+minPrice+"-"+maxPrice+"\n"+
                 "Labisoit: "+minMilage+"-"+maxMilage+"\n"+
                 "Aasta: "+minYear+"-"+maxYear+"\n";
     }
