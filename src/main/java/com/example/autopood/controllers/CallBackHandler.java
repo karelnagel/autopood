@@ -132,7 +132,6 @@ public class CallBackHandler
             final String senderId = event.getSender().getId();
             final Date timestamp = event.getTimestamp();
 
-            sendTextMessage(senderId,"sain");
             logger.info("Received message '{}' with text '{}' from user '{}' at '{}'",
                     messageId, messageText, senderId, timestamp);
 
@@ -183,9 +182,9 @@ public class CallBackHandler
                                 user.setMaxMilage(Integer.parseInt(messageText));
                                 break;
                         }
+                        sendTextMessage(senderId,user.getLastAction()+" muudetud "+messageText);
                         user.setLastAction("");
                         userRepository.save(user);
-                        sendTextMessage(senderId,user.getLastAction()+" muudetud "+messageText);
                         sendOptions(senderId);
                     }
                 }
@@ -222,7 +221,6 @@ public class CallBackHandler
             final String senderId = event.getSender().getId();
             final String messageId = event.getMid();
             final String quickReplyPayload = event.getQuickReply().getPayload();
-            sendTextMessage(senderId,"sain");
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
             User user = userRepository.findById(senderId).get();
             if (quickReplyPayload.equals(OPTION_VAATA))
@@ -234,7 +232,6 @@ public class CallBackHandler
                 userRepository.save(user);
                 sendTextMessage(senderId, "Kirjuta " + quickReplyPayload);
             }
-            sendTextMessage(senderId, "Let's try another one :D!");
         };
     }
 
