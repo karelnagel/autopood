@@ -2,6 +2,7 @@ package com.example.autopood.controllers;
 
 import com.example.autopood.models.Kuulutus;
 import com.example.autopood.models.User;
+import com.example.autopood.poed.Nettiauto;
 import com.example.autopood.poed.Pood;
 import com.example.autopood.poed.Vaurioajoneuvo;
 import com.example.autopood.repositorities.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,16 +35,16 @@ public class Refresh
 
     @Scheduled(fixedRate = 60000)
     @GetMapping("/refresh")
-    public void getTest()
-    {
-        System.out.println("Refresh");
+    public void getTest() throws IOException {
+        System.out.println("Global refresh");
         List<Pood> poodideList = new ArrayList<Pood>();
 //
 //        var mobile = new Mobile();
         var vaurioajoneuvo = new Vaurioajoneuvo();
+        var nettiauto = new Nettiauto();
         poodideList.add(vaurioajoneuvo);
-//        poodideList.add(mobile);
-
+        //poodideList.add(mobile);
+        poodideList.add(nettiauto);
         //Refresh all shops
         for (Pood pood : poodideList)
         {
@@ -64,7 +66,7 @@ public class Refresh
         {
             try
             {
-                System.out.println(user.getId());
+                System.out.println("Sent message to user ID: " + user.getId());
                 sendClient.sendTextMessage(user.getId(), message);
             } catch (MessengerApiException e)
             {
