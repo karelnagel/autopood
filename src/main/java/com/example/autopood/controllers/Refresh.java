@@ -60,7 +60,7 @@ public class Refresh
             {
                 //Kontrolli kas keegi tahab
                 System.out.println(kuulutus.toString());
-                sendMessage(kuulutus.toString());
+                sendMessage(kuulutus.toMessenger());
             }
         }
     }

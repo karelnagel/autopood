@@ -42,9 +42,19 @@ public class Kuulutus
         this.hind = hind;
         this.link = link;
     }
-
     @Override
     public String toString()
+    {
+        return "Kuulutus{" +
+                "mark='" + mark + '\'' +
+                ", mudel='" + mudel + '\'' +
+                ", aasta=" + aasta +
+                ", hind=" + hind +
+                ", link='" + link + '\'' +
+                '}';
+    }
+
+    public String toMessenger()
     {
         return mark+" - "+mudel+ "\n" +
                 aasta +" aasta \n"  +
