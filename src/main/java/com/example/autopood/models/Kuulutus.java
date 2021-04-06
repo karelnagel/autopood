@@ -46,13 +46,10 @@ public class Kuulutus
     @Override
     public String toString()
     {
-        return "Kuulutus{" +
-                "mark='" + mark + '\'' +
-                ", mudel='" + mudel + '\'' +
-                ", aasta=" + aasta +
-                ", hind=" + hind +
-                ", link='" + link + '\'' +
-                '}';
+        return mark+" - "+mudel+ "\n" +
+                aasta +" aasta \n"  +
+                hind +"$ \n" +
+                link ;
     }
 
     public String getMark()
