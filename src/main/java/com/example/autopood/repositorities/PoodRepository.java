@@ -1,9 +1,9 @@
 package com.example.autopood.repositorities;
 
-import com.example.autopood.models.User;
+import com.example.autopood.models.Pood;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, String>
+public interface PoodRepository extends JpaRepository<Pood, String>
 {
 
 }

@@ -1,38 +1,29 @@
 package com.example.autopood.poed;
 
 import com.example.autopood.models.Kuulutus;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import io.swagger.models.Path;
+import com.example.autopood.repositorities.KuulutusRepository;
+import com.example.autopood.repositorities.PoodRepository;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import kong.unirest.json.JSONArray;
 import kong.unirest.json.JSONException;
 import kong.unirest.json.JSONObject;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
-public class Nettiauto extends Pood{
-    public static String lastID = "N/A";
+public class Nettiauto extends AbstractPood
+{
+
+    public Nettiauto(PoodRepository poodRepository, KuulutusRepository kuulutusRepository)
+    {
+        super("Nettiauto",poodRepository,kuulutusRepository);
+    }
+
     @Override
-    public List<Kuulutus> refresh(){
-        System.out.println("------------------------------------\n-------- Nettiauto refresh --------\n------------------------------------");
-        //requestime access tokenit
+    public List<Kuulutus> getKuulutused(){
+
         var tokenURL = "https://auth.nettix.fi/oauth2/token";
 
         JsonNode jsonResponse = Unirest.post(tokenURL)
@@ -47,7 +38,6 @@ public class Nettiauto extends Pood{
         hulk = hulk[1].strip().split(",");
         String token = hulk[0];
         token = token.substring(1,token.length()-1);
-        System.out.println("saime access tokeni: " + token);
 
 
 
@@ -59,7 +49,6 @@ public class Nettiauto extends Pood{
         //  X-Access-Token:
         //HEA REQUEST https://api.nettix.fi/rest/car/search?page=1&rows=30&sortBy=dateCreated&sortOrder=desc&status=forsale&identificationList=&isMyFavorite=false&vehicleType=1&includeMakeModel=true&bodyType=&accessoriesCondition=and&isPriced=true&vatDeduct=true&taxFree=false&roadWorthy=true&tagsCondition=and&isAdDealerExchange=false
         //CURL request curl -X GET "https://api.nettix.fi/rest/car/search?page=1&rows=30&sortBy=dateCreated&sortOrder=desc&status=forsale&identificationList=&isMyFavorite=false&vehicleType=1&includeMakeModel=true&bodyType=&accessoriesCondition=and&isPriced=true&vatDeduct=true&taxFree=false&roadWorthy=true&tagsCondition=and&isAdDealerExchange=false" -H "accept: application/json" -H "X-Access-Token: {token}"
-        System.out.println("\nkogu leht: \n");
 
         String pulliURL = "https://api.nettix.fi/rest/car/search?page=1&rows=10&sortBy=dateCreated&sortOrder=desc&status=forsale&identificationList=&isMyFavorite=false&vehicleType=1&includeMakeModel=true&bodyType=&accessoriesCondition=and&isPriced=true&vatDeduct=true&taxFree=false&roadWorthy=true&tagsCondition=and&isAdDealerExchange=false";
         JsonNode pull = Unirest.get(pulliURL)
@@ -80,8 +69,7 @@ public class Nettiauto extends Pood{
             currentID = kuulutus.get("id").toString();
             //System.out.println(praeguneID);
             //kontrollime kas oleme seda kuulutust juba näinud, kui oleme, siis lõpetame tsükli.
-            if(currentID.equals(lastID)){
-                lastID = currentID;
+            if(kuulutus.get("adUrl").equals(getViimaneKuulutus())){
                 break;
             }
             try {
@@ -105,12 +93,6 @@ public class Nettiauto extends Pood{
             }
             //Kuulutus Auto = new Kuulutus(new String.,);
         }
-
-        lastID = firstID;
         return newListings;
-    }
-    @Override
-    public void andmed() {
-
     }
 }

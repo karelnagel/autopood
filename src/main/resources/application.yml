@@ -1,6 +1,6 @@
 messenger4j:
   appSecret: "48cccf57b5ec4462f06b0595fba26889"
-  verifyToken : "asdasd"
+  verifyToken: "asdasd"
   pageAccessToken: "EAAGlPfpWVvMBAJHZAOMbAW0jsc11PpGKSoJMf7KIvmZBIMnTUs6uk8Cu7qRxpVUISu8Nk1dxn6ZBx0IK7QAfoPfHF66fNWXM6VjFxzudJzICprpj4zvzy3E5kjh8JS2qnZA3GFOLNDfnfHAix2ROqE8Tt9nyRPZAV616pyL2L2gZDZD"
 
 logging:
@@ -11,9 +11,12 @@ logging:
 
 spring:
   jpa.hibernate.ddl-auto: update
+  jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
-    url: jdbc:mysql://sql430.main-hosting.eu/u157943634_autopood
+    hikari.maxLifeTime: 600000
+    #    url: "jdbc:mysql://localhost:3306/autopood?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
+    #    username: root
+    #    password:
+    url: "jdbc:mysql://sql430.main-hosting.eu/u157943634_autopood?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
     username: u157943634_autopood
-    password : dGXeKlB8x0*N
-
-spring.datasource.hikari.maxLifeTime : 600000
+    password: uGusssdfj7F

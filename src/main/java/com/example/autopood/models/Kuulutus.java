@@ -1,15 +1,41 @@
 package com.example.autopood.models;
 
-import java.util.Date;
+import javax.persistence.*;
+import java.util.Set;
+import java.util.UUID;
 
-public class Kuulutus {
+@Entity
+public class Kuulutus
+{
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pood_id", referencedColumnName = "id", nullable = false)
+    private Pood pood;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<User> soovitatud;
 
     String mark;
     String mudel;
     int aasta;
     int hind;
     String link;
-    public Kuulutus(String mark, String mudel, int aasta, int hind, String link) {
+    double mootor;
+    String kütus;
+    int labisoit;
+
+    public Kuulutus()
+    {
+
+    }
+
+    public Kuulutus(String mark, String mudel, int aasta, int hind, String link)
+    {
         this.mark = mark;
         this.mudel = mudel;
         this.aasta = aasta;
@@ -28,43 +54,64 @@ public class Kuulutus {
                 ", link='" + link + '\'' +
                 '}';
     }
-    public String getMark() {
+
+    public String getMark()
+    {
         return mark;
     }
 
-    public void setMark(String mark) {
+    public void setMark(String mark)
+    {
         this.mark = mark;
     }
 
-    public String getMudel() {
+    public String getMudel()
+    {
         return mudel;
     }
 
-    public void setMudel(String mudel) {
+    public void setMudel(String mudel)
+    {
         this.mudel = mudel;
     }
 
-    public int getAasta() {
+    public int getAasta()
+    {
         return aasta;
     }
 
-    public void setAasta(int aasta) {
+    public void setAasta(int aasta)
+    {
         this.aasta = aasta;
     }
 
-    public int getHind() {
+    public int getHind()
+    {
         return hind;
     }
 
-    public void setHind(int hind) {
+    public void setHind(int hind)
+    {
         this.hind = hind;
     }
 
-    public String getLink() {
+    public String getLink()
+    {
         return link;
     }
 
-    public void setLink(String link) {
+    public void setLink(String link)
+    {
         this.link = link;
+    }
+
+    public Pood getPood()
+    {
+        return pood;
+    }
+
+    public void setPood(Pood pood)
+    {
+        this.pood = pood;
     }
 }

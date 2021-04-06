@@ -1,12 +1,20 @@
 package com.example.autopood.models;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.Set;
 
-@Entity // This tells Hibernate to make a table out of this class
-public class User {
+@Entity
+public class User
+{
     @Id
     private String id="";
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Kuulutus> soovitatud;
+    private String eesnimi;
+    private String perekonnanimi;
     private String lastAction="";
     private String brand="";
     private String model="";
