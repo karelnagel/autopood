@@ -17,6 +17,6 @@ spring:
     #    url: "jdbc:mysql://localhost:3306/autopood?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
     #    username: root
     #    password:
-    url: "jdbc:mysql://yt8zae8iuxiorf3u:ytkbyv6l5q3hm0wl@ulsq0qqx999wqz84.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/uxyjbctp3n4hlz3q?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
-    username: yt8zae8iuxiorf3u
-    password: ytkbyv6l5q3hm0wl
+    url: "jdbc:mysql://sql430.main-hosting.eu/u157943634_autopood?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
+    username: u157943634_autopood
+    password: uGusssdfj7F
