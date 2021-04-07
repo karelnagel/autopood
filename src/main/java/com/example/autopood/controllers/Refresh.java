@@ -2,9 +2,9 @@ package com.example.autopood.controllers;
 
 import com.example.autopood.models.Kuulutus;
 import com.example.autopood.models.User;
+import com.example.autopood.poed.AbstractPood;
 import com.example.autopood.poed.Auto24;
 import com.example.autopood.poed.Nettiauto;
-import com.example.autopood.poed.AbstractPood;
 import com.example.autopood.poed.Vaurioajoneuvo;
 import com.example.autopood.repositorities.KuulutusRepository;
 import com.example.autopood.repositorities.PoodRepository;
@@ -40,17 +40,17 @@ public class Refresh
         this.kuulutusRepository = kuulutusRepository;
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 300000)
     @GetMapping("/refresh")
-    public void getTest(){
+    public void getTest()
+    {
         System.out.println("");
         System.out.println("Global refresh");
         List<AbstractPood> poodideList = new ArrayList<AbstractPood>();
 
-
-        poodideList.add(new Vaurioajoneuvo(poodRepository,kuulutusRepository));
-        poodideList.add(new Auto24(poodRepository,kuulutusRepository));
-        poodideList.add(new Nettiauto(poodRepository,kuulutusRepository));
+        poodideList.add(new Vaurioajoneuvo(poodRepository, kuulutusRepository));
+        poodideList.add(new Auto24(poodRepository, kuulutusRepository));
+        poodideList.add(new Nettiauto(poodRepository, kuulutusRepository));
 
         //Refresh all shops
         for (AbstractPood pood : poodideList)

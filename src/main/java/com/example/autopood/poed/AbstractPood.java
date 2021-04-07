@@ -57,6 +57,7 @@ public abstract class AbstractPood
     {
         var pood = getPoodFromDB();
         pood.setViimaneKuulutus(viimaneKuulutus);
+        this.viimaneKuulutus = viimaneKuulutus;
         poodRepository.save(pood);
     }
 
