@@ -14,4 +14,4 @@ spring:
   jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
     hikari.maxLifeTime: 600000
-    url: ${JAWSDB_URL}
+    url: ${CLEARDB_DATABASE_URL}
