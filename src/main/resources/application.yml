@@ -15,5 +15,3 @@ spring:
   datasource:
     hikari.maxLifeTime: 600000
     url: ${JAWSDB_URL}
-    username: ${JAWSDB_USERNAME}
-    password: ${JAWSDB_PASSWORD}
