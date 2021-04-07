@@ -14,6 +14,7 @@ public abstract class AbstractPood
     public KuulutusRepository kuulutusRepository;
     public PoodRepository poodRepository;
     public String poeId;
+    private String viimaneKuulutus;
 
     AbstractPood(String poeNimi, PoodRepository poodRepository, KuulutusRepository kuulutusRepository)
     {
@@ -26,6 +27,8 @@ public abstract class AbstractPood
         this.poeId = poeNimi;
         this.poodRepository = poodRepository;
         this.kuulutusRepository = kuulutusRepository;
+        var pood = getPoodFromDB();
+        this.viimaneKuulutus =  pood.getViimaneKuulutus();
     }
 
     public abstract List<Kuulutus> getKuulutused();
@@ -33,7 +36,6 @@ public abstract class AbstractPood
     public List<Kuulutus> refresh()
     {
         var kuulutused = getKuulutused();
-
         var pood = getPoodFromDB();
         kuulutused.removeIf(k -> k == null);
         for (Kuulutus kuulutus : kuulutused)
@@ -48,9 +50,7 @@ public abstract class AbstractPood
 
     public String getViimaneKuulutus()
     {
-        if (!poodRepository.existsById(poeId)) return null;
-        var pood = poodRepository.findById(poeId).get();
-        return pood.getViimaneKuulutus();
+        return viimaneKuulutus;
     }
 
     public void setViimaneKuulutus(String viimaneKuulutus)
