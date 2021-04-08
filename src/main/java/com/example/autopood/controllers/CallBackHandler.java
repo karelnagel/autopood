@@ -43,7 +43,7 @@ public class CallBackHandler
     public static final String OPTION_MAX_KW = "Max mootori võimsus (kW)";
     public static final String OPTION_FUELTYPE = "Kütus";
     public static final String OPTION_SAVE_PARAMS = "salvesta praegused";
-    public static final String OPTION_NEW_SEARCH = "uus otsing";
+    public static final String OPTION_NEW_SEARCH = "Uus otsing";
     public static final String OPTION_CANCEL_SEARCH = "tühista otsing";
     public static final String OPTION_CHECK_CURRENT = "Vaata praegust otsingut";
 
@@ -210,6 +210,7 @@ public class CallBackHandler
                                     sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
                                     sendSearchOptions(senderId);
                                     break;
+                                    /*
                                 case OPTION_SAVE_PARAMS:
                                     //lisame kasutaja parameetrite listi uue seti of parameters
                                     user.addParameters(parameters);
@@ -225,6 +226,7 @@ public class CallBackHandler
                                     sendTextMessage(senderId, parameters.toString());
                                     sendSearchOptions(senderId);
                                     break;
+                                     */
                             }
                             //sendTextMessage(senderId, "Alustage uuesti");
                             user.setLastAction("");
@@ -258,8 +260,13 @@ public class CallBackHandler
                     User user = userRepository.findById(senderId).get();
                     if (quickReplyPayload.equals(OPTION_CHECK)) {
                         sendTextMessage(senderId,"Teie otsingud on: \n");
-                        for (KuulutusParameters parameetrid : user.getParameters()) {
-                            sendTextMessage(senderId, parameetrid.toString());
+                        if(user.getParameters().isEmpty()){
+                            sendTextMessage(senderId, "Teil pole ühtegi otsingut salvestatud");
+                        }
+                        else {
+                            for (KuulutusParameters parameetrid : user.getParameters()) {
+                                sendTextMessage(senderId, parameetrid.toString());
+                            }
                         }
                         sendFirstOptions(senderId);
 
@@ -270,6 +277,7 @@ public class CallBackHandler
                         sendTextMessage(senderId, "Uued otsinguvalikud salvestatud :)");
                     } else if (quickReplyPayload.equals(OPTION_NEW_SEARCH)) {
                         parameters = new KuulutusParameters();
+                        sendTextMessage(senderId, "Teeme uue otsingu");
                         sendSearchOptions(senderId);
                     } else if (quickReplyPayload.equals(OPTION_CANCEL_SEARCH)) {
                         parameters = new KuulutusParameters();
