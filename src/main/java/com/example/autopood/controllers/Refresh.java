@@ -47,7 +47,7 @@ public class Refresh
         System.out.println("");
         System.out.println("Global refresh");
         List<AbstractPood> poodideList = new ArrayList<AbstractPood>();
-/*
+
         poodideList.add(new Vaurioajoneuvo(poodRepository, kuulutusRepository));
         poodideList.add(new Auto24(poodRepository, kuulutusRepository));
         poodideList.add(new Nettiauto(poodRepository, kuulutusRepository));
@@ -64,7 +64,7 @@ public class Refresh
             }
         }
         
- */
+
     }
 
     @GetMapping("/message")
