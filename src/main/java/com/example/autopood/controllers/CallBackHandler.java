@@ -1,5 +1,6 @@
 package com.example.autopood.controllers;
 
+import com.example.autopood.models.KuulutusParameters;
 import com.example.autopood.models.User;
 import com.example.autopood.repositorities.UserRepository;
 import com.github.messenger4j.MessengerPlatform;
@@ -29,19 +30,29 @@ public class CallBackHandler
 
     private static final Logger logger = LoggerFactory.getLogger(CallBackHandler.class);
 
-    public static final String OPTION_VAATA = "vaata";
-    public static final String OPTION_MARK = "mark";
-    public static final String OPTION_MUDEL = "mudel";
-    public static final String OPTION_MIN_HIND = "min hind";
-    public static final String OPTION_MAX_HIND = "max hind";
-    public static final String OPTION_MIN_AASTA = "min aasta";
-    public static final String OPTION_MAX_AASTA = "max aasta";
-    public static final String OPTION_MIN_LABISOIT = "min labisoit";
-    public static final String OPTION_MAX_LABISOIT = "max labisoit";
+    public static final String OPTION_CHECK = "Vaata kõiki oma otsinguid";
+    public static final String OPTION_MARK = "Mark";
+    public static final String OPTION_MODEL = "Mudel";
+    public static final String OPTION_MIN_PRICE = "Min hind";
+    public static final String OPTION_MAX_PRICE = "Max hind";
+    public static final String OPTION_MIN_YEAR = "Min aasta";
+    public static final String OPTION_MAX_YEAR = "Max aasta";
+    public static final String OPTION_MIN_MILEAGE = "Min labisoit";
+    public static final String OPTION_MAX_MILEAGE = "Max labisoit";
+    public static final String OPTION_MIN_KW = "Min mootori võimsus (kW)";
+    public static final String OPTION_MAX_KW = "Max mootori võimsus (kW)";
+    public static final String OPTION_FUELTYPE = "Kütus";
+    public static final String OPTION_SAVE_PARAMS = "salvesta praegused";
+    public static final String OPTION_NEW_SEARCH = "uus otsing";
+    public static final String OPTION_CANCEL_SEARCH = "tühista otsing";
+    public static final String OPTION_CHECK_CURRENT = "Vaata praegust otsingut";
+
 
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
     private final UserRepository userRepository;
+
+    public static KuulutusParameters parameters = new KuulutusParameters();
 
     @Autowired
     public CallBackHandler(@Value("${messenger4j.appSecret}") final String appSecret,
@@ -116,6 +127,8 @@ public class CallBackHandler
             logger.info("Received message '{}' with text '{}' from user '{}' at '{}'",
                     messageId, messageText, senderId, timestamp);
 
+            //HashMap<String,String> parameters = new HashMap<String,String>();
+
             try
             {
                 boolean userExists = userRepository.existsById(senderId);
@@ -124,51 +137,99 @@ public class CallBackHandler
                     User user = new User();
                     user.setId(senderId);
                     userRepository.save(user);
-                    sendTextMessage(senderId, "Tere tulemast!");
-                    sendTextMessage(senderId, "Vali auto parameetrid");
-                    sendOptions(senderId);
+                    sendTextMessage(senderId, "Teretulemast!");
+                    System.out.println("Olete uus kasutaja, loome teile profiili :)");
+                    //sendTextMessage(senderId, "Vali auto parameetrid");
+                    sendFirstOptions(senderId);
 
                 } else
                 {
                     User user = userRepository.findById(senderId).get();
                     if (user.getLastAction().isEmpty() || user.getLastAction() == null)
                     {
-                        sendOptions(senderId);
+                        sendFirstOptions(senderId);
                     } else
                     {
+
                         try
                         {
                             switch (user.getLastAction())
                             {
                                 case OPTION_MARK:
-                                    user.setBrand(messageText);
+                                    parameters.setBrand(messageText);
+                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
+                                    sendSearchOptions(senderId);
                                     break;
-                                case OPTION_MUDEL:
-                                    user.setModel(messageText);
+                                case OPTION_MODEL:
+                                    parameters.setModel(messageText);
+                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
+                                    sendSearchOptions(senderId);
                                     break;
-                                case OPTION_MIN_HIND:
-                                    user.setMinPrice(Integer.parseInt(messageText));
+                                case OPTION_MIN_PRICE:
+                                    parameters.setMinPrice(Integer.parseInt(messageText));
+                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
+                                    sendSearchOptions(senderId);
                                     break;
-                                case OPTION_MAX_HIND:
-                                    user.setMaxPrice(Integer.parseInt(messageText));
+                                case OPTION_MAX_PRICE:
+                                    parameters.setMaxPrice(Integer.parseInt(messageText));
+                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
+                                    sendSearchOptions(senderId);
                                     break;
-                                case OPTION_MIN_AASTA:
-                                    user.setMinYear(Integer.parseInt(messageText));
+                                case OPTION_MIN_YEAR:
+                                    parameters.setMinYear(Integer.parseInt(messageText));
+                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
+                                    sendSearchOptions(senderId);
                                     break;
-                                case OPTION_MAX_AASTA:
-                                    user.setMaxYear(Integer.parseInt(messageText));
+                                case OPTION_MAX_YEAR:
+                                    parameters.setMaxYear(Integer.parseInt(messageText));
+                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
+                                    sendSearchOptions(senderId);
                                     break;
-                                case OPTION_MIN_LABISOIT:
-                                    user.setMinMilage(Integer.parseInt(messageText));
+                                case OPTION_MIN_MILEAGE:
+                                    parameters.setMinMileage(Integer.parseInt(messageText));
+                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
+                                    sendSearchOptions(senderId);
                                     break;
-                                case OPTION_MAX_LABISOIT:
-                                    user.setMaxMilage(Integer.parseInt(messageText));
+                                case OPTION_MAX_MILEAGE:
+                                    parameters.setMaxMileage(Integer.parseInt(messageText));
+                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
+                                    sendSearchOptions(senderId);
+                                    break;
+                                case OPTION_MIN_KW:
+                                    parameters.setMinEngineKW(Integer.parseInt(messageText));
+                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
+                                    sendSearchOptions(senderId);
+                                    break;
+                                case OPTION_MAX_KW:
+                                    parameters.setMaxEngineKW(Integer.parseInt(messageText));
+                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
+                                    sendSearchOptions(senderId);
+                                    break;
+                                case OPTION_FUELTYPE:
+                                    parameters.setFuelType(messageText);
+                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
+                                    sendSearchOptions(senderId);
+                                    break;
+                                case OPTION_SAVE_PARAMS:
+                                    //lisame kasutaja parameetrite listi uue seti of parameters
+                                    user.addParameters(parameters);
+                                    userRepository.save(user);
+                                    sendTextMessage(senderId, "Uued otsinguvalikud salvestatud :)");
+                                    break;
+                                case OPTION_CANCEL_SEARCH:
+                                    parameters = new KuulutusParameters();
+                                    sendTextMessage(senderId, "Otsinguvalikud kustutatud");
+                                    userRepository.save(user);
+                                    break;
+                                case OPTION_CHECK_CURRENT:
+                                    sendTextMessage(senderId, parameters.toString());
+                                    sendSearchOptions(senderId);
                                     break;
                             }
-                            sendTextMessage(senderId, user.getLastAction() + " muudetud " + messageText);
+                            //sendTextMessage(senderId, "Alustage uuesti");
                             user.setLastAction("");
-                            userRepository.save(user);
-                            sendOptions(senderId);
+                            sendFirstOptions(senderId);
+                            //userRepository.save(user);
                         }
                         catch (NumberFormatException nfe)
                         {
@@ -196,12 +257,15 @@ public class CallBackHandler
             if (userRepository.existsById(senderId))
             {
                 User user = userRepository.findById(senderId).get();
-                if (quickReplyPayload.equals(OPTION_VAATA))
+                if (quickReplyPayload.equals(OPTION_CHECK))
                 {
-                    sendTextMessage(senderId, user.toString());
+                    System.out.println("Teie otsinguvalikud on: ");
+                    for(KuulutusParameters parameetrid : user.getParameters()){
+                        sendTextMessage(senderId, parameetrid.toString());
+                    }
                     try
                     {
-                        sendOptions(senderId);
+                        sendFirstOptions(senderId);
                     } catch (MessengerApiException e)
                     {
                         e.printStackTrace();
@@ -234,21 +298,37 @@ public class CallBackHandler
         }
     }
 
-    void sendOptions(String recipientId) throws MessengerApiException, MessengerIOException
+    void sendFirstOptions(String recipientId) throws MessengerApiException, MessengerIOException
     {
+
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
-                .addTextQuickReply("Vaata praegust", OPTION_VAATA).toList()
-                .addTextQuickReply("Mark", OPTION_MARK).toList()
-                .addTextQuickReply("Mudel", OPTION_MUDEL).toList()
-                .addTextQuickReply("Min hind", OPTION_MIN_HIND).toList()
-                .addTextQuickReply("Max hind", OPTION_MAX_HIND).toList()
-                .addTextQuickReply("Min aasta", OPTION_MIN_AASTA).toList()
-                .addTextQuickReply("Max aasta", OPTION_MAX_AASTA).toList()
-                .addTextQuickReply("Min läbisõit", OPTION_MIN_LABISOIT).toList()
-                .addTextQuickReply("Max läbisõit", OPTION_MAX_LABISOIT).toList()
+                .addTextQuickReply("Vaata oma otsinguid", OPTION_CHECK).toList()
+                .addTextQuickReply("Uus otsing", OPTION_NEW_SEARCH).toList()
                 .build();
 
-        this.sendClient.sendTextMessage(recipientId, "Mida tahad teha?", quickReplies);
+        this.sendClient.sendTextMessage(recipientId, "Mida soovid teha?", quickReplies);
+    }
+    void sendSearchOptions(String recipientId) throws MessengerApiException, MessengerIOException
+    {
+
+        final List<QuickReply> quickReplies = QuickReply.newListBuilder()
+                .addTextQuickReply("Vaata praegust otsingut", OPTION_CHECK_CURRENT).toList()
+                .addTextQuickReply("Salvesta otsing", OPTION_SAVE_PARAMS).toList()
+                .addTextQuickReply("Tühista", OPTION_CANCEL_SEARCH).toList()
+                .addTextQuickReply("Mark", OPTION_MARK).toList()
+                .addTextQuickReply("Mudel", OPTION_MODEL).toList()
+                .addTextQuickReply("Min hind", OPTION_MIN_PRICE).toList()
+                .addTextQuickReply("Max hind", OPTION_MAX_PRICE).toList()
+                .addTextQuickReply("Min aasta", OPTION_MIN_YEAR).toList()
+                .addTextQuickReply("Max aasta", OPTION_MAX_YEAR).toList()
+                .addTextQuickReply("Min läbisõit", OPTION_MIN_MILEAGE).toList()
+                .addTextQuickReply("Max läbisõit", OPTION_MAX_MILEAGE).toList()
+                .addTextQuickReply("Min Mootori võimsus", OPTION_MIN_KW).toList()
+                .addTextQuickReply("Max Mootori võimsus", OPTION_MAX_KW).toList()
+                .addTextQuickReply("Kütus", OPTION_FUELTYPE).toList()
+                .build();
+
+        this.sendClient.sendTextMessage(recipientId, "Vali parameeter, mida soovid muuta", quickReplies);
     }
 
     private void handleSendException(Exception e)
@@ -277,10 +357,10 @@ public class CallBackHandler
                 user.setId(senderId);
                 userRepository.save(user);
                 sendTextMessage(senderId, "Tere tulemast!");
-                sendTextMessage(senderId, "Vali auto parameetrid");
+                //sendTextMessage(senderId, "Vali auto parameetrid");
                 try
                 {
-                    sendOptions(senderId);
+                    sendFirstOptions(senderId);
                 } catch (MessengerApiException e)
                 {
                     e.printStackTrace();

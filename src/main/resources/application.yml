@@ -16,12 +16,20 @@ spring:
     hikari:
       max-lifetime: 120000
       maxLifeTime: 120000
-    url: ${CLEARDB_DATABASE_URL}
+    url: "jdbc:mysql://sql430.main-hosting.eu/u157943634_autopood?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
+    username: u157943634_autopood
+    password: uGusssdfj7F
 
-#    url: "jdbc:mysql://localhost:3306/autopood?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
-#    username: root
-#    password:
 
+    #url: ${CLEARDB_DATABASE_URL}
+
+  #local dbeaver:
+ #   url: "jdbc:mysql://localhost:3306/autopood?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
+ #   username: root
+  #  password: Mangukoobas1
+
+
+# õige server heroku:
 #    url: "jdbc:mysql://sql430.main-hosting.eu/u157943634_autopood?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
 #    username: u157943634_autopood
 #    password: uGusssdfj7F
