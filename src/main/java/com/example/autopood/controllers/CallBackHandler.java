@@ -258,12 +258,13 @@ public class CallBackHandler
             try {
                 if (userRepository.existsById(senderId)) {
                     User user = userRepository.findById(senderId).get();
+
+
                     if (quickReplyPayload.equals(OPTION_CHECK)) {
-                        sendTextMessage(senderId,"Teie otsingud on: \n");
-                        if(user.getParameters().isEmpty()){
+                        if (user.getParameters().isEmpty()) {
                             sendTextMessage(senderId, "Teil pole ühtegi otsingut salvestatud");
-                        }
-                        else {
+                        } else {
+                            sendTextMessage(senderId, "Teie otsingud on: \n");
                             for (KuulutusParameters parameetrid : user.getParameters()) {
                                 sendTextMessage(senderId, parameetrid.toString());
                             }
@@ -275,25 +276,31 @@ public class CallBackHandler
                         user.addParameters(parameters);
                         userRepository.save(user);
                         sendTextMessage(senderId, "Uued otsinguvalikud salvestatud :)");
+
                     } else if (quickReplyPayload.equals(OPTION_NEW_SEARCH)) {
                         parameters = new KuulutusParameters();
                         sendTextMessage(senderId, "Teeme uue otsingu");
                         sendSearchOptions(senderId);
+
                     } else if (quickReplyPayload.equals(OPTION_CANCEL_SEARCH)) {
                         parameters = new KuulutusParameters();
                         sendTextMessage(senderId, "Otsinguvalikud kustutatud");
                         userRepository.save(user);
+                        sendSearchOptions(senderId);
+
                     } else if (quickReplyPayload.equals(OPTION_CHECK_CURRENT)) {
                         sendTextMessage(senderId, parameters.toString());
                         sendSearchOptions(senderId);
-                        }
-                    else {
+
+                    } else {
                         user.setLastAction(quickReplyPayload);
                         userRepository.save(user);
                         sendTextMessage(senderId, "Kirjuta " + quickReplyPayload);
                     }
                 }
-            } catch (Exception e) {
+            } catch (MessengerIOException e) {
+                e.printStackTrace();
+            } catch (MessengerApiException e) {
                 e.printStackTrace();
             }
         };
@@ -317,7 +324,7 @@ public class CallBackHandler
     void sendFirstOptions(String recipientId) throws MessengerApiException, MessengerIOException
     {
 
-        final List<QuickReply> quickReplies = QuickReply.newListBuilder()
+        List<QuickReply> quickReplies = QuickReply.newListBuilder()
                 .addTextQuickReply("Vaata oma otsinguid", OPTION_CHECK).toList()
                 .addTextQuickReply("Uus otsing", OPTION_NEW_SEARCH).toList()
                 .build();
@@ -327,7 +334,7 @@ public class CallBackHandler
     void sendSearchOptions(String recipientId) throws MessengerApiException, MessengerIOException
     {
 
-        final List<QuickReply> quickReplies = QuickReply.newListBuilder()
+        List<QuickReply> quickReplies = QuickReply.newListBuilder()
                 .addTextQuickReply("Vaata praegust otsingut", OPTION_CHECK_CURRENT).toList()
                 .addTextQuickReply("Salvesta otsing", OPTION_SAVE_PARAMS).toList()
                 .addTextQuickReply("Tühista", OPTION_CANCEL_SEARCH).toList()
