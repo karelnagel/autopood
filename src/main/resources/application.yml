@@ -14,8 +14,8 @@ spring:
   jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
     hikari:
-      max-lifetime: 120000
-      maxLifeTime: 120000
+      max-lifetime: 60000
+      maxLifeTime: 60000
     url: "jdbc:mysql://sql430.main-hosting.eu/u157943634_autopood?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
     username: u157943634_autopood
     password: uGusssdfj7F

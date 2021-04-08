@@ -244,8 +244,7 @@ public class CallBackHandler
         };
     }
 
-    private QuickReplyMessageEventHandler newQuickReplyMessageEventHandler()
-    {
+    private QuickReplyMessageEventHandler newQuickReplyMessageEventHandler() {
         return event ->
         {
             logger.debug("Received QuickReplyMessageEvent: {}", event);
@@ -254,31 +253,40 @@ public class CallBackHandler
             final String messageId = event.getMid();
             final String quickReplyPayload = event.getQuickReply().getPayload();
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
-            if (userRepository.existsById(senderId))
-            {
-                User user = userRepository.findById(senderId).get();
-                if (quickReplyPayload.equals(OPTION_CHECK))
-                {
-                    System.out.println("Teie otsinguvalikud on: ");
-                    for(KuulutusParameters parameetrid : user.getParameters()){
-                        sendTextMessage(senderId, parameetrid.toString());
-                    }
-                    try
-                    {
+            try {
+                if (userRepository.existsById(senderId)) {
+                    User user = userRepository.findById(senderId).get();
+                    if (quickReplyPayload.equals(OPTION_CHECK)) {
+                        sendTextMessage(senderId,"Teie otsingud on: \n");
+                        for (KuulutusParameters parameetrid : user.getParameters()) {
+                            sendTextMessage(senderId, parameetrid.toString());
+                        }
                         sendFirstOptions(senderId);
-                    } catch (MessengerApiException e)
-                    {
-                        e.printStackTrace();
-                    } catch (MessengerIOException e)
-                    {
-                        e.printStackTrace();
+
+                    } else if (quickReplyPayload.equals(OPTION_SAVE_PARAMS)) {
+                        //lisame kasutaja parameetrite listi uue seti of parameters
+                        user.addParameters(parameters);
+                        userRepository.save(user);
+                        sendTextMessage(senderId, "Uued otsinguvalikud salvestatud :)");
+                    } else if (quickReplyPayload.equals(OPTION_NEW_SEARCH)) {
+                        parameters = new KuulutusParameters();
+                        sendSearchOptions(senderId);
+                    } else if (quickReplyPayload.equals(OPTION_CANCEL_SEARCH)) {
+                        parameters = new KuulutusParameters();
+                        sendTextMessage(senderId, "Otsinguvalikud kustutatud");
+                        userRepository.save(user);
+                    } else if (quickReplyPayload.equals(OPTION_CHECK_CURRENT)) {
+                        sendTextMessage(senderId, parameters.toString());
+                        sendSearchOptions(senderId);
+                        }
+                    else {
+                        user.setLastAction(quickReplyPayload);
+                        userRepository.save(user);
+                        sendTextMessage(senderId, "Kirjuta " + quickReplyPayload);
                     }
-                } else
-                {
-                    user.setLastAction(quickReplyPayload);
-                    userRepository.save(user);
-                    sendTextMessage(senderId, "Kirjuta " + quickReplyPayload);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         };
     }

@@ -7,6 +7,7 @@ import javax.persistence.Id;
 
 @Entity
 public class KuulutusParameters{
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
     private String brand;
@@ -151,7 +152,6 @@ public class KuulutusParameters{
         this.id = id;
     }
 
-    @Id
     public long getId() {
         return id;
     }
