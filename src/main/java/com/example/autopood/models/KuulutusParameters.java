@@ -1,9 +1,6 @@
 package com.example.autopood.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class KuulutusParameters{
@@ -21,6 +18,9 @@ public class KuulutusParameters{
     private int minYear;
     private int minEngineKW;
     private int maxEngineKW;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
 
 
     public KuulutusParameters() {}
@@ -154,5 +154,15 @@ public class KuulutusParameters{
 
     public long getId() {
         return id;
+    }
+
+    public User getUser()
+    {
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
     }
 }

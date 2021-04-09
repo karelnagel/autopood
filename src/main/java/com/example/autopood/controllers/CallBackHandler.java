@@ -2,6 +2,7 @@ package com.example.autopood.controllers;
 
 import com.example.autopood.models.KuulutusParameters;
 import com.example.autopood.models.User;
+import com.example.autopood.repositorities.KuulutusParametersRepository;
 import com.example.autopood.repositorities.UserRepository;
 import com.github.messenger4j.MessengerPlatform;
 import com.github.messenger4j.exceptions.MessengerApiException;
@@ -51,13 +52,14 @@ public class CallBackHandler
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
     private final UserRepository userRepository;
+    private final KuulutusParametersRepository kuulutusParametersRepository;
 
     public static KuulutusParameters parameters = new KuulutusParameters();
 
     @Autowired
     public CallBackHandler(@Value("${messenger4j.appSecret}") final String appSecret,
                            @Value("${messenger4j.verifyToken}") final String verifyToken,
-                           final MessengerSendClient sendClient, UserRepository userRepository)
+                           final MessengerSendClient sendClient, UserRepository userRepository,KuulutusParametersRepository kuulutusParametersRepository)
     {
 
         logger.debug("Initializing MessengerReceiveClient - appSecret: {} | verifyToken: {}", appSecret, verifyToken);
@@ -74,6 +76,7 @@ public class CallBackHandler
                 .build();
         this.sendClient = sendClient;
         this.userRepository = userRepository;
+        this.kuulutusParametersRepository = kuulutusParametersRepository;
     }
 
     //For messenger verification
@@ -272,8 +275,8 @@ public class CallBackHandler
 
                     } else if (quickReplyPayload.equals(OPTION_SAVE_PARAMS)) {
                         //lisame kasutaja parameetrite listi uue seti of parameters
-                        user.addParameters(parameters);
-                        userRepository.save(user);
+                        parameters.setUser(user);
+                        kuulutusParametersRepository.save(parameters);
                         sendTextMessage(senderId, "Uued otsinguvalikud salvestatud :)");
                     } else if (quickReplyPayload.equals(OPTION_NEW_SEARCH)) {
                         parameters = new KuulutusParameters();
