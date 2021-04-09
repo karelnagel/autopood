@@ -13,7 +13,7 @@ public class User
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Kuulutus> soovitatud;
     @OneToMany(fetch = FetchType.EAGER)
-    private List<KuulutusParameters> parameterList;
+    private Set<KuulutusParameters> parameterList;
     private String eesnimi;
     private String perekonnanimi;
     private String lastAction="";
@@ -28,7 +28,7 @@ public class User
                 "Nimi: "+"\n";
     }
 
-    public List<KuulutusParameters> getParameters() {
+    public Set<KuulutusParameters> getParameters() {
         return parameterList;
     }
 

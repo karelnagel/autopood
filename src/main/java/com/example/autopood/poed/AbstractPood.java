@@ -36,13 +36,13 @@ public abstract class AbstractPood
     public List<Kuulutus> refresh()
     {
         var kuulutused = getKuulutused();
-        var pood = getPoodFromDB();
-        kuulutused.removeIf(k -> k == null);
-        for (Kuulutus kuulutus : kuulutused)
-        {
-            kuulutus.setPood(pood);
-        }
-        kuulutusRepository.saveAll(kuulutused);
+//        var pood = getPoodFromDB();
+//        kuulutused.removeIf(k -> k == null);
+//        for (Kuulutus kuulutus : kuulutused)
+//        {
+//            kuulutus.setPood(pood);
+//        }
+//        kuulutusRepository.saveAll(kuulutused);
         if (kuulutused.size() > 0)
             setViimaneKuulutus(kuulutused.get(0).getLink());
         return kuulutused;

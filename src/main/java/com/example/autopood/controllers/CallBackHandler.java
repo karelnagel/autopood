@@ -210,7 +210,7 @@ public class CallBackHandler
                                     sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
                                     sendSearchOptions(senderId);
                                     break;
-                                    /*
+//
                                 case OPTION_SAVE_PARAMS:
                                     //lisame kasutaja parameetrite listi uue seti of parameters
                                     user.addParameters(parameters);
@@ -226,7 +226,7 @@ public class CallBackHandler
                                     sendTextMessage(senderId, parameters.toString());
                                     sendSearchOptions(senderId);
                                     break;
-                                     */
+
                             }
                             //sendTextMessage(senderId, "Alustage uuesti");
                             user.setLastAction("");
@@ -332,19 +332,19 @@ public class CallBackHandler
     {
 
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
-                .addTextQuickReply("Vaata praegust otsingut", OPTION_CHECK_CURRENT).toList()
+                .addTextQuickReply("Vaata otsingut", OPTION_CHECK_CURRENT).toList()
                 .addTextQuickReply("Salvesta otsing", OPTION_SAVE_PARAMS).toList()
                 .addTextQuickReply("Tühista", OPTION_CANCEL_SEARCH).toList()
                 .addTextQuickReply("Mark", OPTION_MARK).toList()
                 .addTextQuickReply("Mudel", OPTION_MODEL).toList()
                 .addTextQuickReply("Min hind", OPTION_MIN_PRICE).toList()
-                .addTextQuickReply("Max hind", OPTION_MAX_PRICE).toList()
-                .addTextQuickReply("Min aasta", OPTION_MIN_YEAR).toList()
-                .addTextQuickReply("Max aasta", OPTION_MAX_YEAR).toList()
-                .addTextQuickReply("Min läbisõit", OPTION_MIN_MILEAGE).toList()
-                .addTextQuickReply("Max läbisõit", OPTION_MAX_MILEAGE).toList()
-                .addTextQuickReply("Min Mootori võimsus", OPTION_MIN_KW).toList()
-                .addTextQuickReply("Max Mootori võimsus", OPTION_MAX_KW).toList()
+//                .addTextQuickReply("Max hind", OPTION_MAX_PRICE).toList()
+//                .addTextQuickReply("Min aasta", OPTION_MIN_YEAR).toList()
+//                .addTextQuickReply("Max aasta", OPTION_MAX_YEAR).toList()
+//                .addTextQuickReply("Min läbisõit", OPTION_MIN_MILEAGE).toList()
+//                .addTextQuickReply("Max läbisõit", OPTION_MAX_MILEAGE).toList()
+//                .addTextQuickReply("Min Mootori võimsus", OPTION_MIN_KW).toList()
+//                .addTextQuickReply("Max Mootori võimsus", OPTION_MAX_KW).toList()
                 .addTextQuickReply("Kütus", OPTION_FUELTYPE).toList()
                 .build();
 
