@@ -9,7 +9,7 @@ import java.util.Set;
 public class User
 {
     @Id
-    private String id="";
+    private Long id;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Kuulutus> soovitatud;
     @OneToMany(fetch = FetchType.EAGER)
@@ -40,11 +40,11 @@ public class User
         parameterList.remove(parameters);
     }
     public String getId() {
-        return id;
+        return id.toString();
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = Long.parseLong(id);
     }
 
     public String getLastAction() {
