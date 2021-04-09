@@ -230,7 +230,7 @@ public class CallBackHandler
                             }
                             //sendTextMessage(senderId, "Alustage uuesti");
                             user.setLastAction("");
-                            sendFirstOptions(senderId);
+                            //sendFirstOptions(senderId);
                             //userRepository.save(user);
                         }
                         catch (NumberFormatException nfe)
@@ -288,8 +288,6 @@ public class CallBackHandler
                         sendSearchOptions(senderId);
                     }
                     else {
-                        user.setLastAction("");
-                        sendFirstOptions(senderId);
                         //kahtlaneülem
                         user.setLastAction(quickReplyPayload);
                         userRepository.save(user);
