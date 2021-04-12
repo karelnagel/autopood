@@ -10,20 +10,25 @@ logging:
         messenger4j: INFO
 
 spring:
+  #web UI path?
+  data:
+    rest:
+      base-path=/api:
   jpa.hibernate.ddl-auto: update
   jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
     hikari:
       max-lifetime: 60000
       maxLifeTime: 60000
-    url: ${CLEARDB_DATABASE_URL}
+      url: ${CLEARDB_DATABASE_URL}
+
 
   #local dbeaver:
  #   url: "jdbc:mysql://localhost:3306/autopood?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
  #   username: root
   #  password: Mangukoobas1
 
-
+#   url: ${CLEARDB_DATABASE_URL}
 # õige server heroku:
 #    url: "jdbc:mysql://sql430.main-hosting.eu/u157943634_autopood?createDatabaseIfNotExist=true&useSSL=false&useTimezone=true&serverTimezone=UTC"
 #    username: u157943634_autopood

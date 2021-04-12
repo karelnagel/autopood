@@ -90,6 +90,8 @@ public class Nettiauto extends AbstractPood
                 e.printStackTrace();
             } catch (NumberFormatException e) {
                 e.printStackTrace();
+            }catch (NullPointerException e) {
+                System.out.println("Element not found");
             }
             //Kuulutus Auto = new Kuulutus(new String.,);
         }

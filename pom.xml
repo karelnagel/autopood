@@ -68,7 +68,15 @@
             <artifactId>unirest-java</artifactId>
             <version>4.0.0-RC1</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <!-- Use the latest released version:
+            https://repo1.maven.org/maven2/com/github/eirslett/frontend-maven-plugin/ -->
+            <version>1.6</version>
+        </dependency>
     </dependencies>
+
 
     <build>
         <plugins>
@@ -83,6 +91,29 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <!--
+                https://repo1.maven.org/maven2/com/github/eirslett/frontend-maven-plugin/ -->
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>v6.3.1</nodeVersion>
+                            <npmVersion>3.9.5</npmVersion>
+                        </configuration>
+                    </execution>
+
+                </executions>
+                <configuration>
+                    <nodeVersion>v4.6.0</nodeVersion>
                 </configuration>
             </plugin>
         </plugins>

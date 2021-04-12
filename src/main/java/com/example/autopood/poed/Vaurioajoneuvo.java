@@ -3,6 +3,7 @@ package com.example.autopood.poed;
 import com.example.autopood.models.Kuulutus;
 import com.example.autopood.repositorities.KuulutusRepository;
 import com.example.autopood.repositorities.PoodRepository;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import java.io.IOException;
@@ -27,24 +28,28 @@ public class Vaurioajoneuvo extends ScrapePood
         return link;
     }
 
-    public Kuulutus scrapeKuulutus(String url)
-    {
+    public Kuulutus scrapeKuulutus(String url) {
         var kuulutus = new Kuulutus();
         var map = new HashMap<String, String>();
-        try
-        {
+        try {
             var document = Jsoup.connect(url).get();
             var elements = document.select("li.detail");
-            for (Element element : elements)
-            {
+            for (Element element : elements) {
                 var name = element.select("span.name").text();
                 var value = element.select("span.value").text();
                 map.put(name, value);
             }
             var hind = Integer.parseInt(document.select("p.price").get(0).text().replaceAll("[^\\d.]", ""));
             kuulutus.setHind(hind);
-        } catch (IOException e)
+        } catch (NumberFormatException e)
         {
+            System.out.println("Cant parse");
+            return null;
+        } catch (NullPointerException e)
+        {
+            System.out.println("Element not found");
+            return null;
+        } catch (IOException e) {
             e.printStackTrace();
         }
         kuulutus.setMark(map.get("Merkki"));
@@ -52,6 +57,6 @@ public class Vaurioajoneuvo extends ScrapePood
         kuulutus.setAasta(Integer.parseInt(map.get("Käyttöönottovuosi")));
         kuulutus.setLink(url);
         return kuulutus;
-    }
 
+    }
 }

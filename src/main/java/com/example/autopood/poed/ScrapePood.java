@@ -3,6 +3,7 @@ package com.example.autopood.poed;
 import com.example.autopood.models.Kuulutus;
 import com.example.autopood.repositorities.KuulutusRepository;
 import com.example.autopood.repositorities.PoodRepository;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
