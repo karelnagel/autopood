@@ -29,6 +29,22 @@ public class User
                 "Nimi: "+"\n";
     }
 
+    public String getEesnimi() {
+        return eesnimi;
+    }
+
+    public void setEesnimi(String eesnimi) {
+        this.eesnimi = eesnimi;
+    }
+
+    public String getPerekonnanimi() {
+        return perekonnanimi;
+    }
+
+    public void setPerekonnanimi(String perekonnanimi) {
+        this.perekonnanimi = perekonnanimi;
+    }
+
     public Set<KuulutusParameters> getParameters() {
         return parameterList;
     }
