@@ -1,8 +1,6 @@
 package com.example.autopood.models;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,7 +10,7 @@ public class User
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Kuulutus> soovitatud;
     @OneToMany(fetch = FetchType.EAGER)
-    private Set<KuulutusParameters> parameterList;
+    private Set<Parameter> parameterList;
     private String eesnimi;
     private String perekonnanimi;
     private String lastAction="";
@@ -44,15 +42,15 @@ public class User
         this.perekonnanimi = perekonnanimi;
     }
 
-    public Set<KuulutusParameters> getParameters() {
+    public Set<Parameter> getParameters() {
         return parameterList;
     }
 
-    public void addParameters(KuulutusParameters parameters) {
+    public void addParameters(Parameter parameters) {
         parameterList.add(parameters);
     }
 
-    public void removeParameters(KuulutusParameters parameters) {
+    public void removeParameters(Parameter parameters) {
         parameterList.remove(parameters);
     }
 
@@ -61,8 +59,8 @@ public class User
     }
 
 
-    public void setId(String id) {
-        this.id = Long.parseLong(id);
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLastAction() {

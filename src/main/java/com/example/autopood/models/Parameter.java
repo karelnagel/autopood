@@ -1,9 +1,12 @@
 package com.example.autopood.models;
 
+import com.example.autopood.DTOs.ParameterDto;
+
 import javax.persistence.*;
 
 @Entity
-public class KuulutusParameters{
+public class Parameter
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
@@ -23,100 +26,155 @@ public class KuulutusParameters{
     private User user;
 
 
-    public KuulutusParameters() {}
+    public Parameter()
+    {
+    }
 
+    public void update(ParameterDto parameterDto)
+    {
+        this.brand = parameterDto.getBrand();
+        this.model = parameterDto.getModel();
+        this.fuelType = parameterDto.getFuelType();
+        this.minPrice = parameterDto.getMinPrice();
+        this.maxPrice = parameterDto.getMaxPrice();
+        this.maxMileage = parameterDto.getMaxMileage();
+        this.minMileage = parameterDto.getMinMileage();
+        this.maxYear = parameterDto.getMaxYear();
+        this.minYear = parameterDto.getMinYear();
+        this.minEngineKW = parameterDto.getMinEngineKW();
+        this.maxEngineKW = parameterDto.getMaxEngineKW();
+    }
 
-    public String getFuelType() {
+    public boolean isNullOrEmpty(String string){
+        if (string.equals(null) || string.isEmpty()) return true;
+        return false;
+    }
+    public boolean kuulutusSobib(Kuulutus kuulutus)
+    {
+        if (!isNullOrEmpty(brand) && kuulutus.getMark() != brand) return false;
+        if (!isNullOrEmpty(model) && kuulutus.getMudel() != model) return false;
+        if (minPrice != 0 && kuulutus.getHind() < minPrice) return false;
+        if (maxPrice != 0 && kuulutus.getHind() > maxPrice) return false;
+        if (minYear != 0 && kuulutus.getAasta() < minYear) return false;
+        if (maxYear != 0 && kuulutus.getAasta() > maxYear) return false;
+
+        return true;
+    }
+
+    public String getFuelType()
+    {
         return fuelType;
     }
 
-    public void setFuelType(String fuelType) {
+    public void setFuelType(String fuelType)
+    {
         this.fuelType = fuelType;
     }
 
-    public double getMaxMileage() {
+    public double getMaxMileage()
+    {
         return maxMileage;
     }
 
-    public void setMaxMileage(double maxMileage) {
+    public void setMaxMileage(double maxMileage)
+    {
         this.maxMileage = maxMileage;
     }
 
-    public double getMinMileage() {
+    public double getMinMileage()
+    {
         return minMileage;
     }
 
-    public void setMinMileage(double minMileage) {
+    public void setMinMileage(double minMileage)
+    {
         this.minMileage = minMileage;
     }
 
-    public int getMinEngineKW() {
+    public int getMinEngineKW()
+    {
         return minEngineKW;
     }
 
-    public void setMinEngineKW(int minEngineKW) {
+    public void setMinEngineKW(int minEngineKW)
+    {
         this.minEngineKW = minEngineKW;
     }
 
-    public int getMaxEngineKW() {
+    public int getMaxEngineKW()
+    {
         return maxEngineKW;
     }
 
-    public void setMaxEngineKW(int maxEngineKW) {
+    public void setMaxEngineKW(int maxEngineKW)
+    {
         this.maxEngineKW = maxEngineKW;
     }
 
-    public String getBrand() {
+    public String getBrand()
+    {
         return brand;
     }
 
-    public void setBrand(String brand) {
+    public void setBrand(String brand)
+    {
         this.brand = brand;
     }
 
-    public String getModel() {
+    public String getModel()
+    {
         return model;
     }
 
-    public void setModel(String model) {
+    public void setModel(String model)
+    {
         this.model = model;
     }
 
-    public double getMinPrice() {
+    public double getMinPrice()
+    {
         return minPrice;
     }
 
-    public void setMinPrice(double minPrice) {
+    public void setMinPrice(double minPrice)
+    {
         this.minPrice = minPrice;
     }
 
-    public double getMaxPrice() {
+    public double getMaxPrice()
+    {
         return maxPrice;
     }
 
-    public void setMaxPrice(double maxPrice) {
+    public void setMaxPrice(double maxPrice)
+    {
         this.maxPrice = maxPrice;
     }
 
-    public int getMaxYear() {
+    public int getMaxYear()
+    {
         return maxYear;
     }
 
-    public void setMaxYear(int maxYear) {
+    public void setMaxYear(int maxYear)
+    {
         this.maxYear = maxYear;
     }
 
-    public int getMinYear() {
+    public int getMinYear()
+    {
         return minYear;
     }
 
-    public void setMinYear(int minYear) {
+    public void setMinYear(int minYear)
+    {
         this.minYear = minYear;
     }
 
     @Override
-    public String toString() {
-        return "Kuulutuse parameetrid:"+
+    public String toString()
+    {
+        return "Kuulutuse parameetrid:" +
                 "\nid: " + id +
                 "\nMark: " + brand +
                 "\nMudel: " + model +
@@ -148,11 +206,13 @@ public class KuulutusParameters{
          */
     }
 
-    public void setId(long id) {
+    public void setId(long id)
+    {
         this.id = id;
     }
 
-    public long getId() {
+    public long getId()
+    {
         return id;
     }
 

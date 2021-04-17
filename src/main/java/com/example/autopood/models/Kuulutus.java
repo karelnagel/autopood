@@ -2,32 +2,29 @@ package com.example.autopood.models;
 
 import javax.persistence.*;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 public class Kuulutus
 {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pood_id", referencedColumnName = "id", nullable = false)
     private Pood pood;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    Set<User> soovitatud;
+    private Set<User> soovitatud;
 
-    String mark;
-    String mudel;
-    int aasta;
-    int hind;
-    String link;
-    double mootor;
-    String kütus;
-    int labisoit;
+    private String mark;
+    private String mudel;
+    private int aasta;
+    private int hind;
+    private String link;
+    private double mootor;
+    private String kütus;
+    private int labisoit;
 
     public Kuulutus()
     {
@@ -42,6 +39,7 @@ public class Kuulutus
         this.hind = hind;
         this.link = link;
     }
+
     @Override
     public String toString()
     {
@@ -56,10 +54,10 @@ public class Kuulutus
 
     public String toMessenger()
     {
-        return mark+" - "+mudel+ "\n" +
-                aasta +" aasta \n"  +
-                hind +"$ \n" +
-                link ;
+        return mark + " - " + mudel + "\n" +
+                aasta + " aasta \n" +
+                hind + "$ \n" +
+                link;
     }
 
     public String getMark()

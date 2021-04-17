@@ -1,8 +1,8 @@
 package com.example.autopood.controllers;
 
-import com.example.autopood.models.KuulutusParameters;
+import com.example.autopood.models.Parameter;
 import com.example.autopood.models.User;
-import com.example.autopood.repositorities.KuulutusParametersRepository;
+import com.example.autopood.repositorities.ParameterRepository;
 import com.example.autopood.repositorities.UserRepository;
 import com.github.messenger4j.MessengerPlatform;
 import com.github.messenger4j.exceptions.MessengerApiException;
@@ -52,14 +52,14 @@ public class CallBackHandler
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
     private final UserRepository userRepository;
-    private final KuulutusParametersRepository kuulutusParametersRepository;
+    private final ParameterRepository kuulutusParametersRepository;
 
-    public static KuulutusParameters parameters = new KuulutusParameters();
+    public static Parameter parameters = new Parameter();
 
     @Autowired
     public CallBackHandler(@Value("${messenger4j.appSecret}") final String appSecret,
                            @Value("${messenger4j.verifyToken}") final String verifyToken,
-                           final MessengerSendClient sendClient, UserRepository userRepository,KuulutusParametersRepository kuulutusParametersRepository)
+                           final MessengerSendClient sendClient, UserRepository userRepository, ParameterRepository kuulutusParametersRepository)
     {
 
         logger.debug("Initializing MessengerReceiveClient - appSecret: {} | verifyToken: {}", appSecret, verifyToken);
@@ -124,7 +124,7 @@ public class CallBackHandler
 
             final String messageId = event.getMid();
             final String messageText = event.getText();
-            final String senderId = event.getSender().getId();
+            final var senderId = Long.parseLong(event.getSender().getId());
             final Date timestamp = event.getTimestamp();
 
             logger.info("Received message '{}' with text '{}' from user '{}' at '{}'",
@@ -221,7 +221,7 @@ public class CallBackHandler
                                     sendTextMessage(senderId, "Uued otsinguvalikud salvestatud :)");
                                     break;
                                 case OPTION_CANCEL_SEARCH:
-                                    parameters = new KuulutusParameters();
+                                    parameters = new Parameter();
                                     sendTextMessage(senderId, "Otsinguvalikud kustutatud");
                                     userRepository.save(user);
                                     break;
@@ -254,7 +254,7 @@ public class CallBackHandler
         {
             logger.debug("Received QuickReplyMessageEvent: {}", event);
 
-            final String senderId = event.getSender().getId();
+            final var senderId = Long.parseLong(event.getSender().getId());
             final String messageId = event.getMid();
             final String quickReplyPayload = event.getQuickReply().getPayload();
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
@@ -267,7 +267,7 @@ public class CallBackHandler
                             sendTextMessage(senderId, "Teil pole ühtegi otsingut salvestatud");
                         }
                         else {
-                            for (KuulutusParameters parameetrid : user.getParameters()) {
+                            for (Parameter parameetrid : user.getParameters()) {
                                 sendTextMessage(senderId, parameetrid.toString());
                             }
                         }
@@ -279,11 +279,11 @@ public class CallBackHandler
                         kuulutusParametersRepository.save(parameters);
                         sendTextMessage(senderId, "Uued otsinguvalikud salvestatud :)");
                     } else if (quickReplyPayload.equals(OPTION_NEW_SEARCH)) {
-                        parameters = new KuulutusParameters();
+                        parameters = new Parameter();
                         sendTextMessage(senderId, "Teeme uue otsingu");
                         sendSearchOptions(senderId);
                     } else if (quickReplyPayload.equals(OPTION_CANCEL_SEARCH)) {
-                        parameters = new KuulutusParameters();
+                        parameters = new Parameter();
                         sendTextMessage(senderId, "Otsinguvalikud kustutatud");
                         userRepository.save(user);
                     } else if (quickReplyPayload.equals(OPTION_CHECK_CURRENT)) {
@@ -305,11 +305,11 @@ public class CallBackHandler
     }
 
 
-    private void sendTextMessage(String recipientId, String text)
+    private void sendTextMessage(Long recipientId, String text)
     {
         try
         {
-            this.sendClient.sendTextMessage(recipientId, text);
+            this.sendClient.sendTextMessage(recipientId.toString(), text);
         } catch (MessengerApiException e)
         {
             e.printStackTrace();
@@ -319,7 +319,7 @@ public class CallBackHandler
         }
     }
 
-    void sendFirstOptions(String recipientId) throws MessengerApiException, MessengerIOException
+    void sendFirstOptions(Long recipientId) throws MessengerApiException, MessengerIOException
     {
 
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
@@ -327,9 +327,9 @@ public class CallBackHandler
                 .addTextQuickReply("Uus otsing", OPTION_NEW_SEARCH).toList()
                 .build();
 
-        this.sendClient.sendTextMessage(recipientId, "Mida soovid teha?", quickReplies);
+        this.sendClient.sendTextMessage(recipientId.toString(), "Mida soovid teha?", quickReplies);
     }
-    void sendSearchOptions(String recipientId) throws MessengerApiException, MessengerIOException
+    void sendSearchOptions(Long recipientId) throws MessengerApiException, MessengerIOException
     {
 
         final List<QuickReply> quickReplies = QuickReply.newListBuilder()
@@ -349,7 +349,7 @@ public class CallBackHandler
                 .addTextQuickReply("Kütus", OPTION_FUELTYPE).toList()
                 .build();
 
-        this.sendClient.sendTextMessage(recipientId, "Vali parameeter, mida soovid muuta", quickReplies);
+        this.sendClient.sendTextMessage(recipientId.toString(), "Vali parameeter, mida soovid muuta", quickReplies);
     }
 
     private void handleSendException(Exception e)
@@ -363,7 +363,7 @@ public class CallBackHandler
         {
             logger.debug("Received PostbackEvent: {}", event);
 
-            final String senderId = event.getSender().getId();
+            final var senderId = Long.parseLong(event.getSender().getId());
             final String recipientId = event.getRecipient().getId();
             final String payload = event.getPayload();
             final Date timestamp = event.getTimestamp();
@@ -417,7 +417,7 @@ public class CallBackHandler
         {
             logger.debug("Received OptInEvent: {}", event);
 
-            final String senderId = event.getSender().getId();
+            final var senderId = Long.parseLong(event.getSender().getId());
             final String recipientId = event.getRecipient().getId();
             final String passThroughParam = event.getRef();
             final Date timestamp = event.getTimestamp();
