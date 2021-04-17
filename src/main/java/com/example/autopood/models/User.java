@@ -8,8 +8,7 @@ import java.util.Set;
 @Entity
 public class User
 {
-    @Id
-    private Long id;
+ @Id @GeneratedValue(strategy = GenerationType.AUTO) private Long id;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Kuulutus> soovitatud;
     @OneToMany(fetch = FetchType.EAGER)
@@ -56,9 +55,11 @@ public class User
     public void removeParameters(KuulutusParameters parameters) {
         parameterList.remove(parameters);
     }
-    public String getId() {
-        return id.toString();
+
+    public Long getId() {
+        return id;
     }
+
 
     public void setId(String id) {
         this.id = Long.parseLong(id);

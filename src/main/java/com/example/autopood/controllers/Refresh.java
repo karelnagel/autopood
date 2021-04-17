@@ -60,7 +60,7 @@ public class Refresh
             {
                 //Kontrolli kas keegi tahab
                 System.out.println(kuulutus.toString());
-                sendMessage(kuulutus.toMessenger());
+                //sendMessage(kuulutus.toMessenger());
             }
         }
         
@@ -75,7 +75,7 @@ public class Refresh
         {
             try
             {
-                sendClient.sendTextMessage(user.getId(), message);
+                sendClient.sendTextMessage(user.getId().toString(), message);
             } catch (MessengerApiException e)
             {
                 e.printStackTrace();

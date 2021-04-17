@@ -9,18 +9,18 @@ logging:
       github:
         messenger4j: INFO
 
+
 spring:
-  #web UI path?
   data:
     rest:
-      base-path=/api:
+      basePath=/api:
   jpa.hibernate.ddl-auto: create-drop
   jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
     hikari:
       max-lifetime: 60000
       maxLifeTime: 60000
-      url: ${CLEARDB_DATABASE_URL}
+    url: ${CLEARDB_DATABASE_URL}
 
 
   #local dbeaver:
