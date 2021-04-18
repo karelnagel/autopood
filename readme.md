@@ -3,7 +3,8 @@ poodidele uued kuulutuse parameetrid,
 frontend endpointidele,
 pealehekulg,
 video,
-pdf
+pdf,
+get user name when messenger starts
 
 
 broneerimine 
