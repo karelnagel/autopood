@@ -14,13 +14,15 @@ export class App extends Component {
     }
 
     componentDidMount() {
-        axios.get('/user/all')
+        const urlParams = new URLSearchParams(window.location.search);
+        axios.get('/api/users/'+urlParams.get('userId')+'/parameters')
             .then(response => this.setState({users:response.data}))
     }
 
     //Deleting User
     removeUser = (id) =>{
-        axios.delete(`/user/${id}`)
+        const urlParams = new URLSearchParams(window.location.search);
+        axios.delete('/api/users/'+urlParams.get('userId')+'/parameters/${id}')
             .then(
                 response =>this.setState( //Updating UI
                     {users: [...this.state.users.filter(
@@ -31,7 +33,8 @@ export class App extends Component {
     }
 
     addUser = (newUser) =>{
-        axios.post('/user/save',newUser)
+        const urlParams = new URLSearchParams(window.location.search);
+        axios.post('/api/users/'+urlParams.get('userId')+'/parameters/',newUser)
             .then(
                 (response) =>{
                     console.log(response.data);

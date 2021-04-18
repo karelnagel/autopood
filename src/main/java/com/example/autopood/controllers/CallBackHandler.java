@@ -33,7 +33,7 @@ public class CallBackHandler
 
     public static final String OPTION_PROFILE = "profile";
     public static final String OPTION_CREATE_PARAMETER = "create parameter";
-    private static final String baseUrl = "https://autopood.herokuapp.com/api/";
+    private static final String baseUrl = "https://autopood.herokuapp.com/";
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
     private final UserRepository userRepository;
@@ -154,10 +154,10 @@ public class CallBackHandler
                     User user = userRepository.findById(senderId).get();
                     if (quickReplyPayload.equals(OPTION_PROFILE))
                     {
-                        sendTextMessage(senderId, "You can change your profile settings here:\n "+baseUrl+"users/" + senderId);
+                        sendTextMessage(senderId, "You can change your profile settings here:\n "+baseUrl+"api/users/" + senderId);
                     } else if (quickReplyPayload.equals(OPTION_CREATE_PARAMETER))
                     {
-                        sendTextMessage(senderId, "Create new parameter here: \n "+baseUrl+"users/" + senderId + "/parameters/");
+                        sendTextMessage(senderId, "Create new parameter here: \n "+baseUrl+"?userId=" + senderId);
                     } else
                     {
                         var paraId = Long.parseLong(quickReplyPayload);
@@ -165,8 +165,8 @@ public class CallBackHandler
                         {
                             var parameter = kuulutusParametersRepository.findById(paraId).get();
                             sendTextMessage(senderId, parameter.toString());
-                            sendTextMessage(senderId, "Edit: \n "+baseUrl+"users/" + senderId + "/parameters/" + paraId);
-                            sendTextMessage(senderId, "Vanad kuulutused: \n "+baseUrl+"kuulutused?paraId=" + paraId);
+                            sendTextMessage(senderId, "Edit: \n "+baseUrl+"?userId=" + senderId + "&paraId=" + paraId);
+                            sendTextMessage(senderId, "Vanad kuulutused: \n "+baseUrl+"api/kuulutused?paraId=" + paraId);
                         } else
                         {
                             sendTextMessage(senderId, "Error");

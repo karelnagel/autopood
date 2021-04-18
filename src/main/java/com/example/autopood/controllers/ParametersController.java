@@ -63,7 +63,7 @@ public class ParametersController
         return new ResponseEntity(new ParameterDto(parameter), HttpStatus.OK);
     }
 
-    @PostMapping("/users/{userId}/parameters/{paraId}")
+    @PostMapping("/users/{userId}/parameters/")
     public ResponseEntity<ParameterDto> postParameter(@PathVariable Long userId, @RequestBody ParameterDto parameterDto)
     {
         if (userId == null)
