@@ -31,30 +31,14 @@ public class CallBackHandler
 
     private static final Logger logger = LoggerFactory.getLogger(CallBackHandler.class);
 
-    public static final String OPTION_CHECK = "Vaata kõiki oma otsinguid";
-    public static final String OPTION_MARK = "Mark";
-    public static final String OPTION_MODEL = "Mudel";
-    public static final String OPTION_MIN_PRICE = "Min hind";
-    public static final String OPTION_MAX_PRICE = "Max hind";
-    public static final String OPTION_MIN_YEAR = "Min aasta";
-    public static final String OPTION_MAX_YEAR = "Max aasta";
-    public static final String OPTION_MIN_MILEAGE = "Min labisoit";
-    public static final String OPTION_MAX_MILEAGE = "Max labisoit";
-    public static final String OPTION_MIN_KW = "Min mootori võimsus (kW)";
-    public static final String OPTION_MAX_KW = "Max mootori võimsus (kW)";
-    public static final String OPTION_FUELTYPE = "Kütus";
-    public static final String OPTION_SAVE_PARAMS = "salvesta praegused";
-    public static final String OPTION_NEW_SEARCH = "Uus otsing";
-    public static final String OPTION_CANCEL_SEARCH = "tühista otsing";
-    public static final String OPTION_CHECK_CURRENT = "Vaata praegust otsingut";
-
-
+    public static final String OPTION_PROFILE = "profile";
+    public static final String OPTION_CREATE_PARAMETER = "create parameter";
+    private static final String baseUrl = "https://autopood.herokuapp.com/api/";
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
     private final UserRepository userRepository;
     private final ParameterRepository kuulutusParametersRepository;
 
-    public static Parameter parameters = new Parameter();
 
     @Autowired
     public CallBackHandler(@Value("${messenger4j.appSecret}") final String appSecret,
@@ -141,107 +125,11 @@ public class CallBackHandler
                     user.setId(senderId);
                     userRepository.save(user);
                     sendTextMessage(senderId, "Teretulemast!");
-                    System.out.println("Olete uus kasutaja, loome teile profiili :)");
-                    //sendTextMessage(senderId, "Vali auto parameetrid");
-                    sendFirstOptions(senderId);
-
-                } else
-                {
-                    User user = userRepository.findById(senderId).get();
-                    if (user.getLastAction().isEmpty() || user.getLastAction() == null)
-                    {
-                        sendFirstOptions(senderId);
-                    } else
-                    {
-
-                        try
-                        {
-                            switch (user.getLastAction())
-                            {
-                                case OPTION_MARK:
-                                    parameters.setBrand(messageText);
-                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
-                                    sendSearchOptions(senderId);
-                                    break;
-                                case OPTION_MODEL:
-                                    parameters.setModel(messageText);
-                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
-                                    sendSearchOptions(senderId);
-                                    break;
-                                case OPTION_MIN_PRICE:
-                                    parameters.setMinPrice(Integer.parseInt(messageText));
-                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
-                                    sendSearchOptions(senderId);
-                                    break;
-                                case OPTION_MAX_PRICE:
-                                    parameters.setMaxPrice(Integer.parseInt(messageText));
-                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
-                                    sendSearchOptions(senderId);
-                                    break;
-                                case OPTION_MIN_YEAR:
-                                    parameters.setMinYear(Integer.parseInt(messageText));
-                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
-                                    sendSearchOptions(senderId);
-                                    break;
-                                case OPTION_MAX_YEAR:
-                                    parameters.setMaxYear(Integer.parseInt(messageText));
-                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
-                                    sendSearchOptions(senderId);
-                                    break;
-                                case OPTION_MIN_MILEAGE:
-                                    parameters.setMinMileage(Integer.parseInt(messageText));
-                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
-                                    sendSearchOptions(senderId);
-                                    break;
-                                case OPTION_MAX_MILEAGE:
-                                    parameters.setMaxMileage(Integer.parseInt(messageText));
-                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
-                                    sendSearchOptions(senderId);
-                                    break;
-                                case OPTION_MIN_KW:
-                                    parameters.setMinEngineKW(Integer.parseInt(messageText));
-                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
-                                    sendSearchOptions(senderId);
-                                    break;
-                                case OPTION_MAX_KW:
-                                    parameters.setMaxEngineKW(Integer.parseInt(messageText));
-                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
-                                    sendSearchOptions(senderId);
-                                    break;
-                                case OPTION_FUELTYPE:
-                                    parameters.setFuelType(messageText);
-                                    sendTextMessage(senderId, user.getLastAction() + " muudetud: " + messageText);
-                                    sendSearchOptions(senderId);
-                                    break;
-//
-                                case OPTION_SAVE_PARAMS:
-                                    //lisame kasutaja parameetrite listi uue seti of parameters
-                                    user.addParameters(parameters);
-                                    userRepository.save(user);
-                                    sendTextMessage(senderId, "Uued otsinguvalikud salvestatud :)");
-                                    break;
-                                case OPTION_CANCEL_SEARCH:
-                                    parameters = new Parameter();
-                                    sendTextMessage(senderId, "Otsinguvalikud kustutatud");
-                                    userRepository.save(user);
-                                    break;
-                                case OPTION_CHECK_CURRENT:
-                                    sendTextMessage(senderId, parameters.toString());
-                                    sendSearchOptions(senderId);
-                                    break;
-
-                            }
-                            //sendTextMessage(senderId, "Alustage uuesti");
-                            user.setLastAction("");
-                            //sendFirstOptions(senderId);
-                            //userRepository.save(user);
-                        }
-                        catch (NumberFormatException nfe)
-                        {
-                            sendTextMessage(senderId, "Pole sobiv number");
-                        }
-                    }
+                    System.out.println("Alustuseks loo uus parameeter, et oskaksime autosi teile soovitada");
                 }
+
+                sendFirstOptions(senderId);
+
             } catch (MessengerApiException | MessengerIOException e)
             {
                 handleSendException(e);
@@ -249,7 +137,8 @@ public class CallBackHandler
         };
     }
 
-    private QuickReplyMessageEventHandler newQuickReplyMessageEventHandler() {
+    private QuickReplyMessageEventHandler newQuickReplyMessageEventHandler()
+    {
         return event ->
         {
             logger.debug("Received QuickReplyMessageEvent: {}", event);
@@ -258,46 +147,34 @@ public class CallBackHandler
             final String messageId = event.getMid();
             final String quickReplyPayload = event.getQuickReply().getPayload();
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
-            try {
-                if (userRepository.existsById(senderId)) {
+            try
+            {
+                if (userRepository.existsById(senderId))
+                {
                     User user = userRepository.findById(senderId).get();
-                    if (quickReplyPayload.equals(OPTION_CHECK)) {
-                        sendTextMessage(senderId,"Teie otsingud on: \n");
-                        if(user.getParameters().isEmpty()){
-                            sendTextMessage(senderId, "Teil pole ühtegi otsingut salvestatud");
+                    if (quickReplyPayload.equals(OPTION_PROFILE))
+                    {
+                        sendTextMessage(senderId, "You can change your profile settings here:\n "+baseUrl+"users/" + senderId);
+                    } else if (quickReplyPayload.equals(OPTION_CREATE_PARAMETER))
+                    {
+                        sendTextMessage(senderId, "Create new parameter here: \n "+baseUrl+"users/" + senderId + "/parameters/");
+                    } else
+                    {
+                        var paraId = Long.parseLong(quickReplyPayload);
+                        if (kuulutusParametersRepository.existsById(paraId))
+                        {
+                            var parameter = kuulutusParametersRepository.findById(paraId).get();
+                            sendTextMessage(senderId, parameter.toString());
+                            sendTextMessage(senderId, "Edit: \n "+baseUrl+"users/" + senderId + "/parameters/" + paraId);
+                            sendTextMessage(senderId, "Vanad kuulutused: \n "+baseUrl+"kuulutused?paraId=" + paraId);
+                        } else
+                        {
+                            sendTextMessage(senderId, "Error");
                         }
-                        else {
-                            for (Parameter parameetrid : user.getParameters()) {
-                                sendTextMessage(senderId, parameetrid.toString());
-                            }
-                        }
-                        sendFirstOptions(senderId);
-
-                    } else if (quickReplyPayload.equals(OPTION_SAVE_PARAMS)) {
-                        //lisame kasutaja parameetrite listi uue seti of parameters
-                        parameters.setUser(user);
-                        kuulutusParametersRepository.save(parameters);
-                        sendTextMessage(senderId, "Uued otsinguvalikud salvestatud :)");
-                    } else if (quickReplyPayload.equals(OPTION_NEW_SEARCH)) {
-                        parameters = new Parameter();
-                        sendTextMessage(senderId, "Teeme uue otsingu");
-                        sendSearchOptions(senderId);
-                    } else if (quickReplyPayload.equals(OPTION_CANCEL_SEARCH)) {
-                        parameters = new Parameter();
-                        sendTextMessage(senderId, "Otsinguvalikud kustutatud");
-                        userRepository.save(user);
-                    } else if (quickReplyPayload.equals(OPTION_CHECK_CURRENT)) {
-                        sendTextMessage(senderId, parameters.toString());
-                        sendSearchOptions(senderId);
-                    }
-                    else {
-                        //kahtlaneülem
-                        user.setLastAction(quickReplyPayload);
-                        userRepository.save(user);
-                        sendTextMessage(senderId, "Kirjuta " + quickReplyPayload);
                     }
                 }
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 e.printStackTrace();
             }
 
@@ -322,35 +199,17 @@ public class CallBackHandler
     void sendFirstOptions(Long recipientId) throws MessengerApiException, MessengerIOException
     {
 
-        final List<QuickReply> quickReplies = QuickReply.newListBuilder()
-                .addTextQuickReply("Vaata oma otsinguid", OPTION_CHECK).toList()
-                .addTextQuickReply("Uus otsing", OPTION_NEW_SEARCH).toList()
-                .build();
-
-        this.sendClient.sendTextMessage(recipientId.toString(), "Mida soovid teha?", quickReplies);
+        var quickReplies = QuickReply.newListBuilder()
+                .addTextQuickReply("Profiil", OPTION_PROFILE).toList()
+                .addTextQuickReply("Uus otsing", OPTION_CREATE_PARAMETER).toList();
+        var parameters = kuulutusParametersRepository.findByUserId(recipientId);
+        for (Parameter parameter : parameters)
+        {
+            quickReplies.addTextQuickReply("Para " + parameter.getName(), parameter.getId().toString());
+        }
+        this.sendClient.sendTextMessage(recipientId.toString(), "Mida soovid teha?", quickReplies.build());
     }
-    void sendSearchOptions(Long recipientId) throws MessengerApiException, MessengerIOException
-    {
 
-        final List<QuickReply> quickReplies = QuickReply.newListBuilder()
-                .addTextQuickReply("Vaata otsingut", OPTION_CHECK_CURRENT).toList()
-                .addTextQuickReply("Salvesta otsing", OPTION_SAVE_PARAMS).toList()
-                .addTextQuickReply("Tühista", OPTION_CANCEL_SEARCH).toList()
-                .addTextQuickReply("Mark", OPTION_MARK).toList()
-                .addTextQuickReply("Mudel", OPTION_MODEL).toList()
-                .addTextQuickReply("Min hind", OPTION_MIN_PRICE).toList()
-//                .addTextQuickReply("Max hind", OPTION_MAX_PRICE).toList()
-//                .addTextQuickReply("Min aasta", OPTION_MIN_YEAR).toList()
-//                .addTextQuickReply("Max aasta", OPTION_MAX_YEAR).toList()
-//                .addTextQuickReply("Min läbisõit", OPTION_MIN_MILEAGE).toList()
-//                .addTextQuickReply("Max läbisõit", OPTION_MAX_MILEAGE).toList()
-//                .addTextQuickReply("Min Mootori võimsus", OPTION_MIN_KW).toList()
-//                .addTextQuickReply("Max Mootori võimsus", OPTION_MAX_KW).toList()
-                .addTextQuickReply("Kütus", OPTION_FUELTYPE).toList()
-                .build();
-
-        this.sendClient.sendTextMessage(recipientId.toString(), "Vali parameeter, mida soovid muuta", quickReplies);
-    }
 
     private void handleSendException(Exception e)
     {
@@ -370,25 +229,25 @@ public class CallBackHandler
 
             logger.info("Received postback for user '{}' and page '{}' with payload '{}' at '{}'",
                     senderId, recipientId, payload, timestamp);
-
-            boolean userExists = userRepository.existsById(senderId);
-            if (!userExists)
+            try
             {
-                User user = new User();
-                user.setId(senderId);
-                userRepository.save(user);
-                sendTextMessage(senderId, "Tere tulemast!");
-                //sendTextMessage(senderId, "Vali auto parameetrid");
-                try
+                boolean userExists = userRepository.existsById(senderId);
+                if (!userExists)
                 {
+                    User user = new User();
+                    user.setId(senderId);
+                    userRepository.save(user);
+                    sendTextMessage(senderId, "Tere tulemast!");
+                    //sendTextMessage(senderId, "Vali auto parameetrid");
+
                     sendFirstOptions(senderId);
-                } catch (MessengerApiException e)
-                {
-                    e.printStackTrace();
-                } catch (MessengerIOException e)
-                {
-                    e.printStackTrace();
                 }
+            } catch (MessengerApiException e)
+            {
+                e.printStackTrace();
+            } catch (MessengerIOException e)
+            {
+                e.printStackTrace();
             }
         };
     }

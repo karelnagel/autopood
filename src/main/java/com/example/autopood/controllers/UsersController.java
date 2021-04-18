@@ -29,6 +29,7 @@ public class UsersController
         if (!userRepository.existsById(userId))
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         var user = userRepository.findById(userId).get();
+        user.setParameterList(parameterRepository.findByUserId(userId));
         var userDto = new UserDto(user);
         return new ResponseEntity(userDto, HttpStatus.OK);
     }

@@ -1,7 +1,9 @@
 package com.example.autopood.models;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class User
@@ -9,7 +11,7 @@ public class User
     @Id
     private Long id;
     @OneToMany
-    private Set<Parameter> parameterList;
+    private List<Parameter> parameterList;
     private String eesnimi;
     private String perekonnanimi;
     private String lastAction = "";
@@ -46,7 +48,12 @@ public class User
         this.perekonnanimi = perekonnanimi;
     }
 
-    public Set<Parameter> getParameters()
+    public void setParameterList(List<Parameter> parameters)
+    {
+        parameterList = parameters;
+    }
+
+    public List<Parameter> getParameters()
     {
         return parameterList;
     }
