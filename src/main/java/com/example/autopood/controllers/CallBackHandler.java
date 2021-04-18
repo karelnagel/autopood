@@ -205,7 +205,7 @@ public class CallBackHandler
         var parameters = kuulutusParametersRepository.findByUserId(recipientId);
         for (Parameter parameter : parameters)
         {
-            quickReplies.addTextQuickReply("Para " + parameter.getName(), parameter.getId().toString());
+            quickReplies = quickReplies.addTextQuickReply("Para " + parameter.getName(), parameter.getId().toString()).toList();
         }
         this.sendClient.sendTextMessage(recipientId.toString(), "Mida soovid teha?", quickReplies.build());
     }
