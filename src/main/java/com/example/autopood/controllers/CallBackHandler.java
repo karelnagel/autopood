@@ -173,6 +173,7 @@ public class CallBackHandler
                         }
                     }
                 }
+                sendFirstOptions(senderId);
             } catch (Exception e)
             {
                 e.printStackTrace();

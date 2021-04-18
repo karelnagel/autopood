@@ -134,9 +134,9 @@ public class KuulutusDto
         return year;
     }
 
-    public void setYear(int aasta)
+    public void setYear(int year)
     {
-        this.year = aasta;
+        this.year = year;
     }
 
     public int getPrice()
