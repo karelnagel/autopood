@@ -14,6 +14,7 @@ public class Parameter
     private String type;
     private String brand;
     private String model;
+    private String country;
     private String fuelType;
     private double minPrice;
     private double maxPrice;
@@ -38,15 +39,16 @@ public class Parameter
     public String toString()
     {
         return name + '\n' +
-                ", type= " + type + '\n' +
-                ", brand= " + brand + '\n' +
-                ", model= " + model + '\n' +
-                ", fuelType= " + fuelType + '\n' +
-                ", price= " + minPrice +" - " +maxPrice+'\n' +
-                ", year= " + minYear +" - " +maxYear+'\n' +
-                ", mileage= " + minMileage +" - " +maxMileage+'\n' +
-                ", engineKW= " + minEngineKW +" - " +maxEngineKW+'\n' +
-                ", engine size= " + minEngineSize +" - " +maxEngineSize+'\n';
+                "type: " + type + '\n' +
+                "country: " + country + '\n' +
+                "brand: " + brand + '\n' +
+                "model: " + model + '\n' +
+                "fuelType: " + fuelType + '\n' +
+                "price: " + minPrice +" - " +maxPrice+'\n' +
+                "year: " + minYear +" - " +maxYear+'\n' +
+                "mileage: " + minMileage +" - " +maxMileage+'\n' +
+                "engineKW: " + minEngineKW +" - " +maxEngineKW+'\n' +
+                "engine size: " + minEngineSize +" - " +maxEngineSize+'\n';
     }
 
     public void update(ParameterDto parameterDto)
@@ -55,6 +57,7 @@ public class Parameter
         this.type = parameterDto.getType();
         this.brand = parameterDto.getBrand();
         this.model = parameterDto.getModel();
+        this.country = parameterDto.getCountry();
         this.fuelType = parameterDto.getFuelType();
         this.minPrice = parameterDto.getMinPrice();
         this.maxPrice = parameterDto.getMaxPrice();
@@ -105,6 +108,7 @@ public class Parameter
         if (!compareString(kuulutus.getModel(),model)) return false;
         if (!compareString(kuulutus.getFuelType(), fuelType)) return false;
         if (!compareString(kuulutus.getType(), type)) return false;
+        if (!compareString(kuulutus.getPood().getCountry(), country)) return false;
 
         if (!compareDouble(kuulutus.getPrice(), maxPrice, minPrice)) return false;
         if (!compareDouble(kuulutus.getYear(), maxYear, minYear)) return false;
@@ -288,5 +292,15 @@ public class Parameter
     public void setType(String type)
     {
         this.type = type;
+    }
+
+    public String getCountry()
+    {
+        return country;
+    }
+
+    public void setCountry(String country)
+    {
+        this.country = country;
     }
 }

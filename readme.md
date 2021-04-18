@@ -1,13 +1,12 @@
 Todo:
-parameetrid kasutajast eraldi tabelis
-sordi kasutajale
-poodide bugid ja errorid
+poodidele uued kuulutuse parameetrid,
+frontend endpointidele,
+pealehekulg,
+video,
+pdf
+
 
 broneerimine 
 kuulutused image
 messenger send image
 
-
-hv.ee
-api get kuulutused filtritega
-messenger link to kasutajale sobivad kuulutused

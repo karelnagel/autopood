@@ -12,6 +12,7 @@ public class ParameterDto
         this.name = parameter.getName();
         this.type = parameter.getType();
         this.model = parameter.getModel();
+        this.country = parameter.getCountry();
         this.fuelType = parameter.getFuelType();
         this.minPrice = parameter.getMinPrice();
         this.maxPrice = parameter.getMaxPrice();
@@ -32,6 +33,7 @@ public class ParameterDto
     private String brand;
     private String model;
     private String fuelType;
+    private String country;
     private double minPrice;
     private double maxPrice;
     private double maxMileage;
@@ -203,4 +205,13 @@ public class ParameterDto
         this.maxEngineKW = maxEngineKW;
     }
 
+    public String getCountry()
+    {
+        return country;
+    }
+
+    public void setCountry(String country)
+    {
+        this.country = country;
+    }
 }
