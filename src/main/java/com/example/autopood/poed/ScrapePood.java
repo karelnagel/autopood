@@ -16,9 +16,9 @@ public abstract class ScrapePood extends AbstractPood
     String url;
     String kuulutuseElement;
 
-    ScrapePood(String poeNimi, PoodRepository poodRepository, KuulutusRepository kuulutusRepository)
+    ScrapePood(String poeNimi, String poeRiik, PoodRepository poodRepository, KuulutusRepository kuulutusRepository)
     {
-        super(poeNimi, poodRepository, kuulutusRepository);
+        super(poeNimi,poeRiik, poodRepository, kuulutusRepository);
     }
 
     public List<Kuulutus> getKuulutused()

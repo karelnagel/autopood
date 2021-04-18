@@ -12,10 +12,21 @@ public class Pood
     @Id
     private String id;
 
-    @OneToMany(mappedBy = "pood", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "pood")
     private Set<Kuulutus> kuulutused;
     private String viimaneKuulutus;
     private String authKey;
+    private String country;
+
+    public String getCountry()
+    {
+        return country;
+    }
+
+    public void setCountry(String country)
+    {
+        this.country = country;
+    }
 
     public Set<Kuulutus> getKuulutused()
     {

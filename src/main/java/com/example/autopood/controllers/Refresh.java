@@ -64,7 +64,7 @@ public class Refresh
             {
                 for (Parameter parameter : allParameters)
                 {
-                    if (parameter.kuulutusSobib(kuulutus))
+                    if (parameter.kasKuulutusSobib(kuulutus))
                     {
                         var userId = parameter.getUser().getId();
                         sendMessage(kuulutus.toMessenger(), userId);

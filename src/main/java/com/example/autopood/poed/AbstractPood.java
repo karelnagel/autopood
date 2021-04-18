@@ -16,12 +16,13 @@ public abstract class AbstractPood
     public String poeId;
     private String viimaneKuulutus;
 
-    AbstractPood(String poeNimi, PoodRepository poodRepository, KuulutusRepository kuulutusRepository)
+    AbstractPood(String poeNimi, String poeRiik, PoodRepository poodRepository, KuulutusRepository kuulutusRepository)
     {
         if (!poodRepository.existsById(poeNimi))
         {
             var pood = new Pood();
             pood.setId(poeNimi);
+            pood.setCountry(poeRiik);
             poodRepository.save(pood);
         }
         this.poeId = poeNimi;

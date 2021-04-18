@@ -13,7 +13,7 @@ public class Auto24 extends ScrapePood
 {
     public Auto24(PoodRepository poodRepository, KuulutusRepository kuulutusRepository)
     {
-        super("Auto 24", poodRepository, kuulutusRepository);
+        super("Auto 24","Estonia", poodRepository, kuulutusRepository);
         url = "https://www.auto24.ee/kasutatud/nimekiri.php?ae=1&ak=0";
         kuulutuseElement = "div.result-row";
     }
@@ -45,8 +45,8 @@ public class Auto24 extends ScrapePood
             if (pealkiri.contains(" "))
             {
                 String arr[] = pealkiri.split(" ", 2);
-                kuulutus.setMark(arr[0]);
-                kuulutus.setMudel(arr[1]);
+                kuulutus.setBrand(arr[0]);
+                kuulutus.setModel(arr[1]);
             }
         } catch (IOException e)
         {
@@ -59,8 +59,8 @@ public class Auto24 extends ScrapePood
             if (aastaString.contains("/")) aastaString = aastaString.substring(3);
             var aasta = Integer.parseInt(aastaString.replaceAll("[^\\d.]", ""));
             var hind = Integer.parseInt(map.get("Hind:").replaceAll("[^\\d.]", ""));
-            kuulutus.setAasta(aasta);
-            kuulutus.setHind(hind);
+            kuulutus.setYear(aasta);
+            kuulutus.setPrice(hind);
             kuulutus.setLink(url);
             return kuulutus;
         } catch (NumberFormatException e)

@@ -8,9 +8,7 @@ public class User
 {
     @Id
     private Long id;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Kuulutus> soovitatud;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany
     private Set<Parameter> parameterList;
     private String eesnimi;
     private String perekonnanimi;

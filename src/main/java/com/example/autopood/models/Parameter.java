@@ -10,6 +10,8 @@ public class Parameter
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
+    private String name;
+    private String type;
     private String brand;
     private String model;
     private String fuelType;
@@ -21,7 +23,9 @@ public class Parameter
     private int minYear;
     private int minEngineKW;
     private int maxEngineKW;
-    @ManyToOne(fetch = FetchType.EAGER)
+    private int minEngineSize;
+    private int maxEngineSize;
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
@@ -30,8 +34,25 @@ public class Parameter
     {
     }
 
+    @Override
+    public String toString()
+    {
+        return name + '\n' +
+                ", type= " + type + '\n' +
+                ", brand= " + brand + '\n' +
+                ", model= " + model + '\n' +
+                ", fuelType= " + fuelType + '\n' +
+                ", price= " + minPrice +" - " +maxPrice+'\n' +
+                ", year= " + minYear +" - " +maxYear+'\n' +
+                ", mileage= " + minMileage +" - " +maxMileage+'\n' +
+                ", engineKW= " + minEngineKW +" - " +maxEngineKW+'\n' +
+                ", engine size= " + minEngineSize +" - " +maxEngineSize+'\n';
+    }
+
     public void update(ParameterDto parameterDto)
     {
+        this.name = parameterDto.getName();
+        this.type = parameterDto.getType();
         this.brand = parameterDto.getBrand();
         this.model = parameterDto.getModel();
         this.fuelType = parameterDto.getFuelType();
@@ -43,22 +64,80 @@ public class Parameter
         this.minYear = parameterDto.getMinYear();
         this.minEngineKW = parameterDto.getMinEngineKW();
         this.maxEngineKW = parameterDto.getMaxEngineKW();
+        this.minEngineSize = parameterDto.getMinEngineSize();
+        this.maxEngineSize = parameterDto.getMaxEngineSize();
     }
 
-    public boolean isNullOrEmpty(String string){
-        if (string.equals(null) || string.isEmpty()) return true;
+    private boolean isNotNullOrEmpty(String string)
+    {
+        if (string!=null && !string.isEmpty()) return true;
         return false;
     }
-    public boolean kuulutusSobib(Kuulutus kuulutus)
+
+    private boolean isNotNull(double arv)
     {
-        if (!isNullOrEmpty(brand) && kuulutus.getMark() != brand) return false;
-        if (!isNullOrEmpty(model) && kuulutus.getMudel() != model) return false;
-        if (minPrice != 0 && kuulutus.getHind() < minPrice) return false;
-        if (maxPrice != 0 && kuulutus.getHind() > maxPrice) return false;
-        if (minYear != 0 && kuulutus.getAasta() < minYear) return false;
-        if (maxYear != 0 && kuulutus.getAasta() > maxYear) return false;
+        if (arv != 0) return true;
+        return false;
+    }
+
+    private boolean compareDouble(double value, double max, double min)
+    {
+        if (isNotNull(value))
+        {
+            if (isNotNull(min) && value < min) return false;
+            if (isNotNull(max) && value > max) return false;
+        }
+        return true;
+    }
+    private boolean compareString(String kuulutus,String parameter )
+{
+    if (isNotNullOrEmpty(kuulutus))
+    {
+        if (isNotNullOrEmpty(parameter) && !kuulutus.toLowerCase().contains(parameter.toLowerCase()))
+            return false;
+    }
+    return true;
+}
+
+    public boolean kasKuulutusSobib(Kuulutus kuulutus)
+    {
+        if (!compareString(kuulutus.getBrand(),brand)) return false;
+        if (!compareString(kuulutus.getModel(),model)) return false;
+        if (!compareString(kuulutus.getFuelType(), fuelType)) return false;
+        if (!compareString(kuulutus.getType(), type)) return false;
+
+        if (!compareDouble(kuulutus.getPrice(), maxPrice, minPrice)) return false;
+        if (!compareDouble(kuulutus.getYear(), maxYear, minYear)) return false;
+        if (!compareDouble(kuulutus.getMileage(), maxMileage, minMileage)) return false;
+        if (!compareDouble(kuulutus.getEngineKW(), maxEngineKW, minEngineKW)) return false;
+        if (!compareDouble(kuulutus.getEngineSize(), maxEngineSize, minEngineSize)) return false;
 
         return true;
+    }
+
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    public int getMinEngineSize()
+    {
+        return minEngineSize;
+    }
+
+    public void setMinEngineSize(int minEngineSize)
+    {
+        this.minEngineSize = minEngineSize;
+    }
+
+    public int getMaxEngineSize()
+    {
+        return maxEngineSize;
+    }
+
+    public void setMaxEngineSize(int maxEngineSize)
+    {
+        this.maxEngineSize = maxEngineSize;
     }
 
     public String getFuelType()
@@ -171,41 +250,6 @@ public class Parameter
         this.minYear = minYear;
     }
 
-    @Override
-    public String toString()
-    {
-        return "Kuulutuse parameetrid:" +
-                "\nid: " + id +
-                "\nMark: " + brand +
-                "\nMudel: " + model +
-                "\nKütus: " + fuelType +
-                "\nMin hind: " + minPrice +
-                "\nMax hind: " + maxPrice +
-                "\nMin läbisõit: " + minMileage +
-                "\nMax läbisõit: " + maxMileage +
-                "\nMin aasta: " + minYear +
-                "\nMax aasta: " + maxYear +
-                "\nMin kW: " + minEngineKW +
-                "\nMax kW: " + maxEngineKW;
-        /*
-        return "Kuulutuse parameetrid: " +
-                "id='" + id + '\'' +
-                ", brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                ", fuelType='" + fuelType + '\'' +
-                ", minPrice=" + minPrice +
-                ", maxPrice=" + maxPrice +
-                ", maxMileage=" + maxMileage +
-                ", minMileage=" + minMileage +
-                ", maxYear=" + maxYear +
-                ", minYear=" + minYear +
-                ", minEngineKW=" + minEngineKW +
-                ", maxEngineKW=" + maxEngineKW +
-                '}';
-
-         */
-    }
-
     public void setId(long id)
     {
         this.id = id;
@@ -224,5 +268,25 @@ public class Parameter
     public void setUser(User user)
     {
         this.user = user;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
     }
 }

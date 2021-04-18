@@ -18,7 +18,7 @@ public class Nettiauto extends AbstractPood
 
     public Nettiauto(PoodRepository poodRepository, KuulutusRepository kuulutusRepository)
     {
-        super("Nettiauto",poodRepository,kuulutusRepository);
+        super("Nettiauto","Finland", poodRepository,kuulutusRepository);
     }
 
     @Override

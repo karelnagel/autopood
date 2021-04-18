@@ -1,17 +1,11 @@
-package com.example.autopood.models;
+package com.example.autopood.DTOs;
 
-import javax.persistence.*;
+import com.example.autopood.models.Kuulutus;
 
-@Entity
-public class Kuulutus
+public class KuulutusDto
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "pood_id", referencedColumnName = "id", nullable = false)
-    private Pood pood;
+    private String pood;
     private String type;
     private String brand;
     private String model;
@@ -22,20 +16,27 @@ public class Kuulutus
     private double engineSize;
     private String fuelType;
     private int mileage;
+    private String country;
 
-    public Kuulutus()
+    public KuulutusDto()
     {
-
     }
 
-    public double getEngineSize()
+    public KuulutusDto(Kuulutus kuulutus)
     {
-        return engineSize;
-    }
-
-    public void setEngineSize(double engineSize)
-    {
-        this.engineSize = engineSize;
+        this.id = kuulutus.getId();
+        this.type = kuulutus.getType();
+        this.brand = kuulutus.getBrand();
+        this.model = kuulutus.getModel();
+        this.year = kuulutus.getYear();
+        this.price = kuulutus.getPrice();
+        this.link = kuulutus.getLink();
+        this.engineKW = kuulutus.getEngineKW();
+        this.fuelType = kuulutus.getFuelType();
+        this.mileage = kuulutus.getMileage();
+        this.pood = kuulutus.getPood().getId();
+        this.engineSize =kuulutus.getEngineSize();
+        this.country = kuulutus.getPood().getCountry();
     }
 
     public Long getId()
@@ -48,6 +49,16 @@ public class Kuulutus
         this.id = id;
     }
 
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
     public double getEngineKW()
     {
         return engineKW;
@@ -56,6 +67,16 @@ public class Kuulutus
     public void setEngineKW(double engineKW)
     {
         this.engineKW = engineKW;
+    }
+
+    public double getEngineSize()
+    {
+        return engineSize;
+    }
+
+    public void setEngineSize(double engineSize)
+    {
+        this.engineSize = engineSize;
     }
 
     public String getFuelType()
@@ -73,38 +94,19 @@ public class Kuulutus
         return mileage;
     }
 
-    public void setMileage(int milage)
+    public void setMileage(int mileage)
     {
-        this.mileage = milage;
+        this.mileage = mileage;
     }
 
-    public Kuulutus(String brand, String model, int year, int price, String link)
+    public String getCountry()
     {
-        this.brand = brand;
-        this.model = model;
-        this.year = year;
-        this.price = price;
-        this.link = link;
+        return country;
     }
 
-    @Override
-    public String toString()
+    public void setCountry(String country)
     {
-        return "Kuulutus{" +
-                "mark='" + brand + '\'' +
-                ", mudel='" + model + '\'' +
-                ", aasta=" + year +
-                ", hind=" + price +
-                ", link='" + link + '\'' +
-                '}';
-    }
-
-    public String toMessenger()
-    {
-        return brand + " - " + model + "\n" +
-                year + " aasta \n" +
-                price + "$ \n" +
-                link;
+        this.country = country;
     }
 
     public String getBrand()
@@ -157,23 +159,13 @@ public class Kuulutus
         this.link = link;
     }
 
-    public Pood getPood()
+    public String getPood()
     {
         return pood;
     }
 
-    public void setPood(Pood pood)
+    public void setPood(String pood)
     {
         this.pood = pood;
-    }
-
-    public String getType()
-    {
-        return type;
-    }
-
-    public void setType(String type)
-    {
-        this.type = type;
     }
 }

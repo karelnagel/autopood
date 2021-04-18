@@ -9,6 +9,8 @@ public class ParameterDto
     {
         this.id = parameter.getId();
         this.brand = parameter.getBrand();
+        this.name = parameter.getName();
+        this.type = parameter.getType();
         this.model = parameter.getModel();
         this.fuelType = parameter.getFuelType();
         this.minPrice = parameter.getMinPrice();
@@ -19,10 +21,14 @@ public class ParameterDto
         this.minYear = parameter.getMinYear();
         this.minEngineKW = parameter.getMinEngineKW();
         this.maxEngineKW = parameter.getMaxEngineKW();
+        this.minEngineSize = parameter.getMinEngineSize();
+        this.maxEngineSize = parameter.getMaxEngineSize();
     }
     public ParameterDto(){}
 
     private Long id;
+    private String name;
+    private String type;
     private String brand;
     private String model;
     private String fuelType;
@@ -34,7 +40,48 @@ public class ParameterDto
     private int minYear;
     private int minEngineKW;
     private int maxEngineKW;
+    private int minEngineSize;
+    private int maxEngineSize;
 
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public int getMinEngineSize()
+    {
+        return minEngineSize;
+    }
+
+    public void setMinEngineSize(int minEngineSize)
+    {
+        this.minEngineSize = minEngineSize;
+    }
+
+    public int getMaxEngineSize()
+    {
+        return maxEngineSize;
+    }
+
+    public void setMaxEngineSize(int maxEngineSize)
+    {
+        this.maxEngineSize = maxEngineSize;
+    }
 
     public Long getId()
     {
