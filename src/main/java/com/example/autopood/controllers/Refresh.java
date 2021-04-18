@@ -67,7 +67,7 @@ public class Refresh
                     if (parameter.kasKuulutusSobib(kuulutus))
                     {
                         var userId = parameter.getUser().getId();
-                        sendMessage(kuulutus.toMessenger(), userId);
+                        sendMessage(parameter.getName()+"\n"+kuulutus.toMessenger(), userId);
                     }
                 }
                 System.out.println(kuulutus.toString());
