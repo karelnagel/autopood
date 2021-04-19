@@ -22,7 +22,7 @@ export class App extends Component {
     //Deleting User
     removeUser = (id) =>{
         const urlParams = new URLSearchParams(window.location.search);
-        axios.delete('/api/users/'+urlParams.get('userId')+'/parameters/${id}')
+        axios.delete('/api/users/'+urlParams.get('userId')+'/parameters/'+id)
             .then(
                 response =>this.setState( //Updating UI
                     {users: [...this.state.users.filter(
