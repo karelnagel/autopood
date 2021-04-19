@@ -5,6 +5,7 @@ import com.example.autopood.repositorities.KuulutusRepository;
 import com.example.autopood.repositorities.PoodRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -12,7 +13,7 @@ public class Vaurioajoneuvo extends ScrapePood
 {
     public Vaurioajoneuvo(PoodRepository poodRepository, KuulutusRepository kuulutusRepository)
     {
-        super("Vaurioajoneuvo","Finland" ,poodRepository,kuulutusRepository);
+        super("Vaurioajoneuvo", "Finland", poodRepository, kuulutusRepository);
         url = "https://www.vaurioajoneuvo.fi/?condition=no_demo";
         kuulutuseElement = "div[class=col-12 col-lg-3 item-lift-container]";
     }
@@ -27,19 +28,28 @@ public class Vaurioajoneuvo extends ScrapePood
         return link;
     }
 
-    public Kuulutus scrapeKuulutus(String url) {
+    public Kuulutus scrapeKuulutus(String url)
+    {
         var kuulutus = new Kuulutus();
         var map = new HashMap<String, String>();
-        try {
+        try
+        {
             var document = Jsoup.connect(url).get();
             var elements = document.select("li.detail");
-            for (Element element : elements) {
+            for (Element element : elements)
+            {
                 var name = element.select("span.name").text();
                 var value = element.select("span.value").text();
                 map.put(name, value);
             }
             var hind = Integer.parseInt(document.select("p.price").get(0).text().replaceAll("[^\\d.]", ""));
             kuulutus.setPrice(hind);
+
+            kuulutus.setBrand(map.get("Merkki"));
+            kuulutus.setModel(map.get("Malli"));
+            kuulutus.setYear(Integer.parseInt(map.get("Käyttöönottovuosi")));
+            kuulutus.setLink(url);
+            return kuulutus;
         } catch (NumberFormatException e)
         {
             System.out.println("Cant parse");
@@ -48,14 +58,10 @@ public class Vaurioajoneuvo extends ScrapePood
         {
             System.out.println("Element not found");
             return null;
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
-        kuulutus.setBrand(map.get("Merkki"));
-        kuulutus.setModel(map.get("Malli"));
-        kuulutus.setYear(Integer.parseInt(map.get("Käyttöönottovuosi")));
-        kuulutus.setLink(url);
-        return kuulutus;
-
+        return null;
     }
 }
