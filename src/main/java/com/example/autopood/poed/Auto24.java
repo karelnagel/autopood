@@ -13,7 +13,7 @@ public class Auto24 extends ScrapePood
 {
     public Auto24(PoodRepository poodRepository, KuulutusRepository kuulutusRepository)
     {
-        super("Auto 24","Estonia", poodRepository, kuulutusRepository);
+        super("Auto 24", "Estonia", poodRepository, kuulutusRepository);
         url = "https://www.auto24.ee/kasutatud/nimekiri.php?ae=1&ak=0";
         kuulutuseElement = "div.result-row";
     }
@@ -47,14 +47,14 @@ public class Auto24 extends ScrapePood
                 String arr[] = pealkiri.split(" ", 2);
                 kuulutus.setBrand(arr[0]);
                 kuulutus.setModel(arr[1]);
-            }
+            } else
+                kuulutus.setBrand(pealkiri);
         } catch (IOException e)
         {
             e.printStackTrace();
         }
         try
         {
-
             var aastaString = map.get("Esmane reg:");
             if (aastaString.contains("/")) aastaString = aastaString.substring(3);
             var aasta = Integer.parseInt(aastaString.replaceAll("[^\\d.]", ""));
