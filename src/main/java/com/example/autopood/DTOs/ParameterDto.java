@@ -34,16 +34,16 @@ public class ParameterDto
     private String model;
     private String fuelType;
     private String country;
-    private double minPrice;
-    private double maxPrice;
-    private double maxMileage;
-    private double minMileage;
-    private int maxYear;
-    private int minYear;
-    private int minEngineKW;
-    private int maxEngineKW;
-    private int minEngineSize;
-    private int maxEngineSize;
+    private Double minPrice;
+    private Double maxPrice;
+    private Double maxMileage;
+    private Double minMileage;
+    private Integer maxYear;
+    private Integer minYear;
+    private Integer minEngineKW;
+    private Integer maxEngineKW;
+    private Integer minEngineSize;
+    private Integer maxEngineSize;
 
     public String getName()
     {
@@ -65,22 +65,22 @@ public class ParameterDto
         this.type = type;
     }
 
-    public int getMinEngineSize()
+    public Integer getMinEngineSize()
     {
         return minEngineSize;
     }
 
-    public void setMinEngineSize(int minEngineSize)
+    public void setMinEngineSize(Integer minEngineSize)
     {
         this.minEngineSize = minEngineSize;
     }
 
-    public int getMaxEngineSize()
+    public Integer getMaxEngineSize()
     {
         return maxEngineSize;
     }
 
-    public void setMaxEngineSize(int maxEngineSize)
+    public void setMaxEngineSize(Integer maxEngineSize)
     {
         this.maxEngineSize = maxEngineSize;
     }
@@ -125,82 +125,82 @@ public class ParameterDto
         this.fuelType = fuelType;
     }
 
-    public double getMinPrice()
+    public Double getMinPrice()
     {
         return minPrice;
     }
 
-    public void setMinPrice(double minPrice)
+    public void setMinPrice(Double minPrice)
     {
         this.minPrice = minPrice;
     }
 
-    public double getMaxPrice()
+    public Double getMaxPrice()
     {
         return maxPrice;
     }
 
-    public void setMaxPrice(double maxPrice)
+    public void setMaxPrice(Double maxPrice)
     {
         this.maxPrice = maxPrice;
     }
 
-    public double getMaxMileage()
+    public Double getMaxMileage()
     {
         return maxMileage;
     }
 
-    public void setMaxMileage(double maxMileage)
+    public void setMaxMileage(Double maxMileage)
     {
         this.maxMileage = maxMileage;
     }
 
-    public double getMinMileage()
+    public Double getMinMileage()
     {
         return minMileage;
     }
 
-    public void setMinMileage(double minMileage)
+    public void setMinMileage(Double minMileage)
     {
         this.minMileage = minMileage;
     }
 
-    public int getMaxYear()
+    public Integer getMaxYear()
     {
         return maxYear;
     }
 
-    public void setMaxYear(int maxYear)
+    public void setMaxYear(Integer maxYear)
     {
         this.maxYear = maxYear;
     }
 
-    public int getMinYear()
+    public Integer getMinYear()
     {
         return minYear;
     }
 
-    public void setMinYear(int minYear)
+    public void setMinYear(Integer minYear)
     {
         this.minYear = minYear;
     }
 
-    public int getMinEngineKW()
+    public Integer getMinEngineKW()
     {
         return minEngineKW;
     }
 
-    public void setMinEngineKW(int minEngineKW)
+    public void setMinEngineKW(Integer minEngineKW)
     {
         this.minEngineKW = minEngineKW;
     }
 
-    public int getMaxEngineKW()
+    public Integer getMaxEngineKW()
     {
         return maxEngineKW;
     }
 
-    public void setMaxEngineKW(int maxEngineKW)
+    public void setMaxEngineKW(Integer maxEngineKW)
     {
         this.maxEngineKW = maxEngineKW;
     }

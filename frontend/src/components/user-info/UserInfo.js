@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
+import {Check, CheckOutlined, UpdateOutlined} from "@material-ui/icons";
 class UserInfo extends Component{
 
     //dynamic Styling
@@ -21,6 +22,7 @@ class UserInfo extends Component{
     render() {
         //Destructuring instead of using this.props.user.<variable> you can now use name | surname
         const {id} = this.props.user;
+        const userId = new URLSearchParams(window.location.search).get('userId');
         return(
             <div style={this.infoStyle()}>
                 <div style={iconUsername}>
@@ -34,6 +36,12 @@ class UserInfo extends Component{
                 <p>{this.props.user.model}</p>
                 <div style={buttons}>
                     {/*<IconButton color="secondary" onClick={this.props.removeUser.bind(this,id )} >  Because binding in faling in Jest i have used arrow function binding*/}
+                    <IconButton color="secondary" href={"http://autopood.herokuapp.com/api/kuulutused?paraId="+id} >
+                        <CheckOutlined />
+                    </IconButton>
+                    <IconButton color="secondary" href={"http://autopood.herokuapp.com/?userId="+userId+"&paraId="+id} >
+                        <UpdateOutlined />
+                    </IconButton>
                     <IconButton color="secondary" onClick={(e) =>this.props.removeUser(id,e)} >
                         <DeleteIcon />
                     </IconButton>

@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
+import axios from "axios";
 
 class RegisterUser extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             id: 0,
             name: '',
@@ -64,8 +66,32 @@ class RegisterUser extends Component {
     }
 
     render() {
+        const paraId = new URLSearchParams(window.location.search).get('paraId');
+        console.log(paraId);
+        if (paraId) {
+            const len = this.props.users.length;
+            if (len!==0) {
+                const user = this.props.users.find(x=>x.id==paraId);
+                if (user) {
+                    if (this.state) {
+                        console.log(user.name);
+                        console.log(paraId);
+
+                        this.state = user;
+                    }
+                }
+            }
+        }
         return (
             <form onSubmit={this.onSubmit}>
+                <input
+                    type="number"
+                    name="id"
+                    placeholder="Id"
+                    value={this.state.id}
+                    onChange={this.onChange}
+                />
+                <br/>
                 <input
                     type="text"
                     name="name"

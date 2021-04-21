@@ -5,7 +5,7 @@ import com.example.autopood.DTOs.ParameterDto;
 import com.example.autopood.models.Kuulutus;
 import com.example.autopood.repositorities.KuulutusRepository;
 import com.example.autopood.repositorities.ParameterRepository;
-import com.example.autopood.repositorities.UserRepository;
+import com.example.autopood.query.KuulutusSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +20,13 @@ public class KuulutusedController
 {
     private ParameterRepository parameterRepository;
     private KuulutusRepository kuulutusRepository;
+    private KuulutusSearch kuulutusSearch;
 
-    KuulutusedController(@Autowired ParameterRepository parameterRepository, @Autowired KuulutusRepository kuulutusRepository)
+    KuulutusedController(@Autowired ParameterRepository parameterRepository, @Autowired KuulutusRepository kuulutusRepository, @Autowired KuulutusSearch kuulutusSearch)
     {
         this.parameterRepository = parameterRepository;
         this.kuulutusRepository = kuulutusRepository;
+        this.kuulutusSearch = kuulutusSearch;
     }
 
     @GetMapping(value = "/kuulutused")
@@ -35,8 +37,9 @@ public class KuulutusedController
             if (!parameterRepository.existsById(paraId))
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             var parameter = parameterRepository.findById(paraId).get();
-            kuulutused = kuulutusRepository.findByParameter(parameter.getBrand(),parameter.getModel());
-//            kuulutused = kuulutusRepository.findByParameter(new ParameterDto(parameter));
+
+            kuulutused = kuulutusSearch.findKuulutus(new ParameterDto(parameter));
+
         }
         else
         {
@@ -63,8 +66,8 @@ public class KuulutusedController
     {
         if (parameterDto==null)
             new ResponseEntity(HttpStatus.BAD_REQUEST);
-        var kuulutused = kuulutusRepository.findByParameter(parameterDto.getBrand(),parameterDto.getModel());
-//        var kuulutused = kuulutusRepository.findByParameter(parameterDto);
+        var kuulutused = kuulutusSearch.findKuulutus(parameterDto);
+
         var kuulutusedDto = kuulutused.stream().map(k -> new KuulutusDto(k)).toArray();
         return new ResponseEntity(kuulutusedDto, HttpStatus.OK);
     }
