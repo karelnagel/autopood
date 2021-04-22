@@ -13,7 +13,7 @@ spring:
   data:
     rest:
       basePath: /api
-  jpa.hibernate.ddl-auto: create-drop
+  jpa.hibernate.ddl-auto: update
   jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
     hikari:

@@ -155,13 +155,13 @@ public class CallBackHandler
                     User user = userRepository.findById(senderId).get();
                     if (quickReplyPayload.equals(OPTION_PROFILE))
                     {
-                        sendTextMessage(senderId, "You can change your profile settings here:\n "+baseUrl+"api/users/" + senderId);
+                        sendTextMessage(senderId, "You can change your profile settings here:\n " + baseUrl + "api/users/" + senderId);
                     } else if (quickReplyPayload.equals(OPTION_CREATE_PARAMETER))
                     {
-                        sendTextMessage(senderId, "Create new parameter here: \n "+baseUrl+"?userId=" + senderId);
-                    }else if (quickReplyPayload.equals(OPTION_SEARCH))
+                        sendTextMessage(senderId, "Create new parameter here: \n " + baseUrl + "?userId=" + senderId);
+                    } else if (quickReplyPayload.equals(OPTION_SEARCH))
                     {
-                        sendTextMessage(senderId, "Search: \n "+baseUrl+"?page=asd");
+                        sendTextMessage(senderId, "Search: \n " + baseUrl + "?page=asd");
                     } else
                     {
                         var paraId = Long.parseLong(quickReplyPayload);
@@ -169,8 +169,8 @@ public class CallBackHandler
                         {
                             var parameter = kuulutusParametersRepository.findById(paraId).get();
                             sendTextMessage(senderId, parameter.toString());
-                            sendTextMessage(senderId, "Edit: \n "+baseUrl+"?userId=" + senderId + "&paraId=" + paraId);
-                            sendTextMessage(senderId, "Vanad kuulutused: \n "+baseUrl+"?paraId=" + paraId);
+                            sendTextMessage(senderId, "Edit: \n " + baseUrl + "?userId=" + senderId + "&paraId=" + paraId);
+                            sendTextMessage(senderId, "Vanad kuulutused: \n " + baseUrl + "?paraId=" + paraId);
                         } else
                         {
                             sendTextMessage(senderId, "Error");
@@ -211,7 +211,8 @@ public class CallBackHandler
         var parameters = kuulutusParametersRepository.findByUserId(recipientId);
         for (Parameter parameter : parameters)
         {
-            quickReplies = quickReplies.addTextQuickReply(parameter.getName(), parameter.getId().toString()).toList();
+            var name = parameter.getName() != null && parameter.getName() != "" ? parameter.getName() : parameter.getId().toString();
+            quickReplies = quickReplies.addTextQuickReply(name, parameter.getId().toString()).toList();
         }
         this.sendClient.sendTextMessage(recipientId.toString(), "Mida soovid teha?", quickReplies.build());
     }
