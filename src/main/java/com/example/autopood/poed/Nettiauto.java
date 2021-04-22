@@ -73,19 +73,39 @@ public class Nettiauto extends AbstractPood
                 break;
             }
             try {
+                //type
+                JSONObject type1 = kuulutus.getJSONObject("vehicleType");
+                String type = type1.get("en").toString();
                 //mark
                 JSONObject make = kuulutus.getJSONObject("make");
                 String mark = make.get("name").toString();
                 //mudel
                 JSONObject mudla = kuulutus.getJSONObject("model");
                 String model = mudla.get("name").toString();
+                //bodyType
+                JSONObject body = kuulutus.getJSONObject("bodyType");
+                String bodyType = body.get("en").toString();
+                //gearType
+                JSONObject gear = kuulutus.getJSONObject("gearType");
+                String gearType = gear.get("en").toString();
                 //aasta
                 int year = parseInt(kuulutus.get("year").toString());
                 //hind
                 int price = parseInt(kuulutus.get("price").toString());
                 //link
                 String link = kuulutus.get("adUrl").toString();
-                newListings.add(new Kuulutus(mark,model,year,price,link));
+                //engineKW;
+                double engineKW = Double.parseDouble(kuulutus.get("power").toString());
+                //engineSize;
+                double engineSize = Double.parseDouble(kuulutus.get("engineSize").toString());
+                //fuelType;
+                JSONObject fuel = kuulutus.getJSONObject("fuelType");
+                String fuelType = fuel.get("en").toString();
+                //mileage;
+                int mileage = parseInt(kuulutus.get("kilometers").toString());
+
+
+                newListings.add(new Kuulutus(type,mark,model,bodyType,gearType,year,price,link,engineKW,engineSize,fuelType,mileage));
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (NumberFormatException e) {

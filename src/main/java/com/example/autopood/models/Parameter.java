@@ -16,6 +16,8 @@ public class Parameter
     private String model;
     private String country;
     private String fuelType;
+    private String bodyType;
+    private String gearType;
     private double minPrice;
     private double maxPrice;
     private double maxMileage;
@@ -43,6 +45,8 @@ public class Parameter
                 "country: " + country + '\n' +
                 "brand: " + brand + '\n' +
                 "model: " + model + '\n' +
+                "bodyType: " + bodyType + '\n' +
+                "gearType: " + gearType + '\n' +
                 "fuelType: " + fuelType + '\n' +
                 "price: " + minPrice +" - " +maxPrice+'\n' +
                 "year: " + minYear +" - " +maxYear+'\n' +
@@ -57,6 +61,8 @@ public class Parameter
         this.type = parameterDto.getType();
         this.brand = parameterDto.getBrand();
         this.model = parameterDto.getModel();
+        this.bodyType = parameterDto.getBodyType();
+        this.gearType = parameterDto.getGearType();
         this.country = parameterDto.getCountry();
         this.fuelType = parameterDto.getFuelType();
         this.minPrice = parameterDto.getMinPrice();
@@ -109,6 +115,8 @@ public class Parameter
         if (!compareString(kuulutus.getFuelType(), fuelType)) return false;
         if (!compareString(kuulutus.getType(), type)) return false;
         if (!compareString(kuulutus.getPood().getCountry(), country)) return false;
+        if (!compareString(kuulutus.getBodyType(), bodyType)) return false;
+        if (!compareString(kuulutus.getGearType(), gearType)) return false;
 
         if (!compareDouble(kuulutus.getPrice(), maxPrice, minPrice)) return false;
         if (!compareDouble(kuulutus.getYear(), maxYear, minYear)) return false;
@@ -302,5 +310,21 @@ public class Parameter
     public void setCountry(String country)
     {
         this.country = country;
+    }
+
+    public String getBodyType() {
+        return bodyType;
+    }
+
+    public void setBodyType(String bodyType) {
+        this.bodyType = bodyType;
+    }
+
+    public String getGearType() {
+        return gearType;
+    }
+
+    public void setGearType(String gearType) {
+        this.gearType = gearType;
     }
 }

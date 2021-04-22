@@ -9,6 +9,8 @@ public class KuulutusDto
     private String type;
     private String brand;
     private String model;
+    private String bodyType;
+    private String gearType;
     private int year;
     private int price;
     private String link;
@@ -28,6 +30,8 @@ public class KuulutusDto
         this.type = kuulutus.getType();
         this.brand = kuulutus.getBrand();
         this.model = kuulutus.getModel();
+        this.bodyType = kuulutus.getBodyType();
+        this.gearType = kuulutus.getGearType();
         this.year = kuulutus.getYear();
         this.price = kuulutus.getPrice();
         this.link = kuulutus.getLink();
@@ -167,5 +171,21 @@ public class KuulutusDto
     public void setPood(String pood)
     {
         this.pood = pood;
+    }
+
+    public String getBodyType() {
+        return bodyType;
+    }
+
+    public void setBodyType(String bodyType) {
+        this.bodyType = bodyType;
+    }
+
+    public String getGearType() {
+        return gearType;
+    }
+
+    public void setGearType(String gearType) {
+        this.gearType = gearType;
     }
 }

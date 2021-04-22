@@ -15,6 +15,8 @@ public class Kuulutus
     private String type;
     private String brand;
     private String model;
+    private String bodyType;
+    private String gearType;
     private int year;
     private int price;
     private String link;
@@ -76,6 +78,22 @@ public class Kuulutus
     public void setMileage(int milage)
     {
         this.mileage = milage;
+    }
+
+    public Kuulutus(String type,String brand, String model,String bodyType, String gearType, int year, int price, String link, double engineKW,double engineSize,String fuelType,int mileage)
+    {
+        this.type = type;
+        this.brand = brand;
+        this.model = model;
+        this.bodyType = bodyType;
+        this.gearType = gearType;
+        this.year = year;
+        this.price = price;
+        this.link = link;
+        this.engineKW = engineKW;
+        this.engineSize = engineSize;
+        this.fuelType = fuelType;
+        this.mileage = mileage;
     }
 
     public Kuulutus(String brand, String model, int year, int price, String link)
@@ -176,4 +194,21 @@ public class Kuulutus
     {
         this.type = type;
     }
+
+    public String getGearType() {
+        return gearType;
+    }
+
+    public void setGearType(String gearType) {
+        this.gearType = gearType;
+    }
+
+    public String getBodyType() {
+        return bodyType;
+    }
+
+    public void setBodyType(String bodyType) {
+        this.bodyType = bodyType;
+    }
+
 }

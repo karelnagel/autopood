@@ -12,6 +12,8 @@ public class ParameterDto
         this.name = parameter.getName();
         this.type = parameter.getType();
         this.model = parameter.getModel();
+        this.bodyType = parameter.getBodyType();
+        this.gearType = parameter.getGearType();
         this.country = parameter.getCountry();
         this.fuelType = parameter.getFuelType();
         this.minPrice = parameter.getMinPrice();
@@ -34,6 +36,8 @@ public class ParameterDto
     private String model;
     private String fuelType;
     private String country;
+    private String bodyType;
+    private String gearType;
     private Double minPrice;
     private Double maxPrice;
     private Double maxMileage;
@@ -213,5 +217,21 @@ public class ParameterDto
     public void setCountry(String country)
     {
         this.country = country;
+    }
+
+    public String getBodyType() {
+        return bodyType;
+    }
+
+    public void setBodyType(String bodyType) {
+        this.bodyType = bodyType;
+    }
+
+    public String getGearType() {
+        return gearType;
+    }
+
+    public void setGearType(String gearType) {
+        this.gearType = gearType;
     }
 }
