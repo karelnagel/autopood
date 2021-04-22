@@ -13,12 +13,10 @@ import java.util.List;
 public class KuulutusSearch
 {
     private KuulutusRepository kuulutusRepository;
-    private Specification<Kuulutus> spec;
 
     public KuulutusSearch(@Autowired KuulutusRepository kuulutusRepository)
     {
         this.kuulutusRepository = kuulutusRepository;
-        this.spec = Specification.not(new KuulutusCriteria("id", ":", "0"));
     }
 
     private boolean isNotNullOrEmpty(String string)
@@ -33,32 +31,35 @@ public class KuulutusSearch
         return false;
     }
 
-    private void CompareDouble(String attribute, Double min, Double max)
+    private Specification<Kuulutus> CompareDouble(Specification<Kuulutus> spec, String attribute, Double min, Double max)
     {
         if (isNotNull(min))
             spec = spec.and(new KuulutusCriteria(attribute, ">", min));
         if (isNotNull(max))
             spec = spec.and(new KuulutusCriteria(attribute, "<", max));
+        return spec;
     }
 
-    private void CompareString(String attribute, String value)
+    private Specification<Kuulutus> CompareString(Specification<Kuulutus> spec, String attribute, String value)
     {
         if (isNotNullOrEmpty(value))
             spec = spec.and(new KuulutusCriteria(attribute, ":", value));
+        return spec;
     }
 
     public List<Kuulutus> findKuulutus(ParameterDto para)
     {
-        CompareString("brand", para.getBrand());
-        CompareString("model", para.getModel());
-        CompareString("type", para.getType());
-        CompareString("fuelType", para.getFuelType());
+        var spec = Specification.not(new KuulutusCriteria("id", ":", "0"));
+        spec = CompareString(spec, "brand", para.getBrand());
+        spec = CompareString(spec, "model", para.getModel());
+        spec = CompareString(spec, "type", para.getType());
+        spec = CompareString(spec, "fuelType", para.getFuelType());
 
-        CompareDouble("price", para.getMinPrice(), para.getMaxPrice());
-        CompareDouble("year", para.getMinYear().doubleValue(), para.getMaxYear().doubleValue());
-        CompareDouble("mileage", para.getMinMileage(), para.getMaxMileage());
-        CompareDouble("engineSize", para.getMinEngineSize().doubleValue(), para.getMinEngineSize().doubleValue());
-        CompareDouble("engineKW", para.getMinEngineKW().doubleValue(), para.getMaxEngineKW().doubleValue());
+        spec = CompareDouble(spec, "price", para.getMinPrice(), para.getMaxPrice());
+        spec = CompareDouble(spec, "year", para.getMinYear().doubleValue(), para.getMaxYear().doubleValue());
+        spec = CompareDouble(spec, "mileage", para.getMinMileage(), para.getMaxMileage());
+        spec = CompareDouble(spec, "engineSize", para.getMinEngineSize().doubleValue(), para.getMinEngineSize().doubleValue());
+        spec = CompareDouble(spec, "engineKW", para.getMinEngineKW().doubleValue(), para.getMaxEngineKW().doubleValue());
 
         var kuulutused = kuulutusRepository.findAll(spec);
         if (isNotNullOrEmpty(para.getCountry()))

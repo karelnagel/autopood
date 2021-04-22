@@ -54,6 +54,10 @@ public class Vaurioajoneuvo extends ScrapePood
         {
             System.out.println("Cant parse");
             return null;
+        } catch (IndexOutOfBoundsException e)
+        {
+            System.out.println("Cant parse");
+            return null;
         } catch (NullPointerException e)
         {
             System.out.println("Element not found");

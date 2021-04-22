@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&display=swap");
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -11,12 +12,12 @@ body {
     font-size: 1.2em;
 }
 
-a{
+a {
     color: #333;
     text-decoration: none;
 }
 
-.container{
+.container {
     padding: 0 1rem;
 }
 
@@ -32,4 +33,8 @@ a{
 
 .btn:hover {
     background: #666;
+}
+
+.index {
+    text-align: center;
 }

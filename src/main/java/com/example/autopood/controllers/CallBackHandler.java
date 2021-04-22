@@ -33,6 +33,7 @@ public class CallBackHandler
 
     public static final String OPTION_PROFILE = "profile";
     public static final String OPTION_CREATE_PARAMETER = "create parameter";
+    public static final String OPTION_SEARCH = "search";
     private static final String baseUrl = "https://autopood.herokuapp.com/";
     private final MessengerReceiveClient receiveClient;
     private final MessengerSendClient sendClient;
@@ -158,6 +159,9 @@ public class CallBackHandler
                     } else if (quickReplyPayload.equals(OPTION_CREATE_PARAMETER))
                     {
                         sendTextMessage(senderId, "Create new parameter here: \n "+baseUrl+"?userId=" + senderId);
+                    }else if (quickReplyPayload.equals(OPTION_SEARCH))
+                    {
+                        sendTextMessage(senderId, "Search: \n "+baseUrl+"?page=asd");
                     } else
                     {
                         var paraId = Long.parseLong(quickReplyPayload);
@@ -166,7 +170,7 @@ public class CallBackHandler
                             var parameter = kuulutusParametersRepository.findById(paraId).get();
                             sendTextMessage(senderId, parameter.toString());
                             sendTextMessage(senderId, "Edit: \n "+baseUrl+"?userId=" + senderId + "&paraId=" + paraId);
-                            sendTextMessage(senderId, "Vanad kuulutused: \n "+baseUrl+"api/kuulutused?paraId=" + paraId);
+                            sendTextMessage(senderId, "Vanad kuulutused: \n "+baseUrl+"?paraId=" + paraId);
                         } else
                         {
                             sendTextMessage(senderId, "Error");
@@ -202,7 +206,8 @@ public class CallBackHandler
 
         var quickReplies = QuickReply.newListBuilder()
                 .addTextQuickReply("Profiil", OPTION_PROFILE).toList()
-                .addTextQuickReply("Uus otsing", OPTION_CREATE_PARAMETER).toList();
+                .addTextQuickReply("Uus otsing", OPTION_CREATE_PARAMETER).toList()
+                .addTextQuickReply("Search", OPTION_SEARCH).toList();
         var parameters = kuulutusParametersRepository.findByUserId(recipientId);
         for (Parameter parameter : parameters)
         {

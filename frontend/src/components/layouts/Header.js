@@ -3,9 +3,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 function Header(){
     return(
         <header style={header}>
-            <MenuIcon/>
             <h2>Create parameter</h2>
-            <p></p>
         </header>
     );
 }
