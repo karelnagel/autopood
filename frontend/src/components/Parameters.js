@@ -54,7 +54,9 @@ class Parameters extends Component {
 
         let newParameter = this.state;
         this.props.postParameter(newParameter);
-        this.setState(this.emptyParameter());
+        const page = new URLSearchParams(window.location.search).get('page');
+        if (!page)
+            this.setState(this.emptyParameter());
     }
 
     render() {
