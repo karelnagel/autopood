@@ -46,3 +46,7 @@ p {
     line-height: 8px;
     white-space: nowrap;
 }
+.full-width {
+    width: -moz-available;
+    width: -webkit-fill-available;
+}

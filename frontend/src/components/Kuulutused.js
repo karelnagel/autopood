@@ -5,7 +5,7 @@ class Kuulutused extends Component {
 
     render() {
         const isMobile = window.innerWidth < 480;
-        return <div style={kuulutusedColumn} id="kuulutused">{
+        return <div style={kuulutusedColumn} className='full-width' id="kuulutused">{
             this.props.kuulutused.map((kuulutus) => (
                 <a href={kuulutus.link} style={isMobile ? kuulutusDivPhone : kuulutusDiv} key={kuulutus.id}>
                     {isMobile ? null : <img src="https://picsum.photos/200" style={picture}></img>}
@@ -79,7 +79,6 @@ const alignRight = {
 }
 const kuulutusedColumn = {
     backgroundColor: "#C4C4C4",
-    width: "-moz-available",
 }
 const picture = {
     backgroundColor: "#C4C4C4",

@@ -53,6 +53,7 @@ class Search extends Component {
                         name="name"
                         label="Name"
                         style={input}
+                        className='full-width'
                         value={this.state.name}
                         onChange={this.onChange}
                     />
@@ -63,6 +64,7 @@ class Search extends Component {
                         name="type"
                         label="Type"
                         style={input}
+                        className='full-width'
                         value={this.state.type}
                         onChange={this.onChange}
                     />
@@ -72,6 +74,7 @@ class Search extends Component {
                         name="brand"
                         label="Brand"
                         style={input}
+                        className='full-width'
                         value={this.state.brand}
                         onChange={this.onChange}
                     />
@@ -82,6 +85,7 @@ class Search extends Component {
                         name="model"
                         label="Model"
                         style={input}
+                        className='full-width'
                         value={this.state.model}
                         onChange={this.onChange}
                     />
@@ -91,6 +95,7 @@ class Search extends Component {
                         name="fuelType"
                         label="Fuel type"
                         style={input}
+                        className='full-width'
                         value={this.state.fuelType}
                         onChange={this.onChange}
                     />
@@ -100,6 +105,7 @@ class Search extends Component {
                         name="country"
                         label="Country"
                         style={input}
+                        className='full-width'
                         value={this.state.country}
                         onChange={this.onChange}
                     />
@@ -109,6 +115,7 @@ class Search extends Component {
                             name="minPrice"
                             label="Min price"
                             style={input}
+                            className='full-width'
                             value={this.state.minPrice}
                             onChange={this.onChange}
                         />
@@ -118,6 +125,7 @@ class Search extends Component {
                             name="maxPrice"
                             label="Max price"
                             style={input}
+                            className='full-width'
                             value={this.state.maxPrice}
                             onChange={this.onChange}
                         />
@@ -128,6 +136,7 @@ class Search extends Component {
                             name="minYear"
                             label="Min year"
                             style={input}
+                            className='full-width'
                             value={this.state.minYear}
                             onChange={this.onChange}
                         />
@@ -137,6 +146,7 @@ class Search extends Component {
                             name="maxYear"
                             label="Max year"
                             style={input}
+                            className='full-width'
                             value={this.state.maxYear}
                             onChange={this.onChange}
                         />
@@ -147,6 +157,7 @@ class Search extends Component {
                             name="minMileage"
                             label="Min mileage"
                             style={input}
+                            className='full-width'
                             value={this.state.minMileage}
                             onChange={this.onChange}
                         />
@@ -156,6 +167,7 @@ class Search extends Component {
                             name="maxMileage"
                             label="Max mileage"
                             style={input}
+                            className='full-width'
                             value={this.state.maxMileage}
                             onChange={this.onChange}
                         />
@@ -166,6 +178,7 @@ class Search extends Component {
                             name="minEngineKW"
                             label="Min engine kw"
                             style={input}
+                            className='full-width'
                             value={this.state.minEngineKW}
                             onChange={this.onChange}
                         />
@@ -175,6 +188,7 @@ class Search extends Component {
                             name="maxEngineKW"
                             label="Max engine kw"
                             style={input}
+                            className='full-width'
                             value={this.state.maxEngineKW}
                             onChange={this.onChange}
                         />
@@ -185,6 +199,7 @@ class Search extends Component {
                             name="minEngineSize"
                             label="Min engine size"
                             style={input}
+                            className='full-width'
                             value={this.state.minEngineSize}
                             onChange={this.onChange}
                         />
@@ -194,6 +209,7 @@ class Search extends Component {
                             name="maxEngineSize"
                             label="Max engine size"
                             style={input}
+                            className='full-width'
                             value={this.state.maxEngineSize}
                             onChange={this.onChange}
                         />
@@ -252,8 +268,6 @@ const emptyParameter = {
 
 }
 const input = {
-    // width: "-moz-available",
-    width: "-webkit-fill-available",
     margin:'5px 10px',
 }
 Search.propTyoes = {
