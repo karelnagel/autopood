@@ -109,7 +109,6 @@ class Search extends Component {
                             name="minPrice"
                             label="Min price"
                             style={input}
-                            style={leftInput}
                             value={this.state.minPrice}
                             onChange={this.onChange}
                         />
@@ -119,7 +118,6 @@ class Search extends Component {
                             name="maxPrice"
                             label="Max price"
                             style={input}
-                            style={rightInput}
                             value={this.state.maxPrice}
                             onChange={this.onChange}
                         />
@@ -130,7 +128,6 @@ class Search extends Component {
                             name="minYear"
                             label="Min year"
                             style={input}
-                            style={leftInput}
                             value={this.state.minYear}
                             onChange={this.onChange}
                         />
@@ -140,7 +137,6 @@ class Search extends Component {
                             name="maxYear"
                             label="Max year"
                             style={input}
-                            style={rightInput}
                             value={this.state.maxYear}
                             onChange={this.onChange}
                         />
@@ -151,7 +147,6 @@ class Search extends Component {
                             name="minMileage"
                             label="Min mileage"
                             style={input}
-                            style={leftInput}
                             value={this.state.minMileage}
                             onChange={this.onChange}
                         />
@@ -161,7 +156,6 @@ class Search extends Component {
                             name="maxMileage"
                             label="Max mileage"
                             style={input}
-                            style={rightInput}
                             value={this.state.maxMileage}
                             onChange={this.onChange}
                         />
@@ -172,7 +166,6 @@ class Search extends Component {
                             name="minEngineKW"
                             label="Min engine kw"
                             style={input}
-                            style={leftInput}
                             value={this.state.minEngineKW}
                             onChange={this.onChange}
                         />
@@ -182,7 +175,6 @@ class Search extends Component {
                             name="maxEngineKW"
                             label="Max engine kw"
                             style={input}
-                            style={rightInput}
                             value={this.state.maxEngineKW}
                             onChange={this.onChange}
                         />
@@ -193,7 +185,6 @@ class Search extends Component {
                             name="minEngineSize"
                             label="Min engine size"
                             style={input}
-                            style={leftInput}
                             value={this.state.minEngineSize}
                             onChange={this.onChange}
                         />
@@ -203,7 +194,6 @@ class Search extends Component {
                             name="maxEngineSize"
                             label="Max engine size"
                             style={input}
-                            style={rightInput}
                             value={this.state.maxEngineSize}
                             onChange={this.onChange}
                         />
@@ -261,20 +251,10 @@ const emptyParameter = {
     maxEngineSize: 0.0,
 
 }
-const leftInput = {
-    flex: '5',
-    padding: '5px',
-    margin: '10px 10px 0px 0px',
-    textAlign: 'center',
-}
-
-const rightInput = {
-    flex: '5',
-    padding: '5px',
-    margin: '10px 0px 0px 10px'
-}
 const input = {
-    width: "-moz-available",
+    // width: "-moz-available",
+    width: "-webkit-fill-available",
+    margin:'5px 10px',
 }
 Search.propTyoes = {
     addParameter: PropTypes.func.isRequired,
