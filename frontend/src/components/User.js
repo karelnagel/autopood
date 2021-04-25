@@ -40,7 +40,7 @@ const button ={
 User.propTypes = {
     user: PropTypes.object.isRequired,
     updateSearch:PropTypes.func.isRequired,
-    selected:PropTypes.string
+    selected:PropTypes.number.isRequired
 }
 
 export default User;

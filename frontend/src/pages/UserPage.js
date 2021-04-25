@@ -40,6 +40,9 @@ export class UserPage extends Component {
 
     updateSearch = (newParameter) => {
         this.setState({parameter: newParameter})
+        if (newParameter){
+            this.otsiKuulutusi(newParameter)
+        }
     }
 
     deleteParameter = (id) => {
@@ -78,7 +81,6 @@ export class UserPage extends Component {
         }
     }
     otsiKuulutusi = (parameter) => {
-        const paraId = new URLSearchParams(window.location.search).get('paraId');
         axios.post('/api/kuulutused/', parameter)
             .then(
                 (response) => {

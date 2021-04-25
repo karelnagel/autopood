@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
-import {Button, TextField} from "@material-ui/core";
+import {Button, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 
 class Search extends Component {
     constructor(props) {
@@ -29,12 +29,11 @@ class Search extends Component {
             this.props.addParameter(newParameter);
             const element = document.getElementById("user");
             element.scrollIntoView();
-        } else if (button==="search"){
+        } else if (button === "search") {
             this.props.otsiKuulutusi(newParameter);
             const element = document.getElementById("kuulutused");
             element.scrollIntoView();
-        }
-        else {
+        } else {
             this.props.deleteParameter(newParameter.id)
             newParameter = emptyParameter;
             const element = document.getElementById("user");
@@ -100,15 +99,23 @@ class Search extends Component {
                         onChange={this.onChange}
                     />
                     <br/>
-                    <TextField
-                        type="text"
+                    <br/>
+                    <InputLabel style={selectInput} id="country-select-label">Country</InputLabel>
+                    <Select
+                        displayEmpty
+                        labelId="country-select-label"
                         name="country"
-                        label="Country"
-                        style={input}
+                        style={selectInput}
                         className='full-width'
                         value={this.state.country}
                         onChange={this.onChange}
-                    />
+                    >
+                        <MenuItem value="">Kõik</MenuItem>
+                        <MenuItem value='Estonia'>Eesti</MenuItem>
+                        <MenuItem value='Finland'>Soome</MenuItem>
+                    </Select>
+
+                    <br/>
                     <div style={{display: 'flex'}}>
                         <TextField
                             type="number"
@@ -219,7 +226,7 @@ class Search extends Component {
                     <div style={buttons}>
                         {userId ? <Button type="submit" name="save">
                             {this.state.id == 0 ? "Save" : "Update"}
-                        </Button>:null}
+                        </Button> : null}
                         {
                             this.state.id == 0 ? null :
                                 <Button type="submit" name="delete">
@@ -238,8 +245,9 @@ class Search extends Component {
     }
 
 }
-const buttons={
-    justifyContent:'space-between',
+
+const buttons = {
+    justifyContent: 'space-between',
     display: 'flex',
 }
 const searchColumn = {
@@ -268,7 +276,10 @@ const emptyParameter = {
 
 }
 const input = {
-    margin:'5px 10px',
+    margin: '5px 10px',
+}
+const selectInput = {
+    margin: '0 10px',
 }
 Search.propTyoes = {
     addParameter: PropTypes.func.isRequired,

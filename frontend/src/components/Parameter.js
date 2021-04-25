@@ -49,6 +49,6 @@ const selected = {
 Parameter.propTypes = {
     parameter: PropTypes.object.isRequired,
     updateSearch: PropTypes.func.isRequired,
-    selected: PropTypes.string.isRequired
+    selected: PropTypes.number.isRequired
 }
 export default Parameter;
