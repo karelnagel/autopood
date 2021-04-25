@@ -5,9 +5,10 @@ class Parameter extends Component {
     render() {
         const userId = new URLSearchParams(window.location.search).get('userId');
         return (
-            <div style={infoStyle} onClick={(e) => {
-                this.props.updateSearch(this.props.parameter)
-            }}>
+            <div className={this.props.selected === this.props.parameter.id ? 'fancy-color' : null} style={infoStyle}
+                 onClick={(e) => {
+                     this.props.updateSearch(this.props.parameter)
+                 }}>
                 <div style={line}>
                     <p>{this.props.parameter.brand} {this.props.parameter.model}</p>
                     <p style={alignEnd}>{this.props.parameter.minPrice} - {this.props.parameter.maxPrice} $</p>
@@ -26,18 +27,28 @@ const infoStyle = {
     borderRadius: '5px',
     padding: '10px',
     lineHeight: '0px',
-    margin:'10px 0',
+    margin: '10px 0',
+}
+const infoStyleSelected = {
+    background: 'blue',
+    borderRadius: '5px',
+    padding: '10px',
+    lineHeight: '0px',
+    margin: '10px 0',
 }
 const line = {
     display: 'flex'
-
 }
 const alignEnd = {
     marginLeft: 'auto',
 }
+const selected = {
+    color: "blue",
+}
 
 Parameter.propTypes = {
     parameter: PropTypes.object.isRequired,
-    updateSearch: PropTypes.func.isRequired
+    updateSearch: PropTypes.func.isRequired,
+    selected: PropTypes.string.isRequired
 }
 export default Parameter;

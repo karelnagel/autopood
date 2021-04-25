@@ -30,7 +30,6 @@ export class UserPage extends Component {
             if (paraId) {
                 axios.get('/api/kuulutused?paraId=' + paraId)
                     .then((response) => {
-                            console.log(response.data);
                             this.setState({kuulutused: response.data})
                         }
                     );
@@ -96,7 +95,7 @@ export class UserPage extends Component {
                 <Header/>
                 <main>
                     {userId ?
-                        <User style={column} user={this.state.user} updateSearch={this.updateSearch}/> : null}
+                        <User style={column} user={this.state.user} updateSearch={this.updateSearch} selected={this.state.parameter ? this.state.parameter.id : 0}/> : null}
                     <Search style={column} parameter={this.state.parameter} updateSearch={this.updateSearch}
                             otsiKuulutusi={this.otsiKuulutusi} addParameter={this.addParameter}
                             deleteParameter={this.deleteParameter}/>

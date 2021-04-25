@@ -7,12 +7,12 @@ class User extends Component {
 
     render() {
         const user = this.props.user;
-        return <div style={userSection}>
-            <h2 style={welcomeMessage}>Hello {user.firstName} {user.lastName}</h2>
+        return <div style={userSection} id='user'>
+            <h2 style={welcomeMessage}>Tere {user.firstName} {user.lastName}!</h2>
             <br/>
             <p>Sinu salvestatud otsingud:</p>
             {this.props.user.parameters.map((parameter) => (
-                <Parameter parameter={parameter} key={parameter.id} updateSearch={this.props.updateSearch}/>
+                <Parameter parameter={parameter} key={parameter.id} selected={this.props.selected} updateSearch={this.props.updateSearch}/>
             ))}
             <Button style={button} onClick={(e) =>{
                 this.props.updateSearch(null)
@@ -39,7 +39,8 @@ const button ={
 
 User.propTypes = {
     user: PropTypes.object.isRequired,
-    updateSearch:PropTypes.func.isRequired
+    updateSearch:PropTypes.func.isRequired,
+    selected:PropTypes.string
 }
 
 export default User;

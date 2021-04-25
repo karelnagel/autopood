@@ -11,7 +11,6 @@ class Search extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps)
         if (nextProps.parameter)
             this.state = nextProps.parameter;
         else
@@ -28,12 +27,18 @@ class Search extends Component {
         const button = e.nativeEvent.submitter.name;
         if (button === "save") {
             this.props.addParameter(newParameter);
+            const element = document.getElementById("user");
+            element.scrollIntoView();
         } else if (button==="search"){
             this.props.otsiKuulutusi(newParameter);
+            const element = document.getElementById("kuulutused");
+            element.scrollIntoView();
         }
         else {
             this.props.deleteParameter(newParameter.id)
             newParameter = emptyParameter;
+            const element = document.getElementById("user");
+            element.scrollIntoView();
         }
         this.props.updateSearch(newParameter);
     }
@@ -205,19 +210,21 @@ class Search extends Component {
 
                     </div>
                     <br/>
-                    {userId ? <Button type="submit" name="save">
-                        {this.state.id == 0 ? "Save" : "Update"}
-                    </Button>:null}
-                    <Button type="submit" name="search">
-                        Search
-                    </Button>
-                    {
-                        this.state.id == 0 ? null :
-                        <Button type="submit" name="delete">
-                            Delete
+                    <div style={buttons}>
+                        {userId ? <Button type="submit" name="save">
+                            {this.state.id == 0 ? "Save" : "Update"}
+                        </Button>:null}
+                        {
+                            this.state.id == 0 ? null :
+                                <Button type="submit" name="delete">
+                                    Delete
+                                </Button>
+                        }
+                        <Button type="submit" name="search">
+                            Search
                         </Button>
-                    }
 
+                    </div>
                     <br/>
                 </form>
             </div>
@@ -225,7 +232,10 @@ class Search extends Component {
     }
 
 }
-
+const buttons={
+    justifyContent:'space-between',
+    display: 'flex',
+}
 const searchColumn = {
     minWidth: '300px',
     background: '#EBEBEB',
