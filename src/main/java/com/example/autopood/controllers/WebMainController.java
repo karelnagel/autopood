@@ -10,5 +10,10 @@ public class WebMainController {
     public String index() {
         return "index";
     }
+
+    @RequestMapping(value = "/main")
+    public String main() {
+        return "index";
+    }
 }
 

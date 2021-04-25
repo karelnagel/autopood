@@ -1,33 +1,56 @@
 import React, {Component} from "react";
 import Header from '../../../frontend/src/components/layouts/Header';
-import Parameters from '../../../frontend/src/components/Parameters';
-import Users from '../../../frontend/src/components/Users';
+import User from '../components/User';
 import axios from "axios";
+import Search from "../components/Search";
+import Kuulutused from "../components/Kuulutused";
 
 export class UserPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            parameters: []
+            user: {
+                parameters: []
+            },
+            kuulutused: []
         }
     }
 
     componentDidMount() {
         const userId = new URLSearchParams(window.location.search).get("userId");
-        axios.get('/api/users/' + userId + '/parameters')
-            .then(response => this.setState({parameters: response.data}))
+        const paraId = new URLSearchParams(window.location.search).get("paraId");
+        if (userId) {
+            axios.get('/api/users/' + userId)
+                .then(response => {
+                    this.setState({
+                        user: response.data,
+                        parameter: response.data.parameters.find(x => x.id == paraId)
+                    })
+                })
+            if (paraId) {
+                axios.get('/api/kuulutused?paraId=' + paraId)
+                    .then((response) => {
+                            console.log(response.data);
+                            this.setState({kuulutused: response.data})
+                        }
+                    );
+            }
+        }
     }
 
-    //Deleting User
+
+    updateSearch = (newParameter) => {
+        this.setState({parameter: newParameter})
+    }
+
     deleteParameter = (id) => {
         const userId = new URLSearchParams(window.location.search).get("userId");
         axios.delete('/api/users/' + userId + '/parameters/' + id)
-            .then(
-                response => this.setState( //Updating UI
-                    {
-                        parameters: [...this.state.parameters.filter(p => p.id !== id)]
-                    }
-                )
+            .then(response => {
+                    const updatedUser = this.state.user;
+                    updatedUser.parameters = [...this.state.user.parameters.filter(p => p.id !== id)];
+                    this.setState({user: updatedUser})
+                }
             );
     }
 
@@ -38,28 +61,53 @@ export class UserPage extends Component {
             axios.post('/api/users/' + userId + '/parameters/', newParameter)
                 .then(
                     (response) => {
-                        console.log(response.data);
-                        this.setState({parameters: [...this.state.parameters, response.data]})
+                        const updatedUser = this.state.user;
+                        updatedUser.parameters = [...this.state.user.parameters, response.data];
+
+                        this.setState({user: updatedUser})
                     }
                 );
         } else {
             axios.put('/api/users/' + userId + '/parameters/' + id, newParameter)
                 .then(
                     (response) => {
-                        console.log(response.data);
-                        this.setState({parameters: [...this.state.parameters.filter(p => p.id !== id), response.data]})
+                        const updatedUser = this.state.user;
+                        updatedUser.parameters = [...this.state.user.parameters.filter(p => p.id !== id), response.data];
+                        this.setState({user: updatedUser})
                     }
                 );
         }
     }
+    otsiKuulutusi = (parameter) => {
+        const paraId = new URLSearchParams(window.location.search).get('paraId');
+        axios.post('/api/kuulutused/', parameter)
+            .then(
+                (response) => {
+                    this.setState({kuulutused: response.data})
+                }
+            );
+
+    }
 
     render() {
+        const userId = new URLSearchParams(window.location.search).get("userId");
         return (
             <div className="container">
                 <Header/>
-                <Parameters parameters={this.state.parameters} postParameter={this.addParameter}/>
-                <Users users={this.state.parameters} removeUser={this.deleteParameter}/>
+                <main>
+                    {userId ?
+                        <User style={column} user={this.state.user} updateSearch={this.updateSearch}/> : null}
+                    <Search style={column} parameter={this.state.parameter} updateSearch={this.updateSearch}
+                            otsiKuulutusi={this.otsiKuulutusi} addParameter={this.addParameter}
+                            deleteParameter={this.deleteParameter}/>
+                    <Kuulutused kuulutused={this.state.kuulutused}/>
+                </main>
             </div>
         );
     }
 }
+
+const column = {
+    display: "inline-block"
+}
+

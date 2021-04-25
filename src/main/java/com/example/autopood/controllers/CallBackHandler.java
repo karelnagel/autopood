@@ -155,13 +155,13 @@ public class CallBackHandler
                     User user = userRepository.findById(senderId).get();
                     if (quickReplyPayload.equals(OPTION_PROFILE))
                     {
-                        sendTextMessage(senderId, "You can change your profile settings here:\n " + baseUrl + "api/users/" + senderId);
+                        sendTextMessage(senderId, "You can change your profile settings here:\n " + baseUrl + "main?userId=" + senderId);
                     } else if (quickReplyPayload.equals(OPTION_CREATE_PARAMETER))
                     {
-                        sendTextMessage(senderId, "Create new parameter here: \n " + baseUrl + "?userId=" + senderId);
+                        sendTextMessage(senderId, "Create new parameter here: \n " + baseUrl + "main?userId=" + senderId);
                     } else if (quickReplyPayload.equals(OPTION_SEARCH))
                     {
-                        sendTextMessage(senderId, "Search: \n " + baseUrl + "?page=asd");
+                        sendTextMessage(senderId, "Search: \n " + baseUrl + "main");
                     } else
                     {
                         var paraId = Long.parseLong(quickReplyPayload);
@@ -169,8 +169,7 @@ public class CallBackHandler
                         {
                             var parameter = kuulutusParametersRepository.findById(paraId).get();
                             sendTextMessage(senderId, parameter.toString());
-                            sendTextMessage(senderId, "Edit: \n " + baseUrl + "?userId=" + senderId + "&paraId=" + paraId);
-                            sendTextMessage(senderId, "Vanad kuulutused: \n " + baseUrl + "?paraId=" + paraId);
+                            sendTextMessage(senderId, "Muuda või vaata kuulutusi: \n " + baseUrl + "main?userId=" + senderId + "&paraId=" + paraId);
                         } else
                         {
                             sendTextMessage(senderId, "Error");

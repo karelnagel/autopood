@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import Header from "../components/layouts/Header";
 
 export class Index extends Component {
     constructor(props) {
@@ -8,7 +9,7 @@ export class Index extends Component {
     render() {
         return (
             <div className="index">
-                <h1>CarWawtch</h1>
+                <Header/>
                 <p>Parim auto ostu portaal maailmas</p>
             </div>
         );
