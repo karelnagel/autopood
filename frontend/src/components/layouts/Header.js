@@ -17,11 +17,12 @@ function Header() {
 const header = {
     display: 'flex',
     textAlign:'center',
-    padding: '0 30px',
+    padding: '0 15px',
     fontWeight: 'bold',
-    fontSize:'18px',
+    fontSize:'24px',
 }
 const icon={
-    marginLeft:'auto'
+    marginLeft:'auto',
+    color:'black',
 }
 export default Header;

@@ -8,27 +8,29 @@ class Kuulutused extends Component {
         return <div style={kuulutusedColumn} className='full-width' id="kuulutused">{
             this.props.kuulutused.map((kuulutus) => (
                 <a href={kuulutus.link} style={isMobile ? kuulutusDivPhone : kuulutusDiv} key={kuulutus.id}>
-                    {isMobile ? null : <img src="https://picsum.photos/200" style={picture}></img>}
+                    {isMobile ? null : <img src={kuulutus.picture ? kuulutus.picture : "https://picsum.photos/200"}
+                                            style={picture}></img>}
                     <div>
                         <div style={flex}>
                             <p style={bold}>{kuulutus.brand} {kuulutus.model}</p>
                             <p style={price}>{kuulutus.price}€</p>
                         </div>
                         <div style={flex}>
-                            {isMobile ? <img src="https://picsum.photos/150" style={picturePhone}></img> : null}
-                            <div style={isMobile?null : flex}>
+                            {isMobile ? <img src={kuulutus.picture ? kuulutus.picture : "https://picsum.photos/200"}
+                                             style={picturePhone}></img> : null}
+                            <div style={isMobile ? null : flex}>
                                 <div style={section}>
-                                    {kuulutus.year ? <p>Aasta: {kuulutus.year}</p>:null}
-                                    {kuulutus.pood ? <p>Pood: {kuulutus.pood}</p>:null}
-                                        {kuulutus.type ? <p>Type: {kuulutus.type}</p>:null}
+                                    {kuulutus.year ? <p>Aasta: {kuulutus.year}</p> : null}
+                                    {kuulutus.pood ? <p>Pood: {kuulutus.pood}</p> : null}
+                                    {kuulutus.type ? <p>Type: {kuulutus.type}</p> : null}
                                 </div>
                                 <div style={section}>
-                                    {kuulutus.bodyType ? <p>Body type: {kuulutus.bodyType}</p>:null}
-                                    {kuulutus.gearType ? <p>Gear type: {kuulutus.gearType}</p>:null}
-                                    {kuulutus.country ? <p>Country: {kuulutus.country}</p>:null}
+                                    {kuulutus.bodyType ? <p>Body type: {kuulutus.bodyType}</p> : null}
+                                    {kuulutus.gearType ? <p>Gear type: {kuulutus.gearType}</p> : null}
+                                    {kuulutus.country ? <p>Country: {kuulutus.country}</p> : null}
                                 </div>
                                 <div style={section}>
-                                    {kuulutus.mileage ? <p>Mileage: {kuulutus.mileage}km</p>:null}
+                                    {kuulutus.mileage ? <p>Mileage: {kuulutus.mileage}km</p> : null}
                                     <p>Engine: {kuulutus.engineSize}L {kuulutus.engineKW}kw</p>
                                 </div>
                             </div>
@@ -40,9 +42,10 @@ class Kuulutused extends Component {
         }</div>
     }
 }
-const section={
-    width:'200px',
-    marginRight:'20px',
+
+const section = {
+    width: '200px',
+    marginRight: '20px',
 }
 const kuulutusDiv = {
     display: 'flex',
@@ -50,11 +53,11 @@ const kuulutusDiv = {
     borderRadius: "15px",
     margin: "20px 20px",
     padding: "10px",
-    position:'relative'
+    position: 'relative'
 }
-const price={
+const price = {
     position: "absolute",
-    right:'10px',
+    right: '10px',
     color: 'green',
     fontWeight: 'bold'
 }
@@ -63,7 +66,7 @@ const kuulutusDivPhone = {
     background: "#FFFFFF",
     margin: "10px 0",
     padding: "10px",
-    position:'relative'
+    position: 'relative'
 }
 const flex = {
     display: "flex",
@@ -72,7 +75,7 @@ const bold = {
     fontWeight: "bold",
     width: '80%',
     whiteSpace: 'inherit',
-lineHeight: 'inherit',
+    lineHeight: 'inherit',
 }
 const alignRight = {
     marginLef: "auto",

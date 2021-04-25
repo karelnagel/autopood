@@ -11,6 +11,7 @@ public class KuulutusDto
     private String model;
     private String bodyType;
     private String gearType;
+    private String picture;
     private int year;
     private int price;
     private String link;
@@ -41,6 +42,7 @@ public class KuulutusDto
         this.pood = kuulutus.getPood().getId();
         this.engineSize =kuulutus.getEngineSize();
         this.country = kuulutus.getPood().getCountry();
+        this.picture = kuulutus.getPicture();
     }
 
     public Long getId()
@@ -187,5 +189,15 @@ public class KuulutusDto
 
     public void setGearType(String gearType) {
         this.gearType = gearType;
+    }
+
+    public String getPicture()
+    {
+        return picture;
+    }
+
+    public void setPicture(String picture)
+    {
+        this.picture = picture;
     }
 }

@@ -17,6 +17,7 @@ public class Kuulutus
     private String model;
     private String bodyType;
     private String gearType;
+    private String picture;
     private int year;
     private int price;
     private String link;
@@ -211,4 +212,13 @@ public class Kuulutus
         this.bodyType = bodyType;
     }
 
+    public String getPicture()
+    {
+        return picture;
+    }
+
+    public void setPicture(String picture)
+    {
+        this.picture = picture;
+    }
 }

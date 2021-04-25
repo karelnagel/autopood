@@ -42,6 +42,8 @@ public class Auto24 extends ScrapePood
                 var value = element.select("span.value").text();
                 map.put(name, value);
             }
+            var picture = document.select("div.img-container").select("img").first().attr("src");
+            kuulutus.setPicture(picture);
             var pealkiri = document.select("h1.commonSubtitle").text();
             if (pealkiri.contains(" "))
             {
