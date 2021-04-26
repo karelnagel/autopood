@@ -31,6 +31,8 @@ public class Auto24 extends ScrapePood
     public Kuulutus scrapeKuulutus(String url)
     {
         var kuulutus = new Kuulutus();
+
+        kuulutus.setLink(url);
         var map = new HashMap<String, String>();
         try
         {
@@ -42,72 +44,129 @@ public class Auto24 extends ScrapePood
                 var value = element.select("span.value").text();
                 map.put(name, value);
             }
-            var picture = document.select("div.img-container").select("img").first().attr("src");
-            kuulutus.setPicture(picture);
-            var pealkiri = document.select("h1.commonSubtitle").text();
-            if (pealkiri.contains(" "))
+            var pictures = document.select("div.img-container").select("img");
+            if (pictures.size() > 0)
+                kuulutus.setPicture(pictures.first().attr("src"));
+
+
+            var pealkiri = document.select("h1.commonSubtitle");
+            if (pealkiri.size() == 1)
             {
-                String arr[] = pealkiri.split(" ", 2);
-                kuulutus.setBrand(arr[0]);
-                kuulutus.setModel(arr[1]);
-            } else
-                kuulutus.setBrand(pealkiri);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        try
-        {
-            var aastaString = map.get("Initial reg:");
-            if (aastaString.contains("/")) aastaString = aastaString.substring(3);
-            var aasta = Integer.parseInt(aastaString.replaceAll("[^\\d.]", ""));
-            var hind = Integer.parseInt(map.get("Price:").replaceAll("[^\\d.]", ""));
-            kuulutus.setYear(aasta);
-            kuulutus.setPrice(hind);
-            kuulutus.setLink(url);
+                if (pealkiri.text().contains(" "))
+                {
+                    String arr[] = pealkiri.text().split(" ", 2);
+                    kuulutus.setBrand(arr[0]);
+                    kuulutus.setModel(arr[1]);
+                } else
+                    kuulutus.setBrand(pealkiri.text());
+            }
+            if (map.containsKey("Initial reg:"))
+            {
+                var aasta = map.get("Initial reg:");
+                if (aasta.contains("/")) aasta = aasta.substring(3);
+                if (!aasta.equals(""))
+                    kuulutus.setYear(parseInt(aasta));
+            }
+            if (map.containsKey("Price:"))
+            {
+                var price = map.get("Price:");
+                if (!price.equals(""))
+                    kuulutus.setPrice(parseInt(price));
+            }
+            if (map.containsKey("Type:"))
+            {
+                var carType = map.get("Type:").strip();
+                kuulutus.setType(toUniversal(carType));
+            }
 
-            var carType = map.get("Type:").replaceAll("[^\\d.]", "").strip();
-            carType = toUniversal(carType);
-            kuulutus.setType(carType);
+            if (map.containsKey("Bodytype:"))
+            {
+                var carBodyType = map.get("Bodytype:").strip();
+                kuulutus.setBodyType(StringUtils.capitalize(carBodyType));
+            }
+            if (map.containsKey("Transmission:"))
+            {
+                var geartype = map.get("Transmission:").strip();
+                kuulutus.setGearType(geartype);
+            }
+            if (map.containsKey("Mileage:"))
+            {
+                var mileage = map.get("Mileage:");
+                if (!mileage.equals(""))
+                    kuulutus.setMileage(parseInt(mileage));
+            }
+            if (map.containsKey("Fuel:"))
+            {
+                var fueltype = map.get("Fuel:").strip();
+                kuulutus.setFuelType(fueltype);
+            }
 
-            var carBodyType = map.get("Bodytype:").replaceAll("[^\\d.]", "").strip();
-            kuulutus.setBodyType(StringUtils.capitalize(carBodyType));
+            if (map.containsKey("Engine:"))
+            {
 
-            var geartype = map.get("Transmission:").replaceAll("[^\\d.]", "").strip();
-            kuulutus.setGearType(geartype);
-
-            var mileage = map.get("Mileage:").strip();
-            mileage = mileage
-                    .replaceAll(",","")
-                    .replaceAll("km","")
-                    .replaceAll(" ","");
-            kuulutus.setMileage(Integer.parseInt(mileage));
-
-            var fueltype = map.get("Fuel:").strip();
-            kuulutus.setFuelType(fueltype);
-
-            var engine = map.get("Engine:").strip();
-            var engineL = engine.split(" ")[0];
-            var engineKW = engine.split(" ")[1].substring(1).strip();
-
-            kuulutus.setEngineSize(Double.parseDouble(engineL));
-            kuulutus.setEngineKW(Double.parseDouble(engineKW));
+                var engine = map.get("Engine:").strip();
+                System.out.println(engine);
+                if (engine.contains(" ("))
+                {
+                    var engineL = engine.substring(0, engine.indexOf("("));
+                    var engineKW = engine.substring(engine.indexOf("(") + 1, engine.indexOf("kW"));
+                    kuulutus.setEngineSize(parseDouble(engineL));
+                    kuulutus.setEngineKW(parseDouble(engineKW));
+                    System.out.println(kuulutus.getEngineKW());
+                    System.out.println(kuulutus.getEngineSize());
+                }
+            }
 
             return kuulutus;
+        } catch (IOException e)
+        {
+            System.out.println("IOException " + this.poeId);
+
+            e.printStackTrace();
         } catch (NumberFormatException e)
         {
-            System.out.println("Cant parse");
-            return null;
+            System.out.println("NumberFormatException " + this.poeId);
         } catch (NullPointerException e)
         {
-            System.out.println("Element not found");
-            return null;
+            System.out.println("NullPointerException " + this.poeId);
+
+        } catch (ArrayIndexOutOfBoundsException e)
+        {
+            System.out.println("ArrayIndexOutOfBoundsException " + this.poeId);
+
         }
+        return null;
 
     }
-    public static String toUniversal(String s){
-        if(s.equals("passenger car")) return "Car";
-        else if(s.equals("commercial vehicle")) return "Van";
+
+    private static Double parseDouble(String string)
+    {
+        try
+        {
+            return Double.parseDouble(string.replaceAll("[^\\d.]", ""));
+        } catch (NumberFormatException e)
+        {
+            System.out.println("parse double failed");
+            return 0.0;
+        }
+    }
+
+    private static Integer parseInt(String string)
+    {
+        try
+        {
+            return Integer.parseInt(string.replaceAll("[^\\d.]", ""));
+        } catch (NumberFormatException e)
+        {
+            System.out.println("parse int failed ");
+            return 0;
+        }
+    }
+
+    public static String toUniversal(String s)
+    {
+        if (s.equals("passenger car")) return "Car";
+        else if (s.equals("commercial vehicle")) return "Van";
         else return s;
     }
 }
