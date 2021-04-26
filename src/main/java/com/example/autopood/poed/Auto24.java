@@ -105,15 +105,12 @@ public class Auto24 extends ScrapePood
             {
 
                 var engine = map.get("Engine:").strip();
-                System.out.println(engine);
                 if (engine.contains(" ("))
                 {
                     var engineL = engine.substring(0, engine.indexOf("("));
                     var engineKW = engine.substring(engine.indexOf("(") + 1, engine.indexOf("kW"));
                     kuulutus.setEngineSize(parseDouble(engineL));
                     kuulutus.setEngineKW(parseDouble(engineKW));
-                    System.out.println(kuulutus.getEngineKW());
-                    System.out.println(kuulutus.getEngineSize());
                 }
             }
 
