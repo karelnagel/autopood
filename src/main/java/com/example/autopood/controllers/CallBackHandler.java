@@ -400,12 +400,13 @@ public class CallBackHandler
         for (Parameter parameter : parameters)
         {
             var name = parameter.getName() == null || parameter.getName().equals("") ? parameter.getBrand() + " " + parameter.getModel() + " " + parameter.getId() : parameter.getName();
+            name=name.substring(0,19);
             buttons = buttons.addUrlButton(name, baseUrl+"main?userId="+recipientId.toString()+"&paraId="+parameter.getId()).toList();
         }
 
         final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
                 .addElements()
-                .addElement("Siin saad muuta oma profiili ja otsinguid")
+                .addElement("Mida soovid teha?")
                 .buttons(buttons.build())
                 .toList()
                 .done()
