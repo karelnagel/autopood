@@ -1,5 +1,6 @@
 package com.example.autopood.controllers;
 
+import com.example.autopood.models.Kuulutus;
 import com.example.autopood.models.Parameter;
 import com.example.autopood.models.User;
 import com.example.autopood.repositorities.ParameterRepository;
@@ -132,8 +133,8 @@ public class CallBackHandler
                     System.out.println("Alustuseks loo uus parameeter, et oskaksime autosi teile soovitada");
                 }
 
-                sendFirstOptions(senderId);
-                sendSpringDoc(senderId.toString(), "asd");
+                //sendFirstOptions(senderId);
+                sendOptions(senderId);
 
             } catch (MessengerApiException | MessengerIOException | IOException e)
             {
@@ -180,7 +181,8 @@ public class CallBackHandler
                         }
                     }
                 }
-                sendFirstOptions(senderId);
+                sendOptions(senderId);
+                //sendFirstOptions(senderId);
             } catch (Exception e)
             {
                 e.printStackTrace();
@@ -204,21 +206,21 @@ public class CallBackHandler
         }
     }
 
-    void sendFirstOptions(Long recipientId) throws MessengerApiException, MessengerIOException
-    {
-
-        var quickReplies = QuickReply.newListBuilder()
-                .addTextQuickReply("Profiil", OPTION_PROFILE).toList()
-                .addTextQuickReply("Uus otsing", OPTION_CREATE_PARAMETER).toList()
-                .addTextQuickReply("Search", OPTION_SEARCH).toList();
-        var parameters = kuulutusParametersRepository.findByUserId(recipientId);
-        for (Parameter parameter : parameters)
-        {
-            var name = parameter.getName() != null && !parameter.getName().equals("") ? parameter.getName() : parameter.getId().toString();
-            quickReplies = quickReplies.addTextQuickReply(name, parameter.getId().toString()).toList();
-        }
-        this.sendClient.sendTextMessage(recipientId.toString(), "Mida soovid teha?", quickReplies.build());
-    }
+//    void sendFirstOptions(Long recipientId) throws MessengerApiException, MessengerIOException
+//    {
+//
+//        var quickReplies = QuickReply.newListBuilder()
+//                .addTextQuickReply("Profiil", OPTION_PROFILE).toList()
+//                .addTextQuickReply("Uus otsing", OPTION_CREATE_PARAMETER).toList()
+//                .addTextQuickReply("Search", OPTION_SEARCH).toList();
+//        var parameters = kuulutusParametersRepository.findByUserId(recipientId);
+//        for (Parameter parameter : parameters)
+//        {
+//            var name = parameter.getName() != null && !parameter.getName().equals("") ? parameter.getName() : parameter.getId().toString();
+//            quickReplies = quickReplies.addTextQuickReply(name, parameter.getId().toString()).toList();
+//        }
+//        this.sendClient.sendTextMessage(recipientId.toString(), "Mida soovid teha?", quickReplies.build());
+//    }
 
 
     private void handleSendException(Exception e)
@@ -249,13 +251,16 @@ public class CallBackHandler
                     userRepository.save(user);
                     sendTextMessage(senderId, "Tere tulemast!");
                     //sendTextMessage(senderId, "Vali auto parameetrid");
-
-                    sendFirstOptions(senderId);
+                    sendOptions(senderId);
+                    //sendFirstOptions(senderId);
                 }
             } catch (MessengerApiException e)
             {
                 e.printStackTrace();
             } catch (MessengerIOException e)
+            {
+                e.printStackTrace();
+            } catch (IOException e)
             {
                 e.printStackTrace();
             }
@@ -360,47 +365,52 @@ public class CallBackHandler
         };
     }
 
-    private void sendSpringDoc(String recipientId, String keyword) throws MessengerApiException, MessengerIOException, IOException
+    private void sendKuulutus(String recipientId, Kuulutus kuulutus, Parameter parameter) throws MessengerApiException, MessengerIOException, IOException
     {
 
-
-        final List<Button> firstLink = Button.newListBuilder()
-                .addUrlButton("Open Link", "https://github.com/aboullaite/SpringBot").toList()
-                .build();
-        final List<Button> secondLink = Button.newListBuilder()
-                .addUrlButton("Open Link", "https://github.com/aboullaite/SpringBot").toList()
-                .build();
-        final List<Button> thirdtLink = Button.newListBuilder()
-                .addUrlButton("Open Link", "https://github.com/aboullaite/SpringBot").toList()
-                .build();
-        final List<Button> searchLink = Button.newListBuilder()
-                .addUrlButton("Open Link", ("https://spring.io/search?q=").concat(keyword)).toList()
+        var parameterButtonName = parameter.getName() == null || parameter.getName().equals("") ? parameter.getBrand() + " " + parameter.getModel() + " " + parameter.getId() : parameter.getName();
+        final List<Button> buttons = Button.newListBuilder()
+                .addUrlButton(kuulutus.getPood().getId(), kuulutus.getLink()).toList()
+                .addUrlButton(parameterButtonName,baseUrl + "main?userId=" + recipientId + "&paraId=" + parameter.getId())
+                .toList()
                 .build();
 
 
         final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
                 .addElements()
-                .addElement("nagel")
-                .subtitle("karel")
-                .itemUrl("https://github.com/aboullaite/SpringBot")
-                .imageUrl("https://upload.wikimedia.org/wikipedia/en/2/20/Pivotal_Java_Spring_Logo.png")
-                .buttons(firstLink)
-                .toList()
-                .addElement("asdasdasdasd")
-                .subtitle("asdasd")
-                .itemUrl("https://github.com/aboullaite/SpringBot")
-                .imageUrl("https://upload.wikimedia.org/wikipedia/en/2/20/Pivotal_Java_Spring_Logo.png")
-                .buttons(secondLink)
-                .toList()
-                .addElement("All results ")
-                .subtitle("Spring Search Result")
-                .itemUrl(("https://spring.io/search?q=").concat(keyword))
-                .imageUrl("https://upload.wikimedia.org/wikipedia/en/2/20/Pivotal_Java_Spring_Logo.png")
-                .buttons(searchLink)
+                .addElement(kuulutus.getBrand() + kuulutus.getModel())
+                .subtitle(kuulutus.toMessenger())
+                .itemUrl(kuulutus.getLink())
+                .imageUrl(kuulutus.getPicture())
+                .buttons(buttons)
                 .toList()
                 .done()
                 .build();
 
         this.sendClient.sendTemplate(recipientId, genericTemplate);
+    }
+
+    private void sendOptions(Long recipientId) throws MessengerApiException, MessengerIOException, IOException
+    {
+        var buttons = Button.newListBuilder()
+                .addUrlButton("Search", baseUrl+"main").toList()
+                .addUrlButton("Uus otsing", baseUrl+"main?userId="+recipientId).toList();
+
+        var parameters = kuulutusParametersRepository.findByUserId(recipientId);
+        for (Parameter parameter : parameters)
+        {
+            var name = parameter.getName() == null || parameter.getName().equals("") ? parameter.getBrand() + " " + parameter.getModel() + " " + parameter.getId() : parameter.getName();
+            buttons = buttons.addUrlButton(name, baseUrl+"main?userId="+recipientId.toString()+"&paraId="+parameter.getId()).toList();
+        }
+
+        final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
+                .addElements()
+                .addElement("Siin saad muuta oma profiili ja otsinguid")
+                .buttons(buttons.build())
+                .toList()
+                .done()
+                .build();
+
+        this.sendClient.sendTemplate(recipientId.toString(), genericTemplate);
     }
 }
