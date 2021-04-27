@@ -370,17 +370,8 @@ public class CallBackHandler
     private void sendOptions(Long recipientId) throws MessengerApiException, MessengerIOException, IOException
     {
         var buttons = Button.newListBuilder()
-                .addUrlButton("Search", baseUrl+"main").toList()
-                .addUrlButton("Uus otsing", baseUrl+"main?userId="+recipientId).toList();
-
-        var parameters = kuulutusParametersRepository.findByUserId(recipientId);
-        for (Parameter parameter : parameters)
-        {
-            var name = parameter.getName() == null || parameter.getName().equals("") ? parameter.getBrand() + " " + parameter.getModel() + " " + parameter.getId() : parameter.getName();
-            if (name.length()>19)
-                name=name.substring(0,19);
-            buttons = buttons.addUrlButton(name, baseUrl+"main?userId="+recipientId.toString()+"&paraId="+parameter.getId()).toList();
-        }
+                .addUrlButton("Muuda parameetreid", baseUrl+"main?userId="+recipientId).toList()
+                .addUrlButton("Otsi", baseUrl+"main").toList();
 
         final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
                 .addElements()

@@ -42,7 +42,7 @@ public abstract class AbstractPood
         for (Kuulutus kuulutus : kuulutused)
         {
             kuulutus.setPood(pood);
-            kuulutusRepository.deleteAllByLink(kuulutus.getLink()); //Todo kustutamise asemel uuenda vana kuulutust
+            //kuulutusRepository.deleteAllByLink(kuulutus.getLink()); //Todo kustutamise asemel uuenda vana kuulutust
         }
         kuulutusRepository.saveAll(kuulutused);
         if (kuulutused.size() > 0)
