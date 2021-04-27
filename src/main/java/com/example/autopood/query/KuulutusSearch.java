@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -47,23 +49,43 @@ public class KuulutusSearch
         return spec;
     }
 
-    public List<Kuulutus> findKuulutus(ParameterDto para)
+    public List<Kuulutus> findKuulutus(ParameterDto para, String sortBy)
     {
         var spec = Specification.not(new KuulutusCriteria("id", ":", "0"));
         spec = CompareString(spec, "brand", para.getBrand());
         spec = CompareString(spec, "model", para.getModel());
         spec = CompareString(spec, "type", para.getType());
-        spec = CompareString(spec, "fuelType", para.getFuelType());
+        spec = CompareString(spec, "body_type", para.getBodyType());
+        spec = CompareString(spec, "gear_type", para.getGearType());
+        spec = CompareString(spec, "fuel_type", para.getFuelType());
 
         spec = CompareDouble(spec, "price", para.getMinPrice(), para.getMaxPrice());
         spec = CompareDouble(spec, "year", para.getMinYear().doubleValue(), para.getMaxYear().doubleValue());
         spec = CompareDouble(spec, "mileage", para.getMinMileage(), para.getMaxMileage());
-        spec = CompareDouble(spec, "engineSize", para.getMinEngineSize().doubleValue(), para.getMinEngineSize().doubleValue());
-        spec = CompareDouble(spec, "engineKW", para.getMinEngineKW().doubleValue(), para.getMaxEngineKW().doubleValue());
+        spec = CompareDouble(spec, "engine_size", para.getMinEngineSize().doubleValue(), para.getMinEngineSize().doubleValue());
+        spec = CompareDouble(spec, "enginekw", para.getMinEngineKW().doubleValue(), para.getMaxEngineKW().doubleValue());
+
 
         var kuulutused = kuulutusRepository.findAll(spec);
+
         if (isNotNullOrEmpty(para.getCountry()))
             kuulutused.removeIf(k -> !k.getPood().getCountry().equalsIgnoreCase(para.getCountry())); //Todo find out how to move country to query
+
+        if (sortBy == null || sortBy.equals("") || sortBy.contains("date"))
+            Collections.sort(kuulutused, Comparator.comparing(Kuulutus::getDate));
+
+        else if (sortBy.contains("year"))
+            Collections.sort(kuulutused, Comparator.comparing(Kuulutus::getYear));
+
+        else if (sortBy.contains("mileage"))
+            Collections.sort(kuulutused, Comparator.comparing(Kuulutus::getMileage));
+
+        else if (sortBy.contains("price"))
+            Collections.sort(kuulutused, Comparator.comparing(Kuulutus::getPrice));
+
+        if (sortBy!=null && sortBy.contains("desc"))
+            Collections.reverse(kuulutused);
+
         return kuulutused;
     }
 }

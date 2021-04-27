@@ -223,6 +223,26 @@ class Search extends Component {
 
                     </div>
                     <br/>
+                    <InputLabel style={selectInput} id="sortBy-select-label">Sort By</InputLabel>
+                    <Select
+                        displayEmpty
+                        labelId="sortBy-select-label"
+                        name="sortBy"
+                        style={selectInput}
+                        className='full-width'
+                        value={this.state.sortBy}
+                        onChange={this.onChange}
+                    >
+                        <MenuItem value="date">Vanemad kuulutused enne</MenuItem>
+                        <MenuItem value='datedesc'>Uuemad kuulutused enne</MenuItem>
+                        <MenuItem value='price'>Odavamad enne</MenuItem>
+                        <MenuItem value='pricedesc'>Kallimad enne</MenuItem>
+                        <MenuItem value='year'>Vanemad autod enne</MenuItem>
+                        <MenuItem value='yeardesc'>Uuemad autod enne</MenuItem>
+                        <MenuItem value='mileage'>Väiksema läbisõiduga enne</MenuItem>
+                        <MenuItem value='mileagedesc'>Suurema läbisõiduga enne</MenuItem>
+                    </Select>
+                    <br/>
                     <div style={buttons}>
                         {userId ? <Button type="submit" name="save">
                             {this.state.id == 0 ? "Save" : "Update"}
@@ -273,6 +293,7 @@ const emptyParameter = {
     maxEngineKW: 0.0,
     minEngineSize: 0.0,
     maxEngineSize: 0.0,
+    sortBy: "datedesc",
 
 }
 const input = {

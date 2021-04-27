@@ -1,6 +1,9 @@
 package com.example.autopood.models;
 
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Kuulutus
@@ -25,6 +28,11 @@ public class Kuulutus
     private double engineSize;
     private String fuelType;
     private int mileage;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date")
+    private Date date;
 
     public Kuulutus()
     {
@@ -220,5 +228,10 @@ public class Kuulutus
     public void setPicture(String picture)
     {
         this.picture = picture;
+    }
+
+    public Date getDate()
+    {
+        return date;
     }
 }

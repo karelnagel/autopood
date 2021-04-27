@@ -30,7 +30,7 @@ public class KuulutusedController
     }
 
     @GetMapping(value = "/kuulutused")
-    public ResponseEntity<ArrayList<KuulutusDto>> getKuulutused(@RequestParam(required=false) Long paraId)
+    public ResponseEntity<ArrayList<KuulutusDto>> getKuulutused(@RequestParam(required=false) Long paraId, @RequestParam(required=false) String sortBy)
     {
         List<Kuulutus> kuulutused;
         if (paraId!=null){
@@ -38,7 +38,7 @@ public class KuulutusedController
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             var parameter = parameterRepository.findById(paraId).get();
 
-            kuulutused = kuulutusSearch.findKuulutus(new ParameterDto(parameter));
+            kuulutused = kuulutusSearch.findKuulutus(new ParameterDto(parameter),sortBy);
 
         }
         else
@@ -62,11 +62,11 @@ public class KuulutusedController
     }
 
     @PostMapping(value = "/kuulutused")
-    public ResponseEntity<ArrayList<KuulutusDto>> searchKuulutused(@RequestBody ParameterDto parameterDto)
+    public ResponseEntity<ArrayList<KuulutusDto>> searchKuulutused(@RequestBody ParameterDto parameterDto, @RequestParam(required=false) String sortBy)
     {
         if (parameterDto==null)
             new ResponseEntity(HttpStatus.BAD_REQUEST);
-        var kuulutused = kuulutusSearch.findKuulutus(parameterDto);
+        var kuulutused = kuulutusSearch.findKuulutus(parameterDto,sortBy);
 
         var kuulutusedDto = kuulutused.stream().map(k -> new KuulutusDto(k)).toArray();
         return new ResponseEntity(kuulutusedDto, HttpStatus.OK);

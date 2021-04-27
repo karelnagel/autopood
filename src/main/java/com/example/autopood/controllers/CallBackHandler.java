@@ -13,6 +13,8 @@ import com.github.messenger4j.receive.events.AccountLinkingEvent;
 import com.github.messenger4j.receive.handlers.*;
 import com.github.messenger4j.send.MessengerSendClient;
 import com.github.messenger4j.send.QuickReply;
+import com.github.messenger4j.send.buttons.Button;
+import com.github.messenger4j.send.templates.GenericTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/callback")
@@ -130,8 +132,9 @@ public class CallBackHandler
                 }
 
                 sendFirstOptions(senderId);
+                sendSpringDoc("senderId", "asd");
 
-            } catch (MessengerApiException | MessengerIOException e)
+            } catch (MessengerApiException | MessengerIOException | IOException e)
             {
                 handleSendException(e);
             }
@@ -354,5 +357,49 @@ public class CallBackHandler
             final String senderId = event.getSender().getId();
             logger.info("Received unsupported message from user '{}'", senderId);
         };
+    }
+
+    private void sendSpringDoc(String recipientId, String keyword) throws MessengerApiException, MessengerIOException, IOException
+    {
+
+
+        final List<Button> firstLink = Button.newListBuilder()
+                .addUrlButton("Open Link", "https://github.com/aboullaite/SpringBot").toList()
+                .build();
+        final List<Button> secondLink = Button.newListBuilder()
+                .addUrlButton("Open Link", "https://github.com/aboullaite/SpringBot").toList()
+                .build();
+        final List<Button> thirdtLink = Button.newListBuilder()
+                .addUrlButton("Open Link", "https://github.com/aboullaite/SpringBot").toList()
+                .build();
+        final List<Button> searchLink = Button.newListBuilder()
+                .addUrlButton("Open Link", ("https://spring.io/search?q=").concat(keyword)).toList()
+                .build();
+
+
+        final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
+                .addElements()
+                .addElement("nagel")
+                .subtitle("karel")
+                .itemUrl("https://github.com/aboullaite/SpringBot")
+                .imageUrl("https://upload.wikimedia.org/wikipedia/en/2/20/Pivotal_Java_Spring_Logo.png")
+                .buttons(firstLink)
+                .toList()
+                .addElement("asdasdasdasd")
+                .subtitle("asdasd")
+                .itemUrl("https://github.com/aboullaite/SpringBot")
+                .imageUrl("https://upload.wikimedia.org/wikipedia/en/2/20/Pivotal_Java_Spring_Logo.png")
+                .buttons(secondLink)
+                .toList()
+                .addElement("All results ")
+                .subtitle("Spring Search Result")
+                .itemUrl(("https://spring.io/search?q=").concat(keyword))
+                .imageUrl("https://upload.wikimedia.org/wikipedia/en/2/20/Pivotal_Java_Spring_Logo.png")
+                .buttons(searchLink)
+                .toList()
+                .done()
+                .build();
+
+        this.sendClient.sendTemplate(recipientId, genericTemplate);
     }
 }

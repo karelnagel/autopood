@@ -81,7 +81,9 @@ export class UserPage extends Component {
         }
     }
     otsiKuulutusi = (parameter) => {
-        axios.post('/api/kuulutused/', parameter)
+        if (!parameter.sortBy)
+            parameter.sortBy = "datedesc"
+        axios.post('/api/kuulutused/?sortBy='+parameter.sortBy, parameter)
             .then(
                 (response) => {
                     this.setState({kuulutused: response.data})

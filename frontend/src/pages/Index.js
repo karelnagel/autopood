@@ -16,7 +16,7 @@ export class Index extends Component {
                         <br/>
                         <p>Parim auto ostu portaal maailmas</p>
                         <br/>
-                        <Button variant='contained' href="https://www.messenger.com">Tee oma konto siin</Button>
+                        <Button variant='contained' href="http://m.me/CarVVatch">Tee oma konto siin</Button>
                         <br/>
                         <br/>
                         <Button variant='contained' href="main">Otsi</Button>

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 class Kuulutused extends Component {
 
     render() {
-        const isMobile = window.innerWidth < 480;
+        const isMobile = window.innerWidth < 1024;
         return <div style={kuulutusedColumn} className='full-width' id="kuulutused">{
             this.props.kuulutused.map((kuulutus) => (
                 <a href={kuulutus.link} style={isMobile ? kuulutusDivPhone : kuulutusDiv} key={kuulutus.id}>
@@ -44,7 +44,7 @@ class Kuulutused extends Component {
 }
 
 const section = {
-    width: '200px',
+    width: '300px',
     marginRight: '20px',
 }
 const kuulutusDiv = {
