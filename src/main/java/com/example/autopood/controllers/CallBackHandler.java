@@ -365,30 +365,7 @@ public class CallBackHandler
         };
     }
 
-    private void sendKuulutus(String recipientId, Kuulutus kuulutus, Parameter parameter) throws MessengerApiException, MessengerIOException, IOException
-    {
 
-        var parameterButtonName = parameter.getName() == null || parameter.getName().equals("") ? parameter.getBrand() + " " + parameter.getModel() + " " + parameter.getId() : parameter.getName();
-        final List<Button> buttons = Button.newListBuilder()
-                .addUrlButton(kuulutus.getPood().getId(), kuulutus.getLink()).toList()
-                .addUrlButton(parameterButtonName,baseUrl + "main?userId=" + recipientId + "&paraId=" + parameter.getId())
-                .toList()
-                .build();
-
-
-        final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
-                .addElements()
-                .addElement(kuulutus.getBrand() + kuulutus.getModel())
-                .subtitle(kuulutus.toMessenger())
-                .itemUrl(kuulutus.getLink())
-                .imageUrl(kuulutus.getPicture())
-                .buttons(buttons)
-                .toList()
-                .done()
-                .build();
-
-        this.sendClient.sendTemplate(recipientId, genericTemplate);
-    }
 
     private void sendOptions(Long recipientId) throws MessengerApiException, MessengerIOException, IOException
     {
@@ -400,7 +377,8 @@ public class CallBackHandler
         for (Parameter parameter : parameters)
         {
             var name = parameter.getName() == null || parameter.getName().equals("") ? parameter.getBrand() + " " + parameter.getModel() + " " + parameter.getId() : parameter.getName();
-            name=name.substring(0,19);
+            if (name.length()>19)
+                name=name.substring(0,19);
             buttons = buttons.addUrlButton(name, baseUrl+"main?userId="+recipientId.toString()+"&paraId="+parameter.getId()).toList();
         }
 
