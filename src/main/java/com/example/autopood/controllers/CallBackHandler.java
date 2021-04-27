@@ -112,7 +112,7 @@ public class CallBackHandler
 
             final String messageId = event.getMid();
             final String messageText = event.getText();
-            final var senderId = Long.parseLong(event.getSender().getId());
+            final Long senderId = Long.parseLong(event.getSender().getId());
             final Date timestamp = event.getTimestamp();
 
             logger.info("Received message '{}' with text '{}' from user '{}' at '{}'",
@@ -133,7 +133,7 @@ public class CallBackHandler
                 }
 
                 sendFirstOptions(senderId);
-                sendSpringDoc("senderId", "asd");
+                sendSpringDoc(senderId.toString(), "asd");
 
             } catch (MessengerApiException | MessengerIOException | IOException e)
             {
