@@ -1,21 +1,14 @@
 package com.example.autopood.controllers;
 
-import com.example.autopood.models.Kuulutus;
-import com.example.autopood.models.Parameter;
+import com.example.autopood.components.MessengerSendComponent;
 import com.example.autopood.models.User;
 import com.example.autopood.repositorities.ParameterRepository;
 import com.example.autopood.repositorities.UserRepository;
 import com.github.messenger4j.MessengerPlatform;
-import com.github.messenger4j.exceptions.MessengerApiException;
-import com.github.messenger4j.exceptions.MessengerIOException;
 import com.github.messenger4j.exceptions.MessengerVerificationException;
 import com.github.messenger4j.receive.MessengerReceiveClient;
 import com.github.messenger4j.receive.events.AccountLinkingEvent;
 import com.github.messenger4j.receive.handlers.*;
-import com.github.messenger4j.send.MessengerSendClient;
-import com.github.messenger4j.send.QuickReply;
-import com.github.messenger4j.send.buttons.Button;
-import com.github.messenger4j.send.templates.GenericTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +32,7 @@ public class CallBackHandler
     public static final String OPTION_SEARCH = "search";
     private static final String baseUrl = "https://autopood.herokuapp.com/";
     private final MessengerReceiveClient receiveClient;
-    private final MessengerSendClient sendClient;
+    private final MessengerSendComponent sendClient;
     private final UserRepository userRepository;
     private final ParameterRepository kuulutusParametersRepository;
 
@@ -48,7 +40,7 @@ public class CallBackHandler
     @Autowired
     public CallBackHandler(@Value("${messenger4j.appSecret}") final String appSecret,
                            @Value("${messenger4j.verifyToken}") final String verifyToken,
-                           final MessengerSendClient sendClient, UserRepository userRepository, ParameterRepository kuulutusParametersRepository)
+                           @Autowired final MessengerSendComponent sendClient, UserRepository userRepository, ParameterRepository kuulutusParametersRepository)
     {
 
         logger.debug("Initializing MessengerReceiveClient - appSecret: {} | verifyToken: {}", appSecret, verifyToken);
@@ -119,27 +111,18 @@ public class CallBackHandler
             logger.info("Received message '{}' with text '{}' from user '{}' at '{}'",
                     messageId, messageText, senderId, timestamp);
 
-            //HashMap<String,String> parameters = new HashMap<String,String>();
-
-            try
+            boolean userExists = userRepository.existsById(senderId);
+            if (!userExists)
             {
-                boolean userExists = userRepository.existsById(senderId);
-                if (!userExists)
-                {
-                    User user = new User();
-                    user.setId(senderId);
-                    userRepository.save(user);
-                    sendTextMessage(senderId, "Teretulemast!");
-                    System.out.println("Alustuseks loo uus parameeter, et oskaksime autosi teile soovitada");
-                }
-
-                //sendFirstOptions(senderId);
-                sendOptions(senderId);
-
-            } catch (MessengerApiException | MessengerIOException | IOException e)
-            {
-                handleSendException(e);
+                User user = new User();
+                user.setId(senderId);
+                userRepository.save(user);
+                sendClient.sendTextMessage(senderId, "Teretulemast!");
+                System.out.println("Alustuseks loo uus parameeter, et oskaksime autosi teile soovitada");
             }
+
+            sendClient.sendOptions(senderId);
+
         };
     }
 
@@ -153,75 +136,36 @@ public class CallBackHandler
             final String messageId = event.getMid();
             final String quickReplyPayload = event.getQuickReply().getPayload();
             logger.info("Received quick reply for message '{}' with payload '{}'", messageId, quickReplyPayload);
-            try
+
+            if (userRepository.existsById(senderId))
             {
-                if (userRepository.existsById(senderId))
+                User user = userRepository.findById(senderId).get();
+                if (quickReplyPayload.equals(OPTION_PROFILE))
                 {
-                    User user = userRepository.findById(senderId).get();
-                    if (quickReplyPayload.equals(OPTION_PROFILE))
+                    sendClient.sendTextMessage(senderId, "You can change your profile settings here:\n " + baseUrl + "main?userId=" + senderId);
+                } else if (quickReplyPayload.equals(OPTION_CREATE_PARAMETER))
+                {
+                    sendClient.sendTextMessage(senderId, "Create new parameter here: \n " + baseUrl + "main?userId=" + senderId);
+                } else if (quickReplyPayload.equals(OPTION_SEARCH))
+                {
+                    sendClient.sendTextMessage(senderId, "Search: \n " + baseUrl + "main");
+                } else
+                {
+                    var paraId = Long.parseLong(quickReplyPayload);
+                    if (kuulutusParametersRepository.existsById(paraId))
                     {
-                        sendTextMessage(senderId, "You can change your profile settings here:\n " + baseUrl + "main?userId=" + senderId);
-                    } else if (quickReplyPayload.equals(OPTION_CREATE_PARAMETER))
-                    {
-                        sendTextMessage(senderId, "Create new parameter here: \n " + baseUrl + "main?userId=" + senderId);
-                    } else if (quickReplyPayload.equals(OPTION_SEARCH))
-                    {
-                        sendTextMessage(senderId, "Search: \n " + baseUrl + "main");
+                        var parameter = kuulutusParametersRepository.findById(paraId).get();
+                        sendClient.sendTextMessage(senderId, parameter.toString());
+                        sendClient.sendTextMessage(senderId, "Muuda või vaata kuulutusi: \n " + baseUrl + "main?userId=" + senderId + "&paraId=" + paraId);
                     } else
                     {
-                        var paraId = Long.parseLong(quickReplyPayload);
-                        if (kuulutusParametersRepository.existsById(paraId))
-                        {
-                            var parameter = kuulutusParametersRepository.findById(paraId).get();
-                            sendTextMessage(senderId, parameter.toString());
-                            sendTextMessage(senderId, "Muuda või vaata kuulutusi: \n " + baseUrl + "main?userId=" + senderId + "&paraId=" + paraId);
-                        } else
-                        {
-                            sendTextMessage(senderId, "Error");
-                        }
+                        sendClient.sendTextMessage(senderId, "Error");
                     }
                 }
-                sendOptions(senderId);
-                //sendFirstOptions(senderId);
-            } catch (Exception e)
-            {
-                e.printStackTrace();
             }
-
+            sendClient.sendOptions(senderId);
         };
     }
-
-
-    private void sendTextMessage(Long recipientId, String text)
-    {
-        try
-        {
-            this.sendClient.sendTextMessage(recipientId.toString(), text);
-        } catch (MessengerApiException e)
-        {
-            e.printStackTrace();
-        } catch (MessengerIOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-//    void sendFirstOptions(Long recipientId) throws MessengerApiException, MessengerIOException
-//    {
-//
-//        var quickReplies = QuickReply.newListBuilder()
-//                .addTextQuickReply("Profiil", OPTION_PROFILE).toList()
-//                .addTextQuickReply("Uus otsing", OPTION_CREATE_PARAMETER).toList()
-//                .addTextQuickReply("Search", OPTION_SEARCH).toList();
-//        var parameters = kuulutusParametersRepository.findByUserId(recipientId);
-//        for (Parameter parameter : parameters)
-//        {
-//            var name = parameter.getName() != null && !parameter.getName().equals("") ? parameter.getName() : parameter.getId().toString();
-//            quickReplies = quickReplies.addTextQuickReply(name, parameter.getId().toString()).toList();
-//        }
-//        this.sendClient.sendTextMessage(recipientId.toString(), "Mida soovid teha?", quickReplies.build());
-//    }
-
 
     private void handleSendException(Exception e)
     {
@@ -241,28 +185,15 @@ public class CallBackHandler
 
             logger.info("Received postback for user '{}' and page '{}' with payload '{}' at '{}'",
                     senderId, recipientId, payload, timestamp);
-            try
+
+            boolean userExists = userRepository.existsById(senderId);
+            if (!userExists)
             {
-                boolean userExists = userRepository.existsById(senderId);
-                if (!userExists)
-                {
-                    User user = new User();
-                    user.setId(senderId);
-                    userRepository.save(user);
-                    sendTextMessage(senderId, "Tere tulemast!");
-                    //sendTextMessage(senderId, "Vali auto parameetrid");
-                    sendOptions(senderId);
-                    //sendFirstOptions(senderId);
-                }
-            } catch (MessengerApiException e)
-            {
-                e.printStackTrace();
-            } catch (MessengerIOException e)
-            {
-                e.printStackTrace();
-            } catch (IOException e)
-            {
-                e.printStackTrace();
+                User user = new User();
+                user.setId(senderId);
+                userRepository.save(user);
+                sendClient.sendTextMessage(senderId, "Tere tulemast!");
+                sendClient.sendOptions(senderId);
             }
         };
     }
@@ -299,7 +230,7 @@ public class CallBackHandler
             logger.info("Received authentication for user '{}' and page '{}' with pass through param '{}' at '{}'",
                     senderId, recipientId, passThroughParam, timestamp);
 
-            sendTextMessage(senderId, "Authentication successful");
+            sendClient.sendTextMessage(senderId, "Authentication successful");
         };
     }
 
@@ -366,21 +297,4 @@ public class CallBackHandler
     }
 
 
-
-    private void sendOptions(Long recipientId) throws MessengerApiException, MessengerIOException, IOException
-    {
-        var buttons = Button.newListBuilder()
-                .addUrlButton("Muuda parameetreid", baseUrl+"main?userId="+recipientId).toList()
-                .addUrlButton("Otsi", baseUrl+"main").toList();
-
-        final GenericTemplate genericTemplate = GenericTemplate.newBuilder()
-                .addElements()
-                .addElement("Mida soovid teha?")
-                .buttons(buttons.build())
-                .toList()
-                .done()
-                .build();
-
-        this.sendClient.sendTemplate(recipientId.toString(), genericTemplate);
-    }
 }

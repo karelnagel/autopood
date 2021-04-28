@@ -5,7 +5,7 @@ import com.example.autopood.DTOs.ParameterDto;
 import com.example.autopood.models.Kuulutus;
 import com.example.autopood.repositorities.KuulutusRepository;
 import com.example.autopood.repositorities.ParameterRepository;
-import com.example.autopood.query.KuulutusSearch;
+import com.example.autopood.components.KuulutusSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

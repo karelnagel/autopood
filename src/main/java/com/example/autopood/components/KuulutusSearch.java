@@ -1,7 +1,8 @@
-package com.example.autopood.query;
+package com.example.autopood.components;
 
 import com.example.autopood.DTOs.ParameterDto;
 import com.example.autopood.models.Kuulutus;
+import com.example.autopood.query.KuulutusCriteria;
 import com.example.autopood.repositorities.KuulutusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -71,7 +72,10 @@ public class KuulutusSearch
         if (isNotNullOrEmpty(para.getCountry()))
             kuulutused.removeIf(k -> !k.getPood().getCountry().equalsIgnoreCase(para.getCountry())); //Todo find out how to move country to query
 
-        if (sortBy == null || sortBy.equals("") || sortBy.contains("date"))
+        if (sortBy == null || sortBy.equals(""))
+            sortBy = "datedesc";
+
+        if (sortBy.contains("date"))
             Collections.sort(kuulutused, Comparator.comparing(Kuulutus::getDate));
 
         else if (sortBy.contains("year"))
@@ -83,7 +87,7 @@ public class KuulutusSearch
         else if (sortBy.contains("price"))
             Collections.sort(kuulutused, Comparator.comparing(Kuulutus::getPrice));
 
-        if (sortBy!=null && sortBy.contains("desc"))
+        if (sortBy != null && sortBy.contains("desc"))
             Collections.reverse(kuulutused);
 
         return kuulutused;
