@@ -50,3 +50,13 @@ p {
     width: -moz-available;
     width: -webkit-fill-available;
 }
+
+.picture {
+    transition: transform 250ms;
+    height: 200px;
+    width: 250px;
+}
+
+.picture:hover {
+    width: 400px ;
+}

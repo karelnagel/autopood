@@ -10,7 +10,7 @@ class Search extends Component {
         this.onChange = this.onChange.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
+    getDerivedStateFromProps(nextProps,state) {
         if (nextProps.parameter)
             this.state = nextProps.parameter;
         else
@@ -47,31 +47,25 @@ class Search extends Component {
         return (
             <div style={searchColumn} id="search">
                 <form onSubmit={this.onSubmit}>
-                    <TextField
-                        type="text"
-                        name="name"
-                        label="Name"
-                        style={input}
-                        className='full-width'
-                        value={this.state.name}
-                        onChange={this.onChange}
-                    />
-                    <br/>
-
-                    <TextField
-                        type="text"
+                    <InputLabel style={selectInput} id="type-select-label">Tüüp</InputLabel>
+                    <Select
+                        displayEmpty
+                        labelId="type-select-label"
                         name="type"
-                        label="Type"
-                        style={input}
+                        style={selectInput}
                         className='full-width'
                         value={this.state.type}
                         onChange={this.onChange}
-                    />
+                    >
+                        <MenuItem value="">Kõik</MenuItem>
+                        <MenuItem value='car'>Auto</MenuItem>
+                        <MenuItem value='van'>Buss</MenuItem>
+                    </Select>
                     <br/>
                     <TextField
                         type="text"
                         name="brand"
-                        label="Brand"
+                        label="Mark"
                         style={input}
                         className='full-width'
                         value={this.state.brand}
@@ -82,25 +76,15 @@ class Search extends Component {
                     <TextField
                         type="text"
                         name="model"
-                        label="Model"
+                        label="Mudel"
                         style={input}
                         className='full-width'
                         value={this.state.model}
                         onChange={this.onChange}
                     />
                     <br/>
-                    <TextField
-                        type="text"
-                        name="fuelType"
-                        label="Fuel type"
-                        style={input}
-                        className='full-width'
-                        value={this.state.fuelType}
-                        onChange={this.onChange}
-                    />
                     <br/>
-                    <br/>
-                    <InputLabel style={selectInput} id="country-select-label">Country</InputLabel>
+                    <InputLabel style={selectInput} id="country-select-label">Riik</InputLabel>
                     <Select
                         displayEmpty
                         labelId="country-select-label"
@@ -116,11 +100,77 @@ class Search extends Component {
                     </Select>
 
                     <br/>
+                    <br/>
+                    <InputLabel style={selectInput} id="fuel-select-label">Kütus</InputLabel>
+                    <Select
+                        displayEmpty
+                        labelId="fuel-select-label"
+                        name="fuelType"
+                        style={selectInput}
+                        className='full-width'
+                        value={this.state.fuelType}
+                        onChange={this.onChange}
+                    >
+                        <MenuItem value="">Kõik</MenuItem>
+                        <MenuItem value='Petrol'>Bensiin</MenuItem>
+                        <MenuItem value='Diesel'>Diisel</MenuItem>
+                        <MenuItem value='Hybrid'>Hübriid</MenuItem>
+                        <MenuItem value='Gas'>Gaas</MenuItem>
+                        <MenuItem value='Electric'>Elekter</MenuItem>
+                    </Select>
+
+                    <br/>
+                    <br/>
+                    <InputLabel style={selectInput} id="gear-select-label">Käigukast</InputLabel>
+                    <Select
+                        displayEmpty
+                        labelId="fuel-select-label"
+                        name="gearType"
+                        style={selectInput}
+                        className='full-width'
+                        value={this.state.gearType}
+                        onChange={this.onChange}
+                    >
+                        <MenuItem value="">Kõik</MenuItem>
+                        <MenuItem value='Automatic'>Automaat</MenuItem>/
+                        <MenuItem value='Manual'>Manuaal</MenuItem>
+                    </Select>
+
+                    <br/>
+                    <br/>
+                    <InputLabel style={selectInput} id="body-select-label">Kere</InputLabel>
+
+                    <Select
+                        displayEmpty
+                        labelId="body-select-label"
+                        name="bodyType"
+                        style={selectInput}
+                        className='full-width'
+                        value={this.state.bodyType}
+                        onChange={this.onChange}
+                    >
+                        <MenuItem value="">Kõik</MenuItem>
+                        <MenuItem value='Sedan'>Sedaan</MenuItem>/
+                        <MenuItem value='Hatchback'>Luukpära</MenuItem>
+                        <MenuItem value='Cabriolet'>Kabriolett</MenuItem>
+                        <MenuItem value='Touring'>Buss</MenuItem>
+                        <MenuItem value='Station wagon'>Universaal</MenuItem>
+                        <MenuItem value='Minivan'>Väike buss</MenuItem>
+                        <MenuItem value='MPV'>Linnamaastur</MenuItem>
+                        <MenuItem value='Commercial vehicle'>Tarbesõiduk</MenuItem>
+                        <MenuItem value='Moped car'>Mopeedauto</MenuItem>
+                        <MenuItem value='Caravan'>Karavan</MenuItem>
+                        <MenuItem value='Coupé'>Kupee</MenuItem>
+                        <MenuItem value='All-terrain'>Maastik</MenuItem>
+                    </Select>
+
+                    <br/>
+                    <br/>
                     <div style={{display: 'flex'}}>
                         <TextField
                             type="number"
                             name="minPrice"
-                            label="Min price"
+                            label="Min hind"
                             style={input}
                             className='full-width'
                             value={this.state.minPrice}
@@ -130,7 +180,7 @@ class Search extends Component {
                         <TextField
                             type="number"
                             name="maxPrice"
-                            label="Max price"
+                            label="Max hind"
                             style={input}
                             className='full-width'
                             value={this.state.maxPrice}
@@ -141,7 +191,7 @@ class Search extends Component {
                         <TextField
                             type="number"
                             name="minYear"
-                            label="Min year"
+                            label="Min aasta"
                             style={input}
                             className='full-width'
                             value={this.state.minYear}
@@ -151,7 +201,7 @@ class Search extends Component {
                         <TextField
                             type="number"
                             name="maxYear"
-                            label="Max year"
+                            label="Max aasta"
                             style={input}
                             className='full-width'
                             value={this.state.maxYear}
@@ -162,7 +212,7 @@ class Search extends Component {
                         <TextField
                             type="number"
                             name="minMileage"
-                            label="Min mileage"
+                            label="Min läbisõit"
                             style={input}
                             className='full-width'
                             value={this.state.minMileage}
@@ -172,7 +222,7 @@ class Search extends Component {
                         <TextField
                             type="number"
                             name="maxMileage"
-                            label="Max mileage"
+                            label="Max läbisõit"
                             style={input}
                             className='full-width'
                             value={this.state.maxMileage}
@@ -183,7 +233,7 @@ class Search extends Component {
                         <TextField
                             type="number"
                             name="minEngineKW"
-                            label="Min engine kw"
+                            label="Min mootori kw"
                             style={input}
                             className='full-width'
                             value={this.state.minEngineKW}
@@ -193,7 +243,7 @@ class Search extends Component {
                         <TextField
                             type="number"
                             name="maxEngineKW"
-                            label="Max engine kw"
+                            label="Max mootori kw"
                             style={input}
                             className='full-width'
                             value={this.state.maxEngineKW}
@@ -204,7 +254,7 @@ class Search extends Component {
                         <TextField
                             type="number"
                             name="minEngineSize"
-                            label="Min engine size"
+                            label="Min mootori L"
                             style={input}
                             className='full-width'
                             value={this.state.minEngineSize}
@@ -214,7 +264,7 @@ class Search extends Component {
                         <TextField
                             type="number"
                             name="maxEngineSize"
-                            label="Max engine size"
+                            label="Max mootori L"
                             style={input}
                             className='full-width'
                             value={this.state.maxEngineSize}
@@ -223,7 +273,7 @@ class Search extends Component {
 
                     </div>
                     <br/>
-                    <InputLabel style={selectInput} id="sortBy-select-label">Sort By</InputLabel>
+                    <InputLabel style={selectInput} id="sortBy-select-label">Sordi</InputLabel>
                     <Select
                         displayEmpty
                         labelId="sortBy-select-label"
@@ -245,12 +295,12 @@ class Search extends Component {
                     <br/>
                     <div style={buttons}>
                         {userId ? <Button type="submit" name="save">
-                            {this.state.id == 0 ? "Save" : "Update"}
+                            {this.state.id == 0 ? "Salvesta" : "Uuenda"}
                         </Button> : null}
                         {
                             this.state.id == 0 ? null :
                                 <Button type="submit" name="delete">
-                                    Delete
+                                    Kustuta
                                 </Button>
                         }
                         <Button type="submit" name="search">
@@ -282,6 +332,8 @@ const emptyParameter = {
     brand: '',
     model: '',
     fuelType: '',
+    gearType: '',
+    bodyType: '',
     country: '',
     minPrice: 0.0,
     maxPrice: 0.0,

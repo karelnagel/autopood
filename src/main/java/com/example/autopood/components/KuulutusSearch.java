@@ -56,14 +56,14 @@ public class KuulutusSearch
         spec = CompareString(spec, "brand", para.getBrand());
         spec = CompareString(spec, "model", para.getModel());
         spec = CompareString(spec, "type", para.getType());
-        spec = CompareString(spec, "body_type", para.getBodyType());
-        spec = CompareString(spec, "gear_type", para.getGearType());
-        spec = CompareString(spec, "fuel_type", para.getFuelType());
+        spec = CompareString(spec, "bodyType", para.getBodyType());
+        spec = CompareString(spec, "gearType", para.getGearType());
+        spec = CompareString(spec, "fuelType", para.getFuelType());
 
         spec = CompareDouble(spec, "price", para.getMinPrice(), para.getMaxPrice());
         spec = CompareDouble(spec, "year", para.getMinYear().doubleValue(), para.getMaxYear().doubleValue());
         spec = CompareDouble(spec, "mileage", para.getMinMileage(), para.getMaxMileage());
-        spec = CompareDouble(spec, "engine_size", para.getMinEngineSize().doubleValue(), para.getMinEngineSize().doubleValue());
+        spec = CompareDouble(spec, "engineSize", para.getMinEngineSize().doubleValue(), para.getMinEngineSize().doubleValue());
         spec = CompareDouble(spec, "enginekw", para.getMinEngineKW().doubleValue(), para.getMaxEngineKW().doubleValue());
 
 

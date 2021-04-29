@@ -8,7 +8,7 @@ class Kuulutused extends Component {
         return <div style={kuulutusedColumn} className='full-width' id="kuulutused">{
             this.props.kuulutused.map((kuulutus) => (
                 <a href={kuulutus.link} style={isMobile ? kuulutusDivPhone : kuulutusDiv} key={kuulutus.id}>
-                    {isMobile ? null : <img src={kuulutus.picture ? kuulutus.picture : "https://picsum.photos/200"}
+                    {isMobile ? null : <img className="picture" src={kuulutus.picture ? kuulutus.picture : "favicon.png"}
                                             style={picture}></img>}
                     <div>
                         <div style={flex}>
@@ -16,7 +16,7 @@ class Kuulutused extends Component {
                             <p style={price}>{kuulutus.price}€</p>
                         </div>
                         <div style={flex}>
-                            {isMobile ? <img src={kuulutus.picture ? kuulutus.picture : "https://picsum.photos/200"}
+                            {isMobile ? <img src={kuulutus.picture ? kuulutus.picture : "favicon.png"}
                                              style={picturePhone}></img> : null}
                             <div style={isMobile ? null : flex}>
                                 <div style={section}>
@@ -44,16 +44,15 @@ class Kuulutused extends Component {
 }
 
 const section = {
-    width: '300px',
-    marginRight: '20px',
+    maxWidth: '200px',
+    marginRight: '15px',
 }
 const kuulutusDiv = {
     display: 'flex',
     background: "#FFFFFF",
     borderRadius: "15px",
     margin: "20px 20px",
-    padding: "10px",
-    position: 'relative'
+    position: 'relative',
 }
 const price = {
     position: "absolute",
@@ -73,7 +72,7 @@ const flex = {
 }
 const bold = {
     fontWeight: "bold",
-    width: '80%',
+    width: '70%',
     whiteSpace: 'inherit',
     lineHeight: 'inherit',
 }
@@ -82,21 +81,21 @@ const alignRight = {
 }
 const kuulutusedColumn = {
     backgroundColor: "#C4C4C4",
+    overflowY:"hidden",
 }
 const picture = {
     backgroundColor: "#C4C4C4",
     borderRadius: "15px",
-    height: "200px",
-    width: "200px",
-    marginRight: "10px",
-
+    marginRight: "20px",
+    objectFit: "cover",
 }
 const picturePhone = {
     backgroundColor: "#C4C4C4",
     borderRadius: "15px",
     height: "150px",
-    width: "150px",
+    width: "180px",
     marginRight: "10px",
+    objectFit: "cover",
 }
 Kuulutused.propTypes = {
     kuulutused: PropTypes.array.isRequired
