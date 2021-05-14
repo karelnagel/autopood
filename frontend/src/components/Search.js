@@ -10,11 +10,11 @@ class Search extends Component {
         this.onChange = this.onChange.bind(this);
     }
 
-    getDerivedStateFromProps(nextProps,state) {
+    componentWillReceiveProps(nextProps) {
         if (nextProps.parameter)
-            this.state = nextProps.parameter;
+            this.setState(nextProps.parameter)
         else
-            this.state = emptyParameter;
+            this.setState(emptyParameter);
     }
 
     onChange(event) {

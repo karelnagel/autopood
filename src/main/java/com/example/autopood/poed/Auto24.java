@@ -103,7 +103,6 @@ public class Auto24 extends ScrapePood
 
             if (map.containsKey("Engine:"))
             {
-
                 var engine = map.get("Engine:").strip();
                 if (engine.contains(" ("))
                 {

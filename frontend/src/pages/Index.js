@@ -11,10 +11,10 @@ export class Index extends Component {
         return (
                 <div style={main} className='fancy-color'>
                     <div style={content}>
-                        <h1>Car Watch</h1>
+                        <h1>CarWatch</h1>
                         <br/>
                         <br/>
-                        <p>Parim auto ostu portaal maailmas</p>
+                        <p>Leia endale soodsaim auto.</p>
                         <br/>
                         <Button variant='contained' href="http://m.me/CarVVatch">Tee oma konto siin</Button>
                         <br/>
