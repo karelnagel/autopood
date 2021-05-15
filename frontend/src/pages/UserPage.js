@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import Header from '../../../frontend/src/components/layouts/Header';
+import Header from '../components/Header';
 import User from '../components/User';
 import axios from "axios";
 import Search from "../components/Search";

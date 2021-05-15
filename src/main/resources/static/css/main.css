@@ -3,20 +3,22 @@ html, body{
     margin: 0;
     padding: 0;
 }
+
 header{
     background: linear-gradient(90.15deg, #FFB03A 0%, #FF3A3A 100%);
     text-align: center;
 }
-.fancy-color{
-    background: linear-gradient(90.15deg, #FFB03A 0%, #FF3A3A 100%) !important;
-}
+
+
+
 h1{
-    font-family: Roboto;
+    color: #e0e0e0;
+    font-family: monospace;
     font-style: normal;
     font-weight: bold;
-    font-size: 32px;
+    font-size: 65px;
     line-height: 32px;
-    padding: 15px;
+    padding: 5px;
 }
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
