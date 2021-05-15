@@ -38,8 +38,8 @@ const txt1={
 const btn={
 }
 const logostyle={
-    height: "250px",
-    width: "250px",
+    height: "200px",
+    width: "200px",
     margin: "5%",
 }
 const fancycolor={
