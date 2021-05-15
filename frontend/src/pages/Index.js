@@ -16,9 +16,8 @@ export class Index extends Component {
                         <img style={logostyle} src={logo}/>
                         <h1>CarWatch</h1>
                         <br/>
-                        <p style={txt1}>Meie abiga saate auto ostul parima tehingu!
+                        <p style={txt1}>Meie abiga saate autot ostes parima tehingu!
                             <br/>
-
                         </p>
                         <br/>
                         <Button style={btn} variant='contained' href="http://m.me/CarVVatch">Tee oma konto siin</Button>
@@ -39,14 +38,14 @@ const txt1={
 const btn={
 }
 const logostyle={
-    height: "200px",
-    width: "200px",
+    height: "250px",
+    width: "250px",
+    margin: "5%",
 }
 const fancycolor={
     height:"100vh",
     width:"100vw",
     backgroundImage: "linear-gradient(to right, rgba(100,50,0,0.4), rgba(0,0,0,0.4))",
-    display:'flex',
 }
 const main={
     backgroundImage: "url(" + Background + ")",
@@ -55,6 +54,7 @@ const main={
     textAlign:"center",
     backgroundRepeat: 'no-repeat',
     backgroundSize: "cover",
+    justifyContent: "center",
 }
 const content={
     margin:'auto',

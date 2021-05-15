@@ -2,6 +2,8 @@
 html, body{
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+
 }
 
 header{
@@ -44,9 +46,9 @@ main {
         display: flex;
     }
 }
+
+
 p {
-    line-height: 8px;
-    white-space: nowrap;
 }
 .full-width {
     width: -moz-available;
@@ -55,10 +57,12 @@ p {
 
 .picture {
     transition: transform 250ms;
-    height: 200px;
-    width: 250px;
+    height: 35%;
+    width: 35%;
+    display: flex;
 }
 
 .picture:hover {
     width: 400px ;
+    display: flex;
 }
