@@ -20,6 +20,7 @@ const header = {
     padding: '0 15px',
     fontWeight: 'bold',
     fontSize:'24px',
+    lineHeight: "10px",
 }
 const icon={
     marginLeft:'auto',

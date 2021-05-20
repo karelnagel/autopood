@@ -24,7 +24,7 @@ class User extends Component {
 }
 
 const userSection = {
-    minWidth: '300px',
+    minWidth: '250px',
     padding: '15px'
 }
 const welcomeMessage = {

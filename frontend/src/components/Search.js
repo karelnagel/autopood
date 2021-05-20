@@ -9,12 +9,9 @@ class Search extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.onChange = this.onChange.bind(this);
     }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.parameter)
-            this.setState(nextProps.parameter)
-        else
-            this.setState(emptyParameter);
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps) return nextProps;
+        else return emptyParameter;
     }
 
     onChange(event) {
@@ -321,7 +318,7 @@ const buttons = {
     display: 'flex',
 }
 const searchColumn = {
-    minWidth: '300px',
+    minWidth: '250px',
     background: '#EBEBEB',
     padding: "10px"
 }

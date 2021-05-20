@@ -7,43 +7,48 @@ class Kuulutused extends Component {
     render() {
         const isMobile = window.innerWidth < 1024;
         return <div style={kuulutusedColumn} className='full-width' id="kuulutused">{
-            this.props.kuulutused.map((kuulutus) => (
-                <a href={kuulutus.link} style={isMobile ? kuulutusDivPhone : kuulutusDiv} key={kuulutus.id}>
-                    {isMobile ? null : <img className="picture" src={kuulutus.picture ? kuulutus.picture : "/logo.png"}
-                                            style={picture}></img>}
-                    <div>
-                        <div style={flex}>
-                            <p style={bold}>{kuulutus.brand} {kuulutus.model}</p>
-                            <p style={price}>{kuulutus.price}€</p>
-                        </div>
-                        <div style={flex}>
-                            {isMobile ? <img src={kuulutus.picture ? kuulutus.picture : "/logo.png"}
-                                             style={picturePhone}></img> : null}
-                            <div style={isMobile ? null : flex}>
-                                <div style={section}>
-                                    {kuulutus.year ? <p>Aasta: {kuulutus.year}</p> : null}
-                                    {kuulutus.pood ? <p>Pood: {kuulutus.pood}</p> : null}
-                                    {kuulutus.type ? <p>Type: {kuulutus.type}</p> : null}
-                                </div>
-                                <div style={section}>
-                                    {kuulutus.bodyType ? <p>Body type: {kuulutus.bodyType}</p> : null}
-                                    {kuulutus.gearType ? <p>Gear type: {kuulutus.gearType}</p> : null}
-                                    {kuulutus.country ? <p>Country: {kuulutus.country}</p> : null}
-                                </div>
-                                <div style={section}>
-                                    {kuulutus.mileage ? <p>Mileage: {kuulutus.mileage}km</p> : null}
-                                    <p>Engine: {kuulutus.engineSize}L {kuulutus.engineKW}kw</p>
-                                </div>
+            this.props.kuulutused.length != 0 ?
+                this.props.kuulutused.map((kuulutus) => (
+                    <a href={kuulutus.link} style={isMobile ? kuulutusDivPhone : kuulutusDiv} key={kuulutus.id}>
+                        {isMobile ? null :
+                            <img className="picture" src={kuulutus.picture ? kuulutus.picture : "/logo.png"}
+                                 style={picture}></img>}
+                        <div>
+                            <div style={flex}>
+                                <p style={bold}>{kuulutus.brand} {kuulutus.model}</p>
+                                <p style={price}>{kuulutus.price}€</p>
                             </div>
+                            <div style={flex}>
+                                {isMobile ? <img src={kuulutus.picture ? kuulutus.picture : "/logo.png"}
+                                                 style={picturePhone}></img> : null}
+                                <div style={isMobile ? null : flex}>
+                                    <div style={section}>
+                                        {kuulutus.year ? <p>Aasta: {kuulutus.year}</p> : null}
+                                        {kuulutus.pood ? <p>Pood: {kuulutus.pood}</p> : null}
+                                        {kuulutus.type ? <p>Type: {kuulutus.type}</p> : null}
+                                    </div>
+                                    <div style={section}>
+                                        {kuulutus.bodyType ? <p>Body type: {kuulutus.bodyType}</p> : null}
+                                        {kuulutus.gearType ? <p>Gear type: {kuulutus.gearType}</p> : null}
+                                        {kuulutus.country ? <p>Country: {kuulutus.country}</p> : null}
+                                    </div>
+                                    <div style={section}>
+                                        {kuulutus.mileage ? <p>Mileage: {kuulutus.mileage}km</p> : null}
+                                        <p>Engine: {kuulutus.engineSize}L {kuulutus.engineKW}kw</p>
+                                    </div>
+                                </div>
 
+                            </div>
                         </div>
-                    </div>
-                </a>
-            ))
+                    </a>
+                )) : <h3 style={startMessage}>Sisesta soovitud parameetrid ja vajuta otsi!</h3>
         }</div>
     }
 }
 
+const startMessage = {
+    textAlign: "center"
+}
 const section = {
     maxWidth: '200px',
     marginRight: '15px',
@@ -79,7 +84,7 @@ const bold = {
 }
 const kuulutusedColumn = {
     backgroundColor: "#C4C4C4",
-    overflowY:"hidden",
+    overflowY: "hidden",
 }
 const picture = {
     backgroundColor: "#C4C4C4",
