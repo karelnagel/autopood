@@ -1,19 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&display=swap");
-html, body{
+
+html, body {
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
-
 }
 
-header{
+header {
     background: linear-gradient(90.15deg, #FFB03A 0%, #FF3A3A 100%);
     text-align: center;
 }
 
+.fancy-color {
+    background: linear-gradient(90.15deg, #FFB03A 0%, #FF3A3A 100%) !important;
+}
 
-
-h1{
+h1 {
     color: #e0e0e0;
     font-family: monospace;
     font-style: normal;
@@ -22,6 +23,7 @@ h1{
     line-height: 32px;
     padding: 5px;
 }
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -33,10 +35,12 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
 a {
     text-decoration: none !important;
     color: black;
 }
+
 main {
     display: block;
 }
@@ -47,9 +51,6 @@ main {
     }
 }
 
-
-p {
-}
 .full-width {
     width: -moz-available;
     width: -webkit-fill-available;
@@ -57,12 +58,10 @@ p {
 
 .picture {
     transition: transform 250ms;
-    height: 35%;
-    width: 35%;
-    display: flex;
+    height: 200px;
+    width: 250px;
 }
 
 .picture:hover {
-    width: 400px ;
-    display: flex;
+    width: 400px;
 }

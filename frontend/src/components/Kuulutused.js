@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
 
+
 class Kuulutused extends Component {
 
     render() {
@@ -8,7 +9,7 @@ class Kuulutused extends Component {
         return <div style={kuulutusedColumn} className='full-width' id="kuulutused">{
             this.props.kuulutused.map((kuulutus) => (
                 <a href={kuulutus.link} style={isMobile ? kuulutusDivPhone : kuulutusDiv} key={kuulutus.id}>
-                    {isMobile ? null : <img className="picture" src={kuulutus.picture ? kuulutus.picture : "favicon.png"}
+                    {isMobile ? null : <img className="picture" src={kuulutus.picture ? kuulutus.picture : "/logo.png"}
                                             style={picture}></img>}
                     <div>
                         <div style={flex}>
@@ -16,7 +17,7 @@ class Kuulutused extends Component {
                             <p style={price}>{kuulutus.price}€</p>
                         </div>
                         <div style={flex}>
-                            {isMobile ? <img src={kuulutus.picture ? kuulutus.picture : "favicon.png"}
+                            {isMobile ? <img src={kuulutus.picture ? kuulutus.picture : "/logo.png"}
                                              style={picturePhone}></img> : null}
                             <div style={isMobile ? null : flex}>
                                 <div style={section}>
@@ -75,9 +76,6 @@ const bold = {
     width: '70%',
     whiteSpace: 'inherit',
     lineHeight: 'inherit',
-}
-const alignRight = {
-    marginLef: "auto",
 }
 const kuulutusedColumn = {
     backgroundColor: "#C4C4C4",

@@ -1,8 +1,5 @@
 import React, {Component} from "react";
-import Header from "../components/Header";
 import {Button} from "@material-ui/core";
-import logo from '../components/logoroundCW.png';
-import Background from '../components/newbg.jpg';
 export class Index extends Component {
     constructor(props) {
         super(props);
@@ -13,7 +10,7 @@ export class Index extends Component {
                 <div style={main}>
                     <div style={fancycolor}>
                     <div style={content}>
-                        <img style={logostyle} src={logo}/>
+                        <img style={logostyle} src="favicon.png"/>
                         <h1>CarWatch</h1>
                         <br/>
                         <p style={txt1}>Meie abiga saate autot ostes parima tehingu!
@@ -48,7 +45,7 @@ const fancycolor={
     backgroundImage: "linear-gradient(to right, rgba(100,50,0,0.4), rgba(0,0,0,0.4))",
 }
 const main={
-    backgroundImage: "url(" + Background + ")",
+    backgroundImage: "url(/background.jpg)",
     height:"100%",
     width:"100%",
     textAlign:"center",

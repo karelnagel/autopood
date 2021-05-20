@@ -11,7 +11,7 @@ public class WebMainController {
         return "index";
     }
 
-    @RequestMapping(value = "/main")
+    @RequestMapping(value = "main")
     public String main() {
         return "index";
     }
