@@ -38,12 +38,15 @@ public abstract class ScrapePood extends AbstractPood
         {
             List<String> returnValue = new ArrayList<>();
             var document = Jsoup.connect(url).get();
+            //System.out.println(document);
             var elements = document.select(kuulutuseElement);
             for (Element element : elements)
             {
                 var url = scrapeLink(element);
-                if (url.equals(getViimaneKuulutus()) || elements.indexOf(element) == 1 && getViimaneKuulutus() == null)
+                if (url.equals(getViimaneKuulutus()) || elements.indexOf(element) == 1 && getViimaneKuulutus() == null){
+                    //System.out.println("null on");
                     break;
+                }
                 returnValue.add(url);
             }
             return returnValue;

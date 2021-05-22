@@ -103,9 +103,21 @@ public class Nettiauto extends AbstractPood
                 String fuelType = fuel.get("en").toString();
                 //mileage;
                 int mileage = parseInt(kuulutus.get("kilometers").toString());
-
-
-                newListings.add(new Kuulutus(type,mark,model,bodyType,gearType,year,price,link,engineKW,engineSize,fuelType,mileage));
+                //making the listing
+                var listing = new Kuulutus(type,mark,model,bodyType,gearType,year,price,link,engineKW,engineSize,fuelType,mileage);
+                //picture
+                try {
+                    var picturereq =  kuulutus.getJSONArray("images");
+                    var picture = picturereq.get(0).toString().strip().split(",")[7].replaceAll("\"medium\":\\{\"url\":\"","").replaceAll("\"","");
+                    //System.out.println(picture);
+                    //var width = picturereq.get(0).toString().strip().split(",")[8].replaceAll("\"width\":","").replaceAll("\"","");
+                    //var height = picturereq.get(0).toString().strip().split(",")[9].replaceAll("\"height\":","").replaceAll("\"","").replaceAll("}","");
+                    //System.out.println(width+height);
+                    listing.setPicture(picture);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                newListings.add(listing);
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (NumberFormatException e) {

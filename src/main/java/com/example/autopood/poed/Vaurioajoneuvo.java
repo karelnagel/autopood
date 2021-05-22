@@ -50,18 +50,12 @@ public class Vaurioajoneuvo extends ScrapePood
             kuulutus.setYear(Integer.parseInt(map.get("Käyttöönottovuosi")));
             kuulutus.setLink(url);
             return kuulutus;
-        } catch (NumberFormatException e)
+        } catch (NumberFormatException | IndexOutOfBoundsException e)
         {
             System.out.println("Cant parse");
-            return null;
-        } catch (IndexOutOfBoundsException e)
-        {
-            System.out.println("Cant parse");
-            return null;
         } catch (NullPointerException e)
         {
             System.out.println("Element not found");
-            return null;
         } catch (IOException e)
         {
             e.printStackTrace();
