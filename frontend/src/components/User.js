@@ -6,10 +6,7 @@ import {Button} from "@material-ui/core";
 class User extends Component {
 
     render() {
-        const user = this.props.user;
         return <div style={userSection} id='user'>
-            <h2 style={welcomeMessage}>Tere {user.firstName} {user.lastName}!</h2>
-            <br/>
             <p>Sinu salvestatud otsingud:</p>
             {this.props.user.parameters.map((parameter) => (
                 <Parameter parameter={parameter} key={parameter.id} selected={this.props.selected} updateSearch={this.props.updateSearch}/>

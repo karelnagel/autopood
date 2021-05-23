@@ -9,9 +9,14 @@ class Search extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.onChange = this.onChange.bind(this);
     }
+
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps) return nextProps;
-        else return emptyParameter;
+        if (prevState && nextProps && nextProps.parameter) {
+            if (prevState.id == nextProps.parameter.id) return prevState;
+        }
+        if (nextProps.parameter) return nextProps.parameter;
+        else if (prevState.id) return emptyParameter;
+        else return prevState;
     }
 
     onChange(event) {
