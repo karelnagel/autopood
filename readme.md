@@ -1,14 +1,15 @@
-Todo:
-kuulutuste sortimine ja pagination,
-Cant't parse ja element not found errorid eemaldada aind ühe välja jätab tühjaks mitte ei tee üldse kuulutust,
-kuulutuse query juurde parameetreid juurde body type jne,
-messenger s]numite lingid nupuna,
-video,
-pdf,
-get user name when messenger starts
+# Carwatch
+
+Carwatch on veebilehkülg, mis kogub kokku automüügikuulutused üle Euroopa, laseb kasutajatel otsida kuulutuste hulgast ja saadab soovitud teavitused kasutajatele Messengeri. Kasutame Java Spring Booti backendiks, MySQL andmebaasi, Reacti frontendiks ja Herokut hostimiseks.
 
 
-broneerimine 
-kuulutused image nettiauto ja vauri
-messenger send image
 
+[Pealeht](https://autopood.herokuapp.com/)
+
+[Otsing](https://autopood.herokuapp.com/main/)
+
+[Tee kasutaja](http://m.me/CarVVatch)
+
+[Swagger](https://autopood.herokuapp.com/swagger-ui/)
+
+[![Video](http://img.youtube.com/vi/256TTNp8IuE/0.jpg)](http://www.youtube.com/watch?v=256TTNp8IuE)
