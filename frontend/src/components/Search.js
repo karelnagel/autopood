@@ -6,7 +6,9 @@ class Search extends Component {
     constructor(props) {
         super(props);
         this.state = emptyParameter
-        this.onSubmit = this.onSubmit.bind(this);
+        this.onSubmitSave = this.onSubmitSave.bind(this);
+        this.onSubmitSearch = this.onSubmitSearch.bind(this);
+        this.onSubmitDelete = this.onSubmitDelete.bind(this);
         this.onChange = this.onChange.bind(this);
     }
 
@@ -23,24 +25,31 @@ class Search extends Component {
         this.setState({[event.target.name]: event.target.value});
     }
 
-    onSubmit(e) {
+    onSubmitSave(e) {
         e.preventDefault();
         let newParameter = this.state;
-        const button = e.nativeEvent.submitter.name;
-        if (button === "save") {
-            this.props.addParameter(newParameter);
-            const element = document.getElementById("user");
-            element.scrollIntoView();
-        } else if (button === "search") {
-            this.props.otsiKuulutusi(newParameter);
-            const element = document.getElementById("kuulutused");
-            element.scrollIntoView();
-        } else {
-            this.props.deleteParameter(newParameter.id)
-            newParameter = emptyParameter;
-            const element = document.getElementById("user");
-            element.scrollIntoView();
-        }
+        this.props.addParameter(newParameter);
+        const element = document.getElementById("user");
+        element.scrollIntoView();
+        this.props.updateSearch(newParameter);
+    }
+
+    onSubmitSearch(e) {
+        e.preventDefault();
+        let newParameter = this.state;
+        this.props.otsiKuulutusi(newParameter);
+        const element = document.getElementById("kuulutused");
+        element.scrollIntoView();
+        this.props.updateSearch(newParameter);
+    }
+
+    onSubmitDelete(e) {
+        e.preventDefault();
+        let newParameter = this.state;
+        this.props.deleteParameter(newParameter.id)
+        newParameter = emptyParameter;
+        const element = document.getElementById("user");
+        element.scrollIntoView();
         this.props.updateSearch(newParameter);
     }
 
@@ -296,16 +305,16 @@ class Search extends Component {
                     </Select>
                     <br/>
                     <div style={buttons}>
-                        {userId ? <Button type="submit" name="save">
+                        {userId ? <Button onClick={this.onSubmitSave}>
                             {this.state.id == 0 ? "Salvesta" : "Uuenda"}
                         </Button> : null}
                         {
                             this.state.id == 0 ? null :
-                                <Button type="submit" name="delete">
+                                <Button onClick={this.onSubmitDelete}>
                                     Kustuta
                                 </Button>
                         }
-                        <Button type="submit" name="search">
+                        <Button onClick={this.onSubmitSearch}>
                             Search
                         </Button>
 
